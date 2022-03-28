@@ -11,3 +11,14 @@ C:\Users\Konos\Downloads\StarterGame1.0\StarterGame\StarterGame\obj\Debug\netcor
 C:\Users\Konos\Downloads\StarterGame1.0\StarterGame\StarterGame\obj\Debug\netcoreapp2.1\StarterGame.dll
 C:\Users\Konos\Downloads\StarterGame1.0\StarterGame\StarterGame\obj\Debug\netcoreapp2.1\StarterGame.pdb
 C:\Users\Konos\Downloads\StarterGame1.0\StarterGame\StarterGame\obj\Debug\netcoreapp2.1\StarterGame.genruntimeconfig.cache
+C:\Users\nguyen_philip\Downloads\Project-OOD-main\Project-OOD-main\Project\StarterGame\StarterGame\bin\Debug\netcoreapp2.1\StarterGame.deps.json
+C:\Users\nguyen_philip\Downloads\Project-OOD-main\Project-OOD-main\Project\StarterGame\StarterGame\bin\Debug\netcoreapp2.1\StarterGame.runtimeconfig.json
+C:\Users\nguyen_philip\Downloads\Project-OOD-main\Project-OOD-main\Project\StarterGame\StarterGame\bin\Debug\netcoreapp2.1\StarterGame.runtimeconfig.dev.json
+C:\Users\nguyen_philip\Downloads\Project-OOD-main\Project-OOD-main\Project\StarterGame\StarterGame\bin\Debug\netcoreapp2.1\StarterGame.dll
+C:\Users\nguyen_philip\Downloads\Project-OOD-main\Project-OOD-main\Project\StarterGame\StarterGame\bin\Debug\netcoreapp2.1\StarterGame.pdb
+C:\Users\nguyen_philip\Downloads\Project-OOD-main\Project-OOD-main\Project\StarterGame\StarterGame\obj\Debug\netcoreapp2.1\StarterGame.csprojAssemblyReference.cache
+C:\Users\nguyen_philip\Downloads\Project-OOD-main\Project-OOD-main\Project\StarterGame\StarterGame\obj\Debug\netcoreapp2.1\StarterGame.csproj.CoreCompileInputs.cache
+C:\Users\nguyen_philip\Downloads\Project-OOD-main\Project-OOD-main\Project\StarterGame\StarterGame\obj\Debug\netcoreapp2.1\StarterGame.AssemblyInfoInputs.cache
+C:\Users\nguyen_philip\Downloads\Project-OOD-main\Project-OOD-main\Project\StarterGame\StarterGame\obj\Debug\netcoreapp2.1\StarterGame.AssemblyInfo.cs
+C:\Users\nguyen_philip\Downloads\Project-OOD-main\Project-OOD-main\Project\StarterGame\StarterGame\obj\Debug\netcoreapp2.1\StarterGame.dll
+C:\Users\nguyen_philip\Downloads\Project-OOD-main\Project-OOD-main\Project\StarterGame\StarterGame\obj\Debug\netcoreapp2.1\StarterGame.pdb

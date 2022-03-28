@@ -22,6 +22,9 @@ Change Room.cs
 Remove a space in GetExits(). In the string "Exits: " to "Exits:"
 
 Change Program.cs
-Attempted to add teleporter
+Removed CreateWorld()
 
-Time Spent: 40m 14s (third session)
+Create GameWorld.cs
+Moved CreateWorld() to GameWorld. Create a static instance of GameWorld. Change GameWorld to private. Change CreateWorld to private. Create private room entrance.
+
+Time Spent: 48m 00s (third session)
