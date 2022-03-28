@@ -1,0 +1,27 @@
+Change HelpCommand.cs 
+Change 2nd player.OutputMessage().
+
+Change Game.cs CreateWorld(). 
+Removed outside, scctparking, boulevard, universityParking, parkingDeck, scct, theGreen, university, and schuster. Added town and rooms
+
+Change Program.cs
+Removed Console.WriteLine("Hello World!");
+
+Time Spent: 50m 35s (first session) 
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Change Game.cs CreateWorld().
+Added more rooms
+
+Time Spent: 25m 34s (second session)
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Change Room.cs
+Remove a space in GetExits(). In the string "Exits: " to "Exits:"
+
+Change Program.cs
+Attempted to add teleporter
+
+Time Spent: 40m 14s (third session)
