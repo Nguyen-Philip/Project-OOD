@@ -22,6 +22,8 @@ namespace StarterGame
         private GameWorld()
         {
             _town = CreateWorld();
+            NotificationCenter.Instance.AddObserver("PlayerWillEnterRoom", PlayerWillEnterRoom);
+            NotificationCenter.Instance.AddObserver("PlayerDidEnterRoom", PlayerDidEnterRoom);
         }
 
         public Room Town
@@ -32,9 +34,38 @@ namespace StarterGame
             }
         }
 
+        /*
+        public Room Exit
+        {
+            get
+            {
+                return 
+            }
+        }
+        */
+
+        public void PlayerWillEnterRoom(Notification notification)
+        {
+            Player player = (Player)notification.Object;
+            player.OutputMessage("\n*** The player is " + player.CurrentRoom.Tag + ", getting ready to leave ***");
+        }
+
+        public void PlayerDidEnterRoom(Notification notification)
+        {
+            Player player = (Player)notification.Object;
+            /*
+            if(player.CurrentRoom == Exit)
+            {
+                player.OutputMessage("\n*** The player arrived at the exit ***");
+            }
+            */
+
+            player.OutputMessage("\n*** The player is " + player.CurrentRoom.Tag + " ***");
+        }
+
         private Room CreateWorld()
         {
-            Room town = new Room("in the town, outside the dungeon");
+            Room town = new Room("in the town");
             Room entrance = new Room("in the entrance of the dungeon");
 
             Room room1_0 = new Room("in room 1_0");
@@ -157,6 +188,8 @@ namespace StarterGame
             room3_8.SetExit("east", room3_7);
 
             room3_9.SetExit("south", room3_5);
+
+            //Exit = room3_9;
 
             return town;
         }

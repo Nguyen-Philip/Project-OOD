@@ -29,7 +29,11 @@ namespace StarterGame
             Room nextRoom = this.CurrentRoom.GetExit(direction);
             if (nextRoom != null)
             {
+                Notification notification = new Notification("PlayerWillEnterRoom", this);
+                NotificationCenter.Instance.PostNotification(notification);
                 this.CurrentRoom = nextRoom;
+                notification = new Notification("PlayerDidEnterRoom", this);
+                NotificationCenter.Instance.PostNotification(notification);
                 this.OutputMessage("\n" + this.CurrentRoom.Description());
             }
             else

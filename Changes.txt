@@ -28,3 +28,9 @@ Create GameWorld.cs
 Moved CreateWorld() to GameWorld. Create a static instance of GameWorld. Change GameWorld to private. Change CreateWorld to private. Create private room entrance.
 
 Time Spent: 48m 00s (third session)
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Added Notifications
+
+Time Spent: 49m 45s (fourth session)
