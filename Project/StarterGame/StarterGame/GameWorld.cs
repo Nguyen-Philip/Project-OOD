@@ -34,16 +34,6 @@ namespace StarterGame
             }
         }
 
-        /*
-        public Room Exit
-        {
-            get
-            {
-                return 
-            }
-        }
-        */
-
         public void PlayerWillEnterRoom(Notification notification)
         {
             Player player = (Player)notification.Object;
@@ -53,13 +43,6 @@ namespace StarterGame
         public void PlayerDidEnterRoom(Notification notification)
         {
             Player player = (Player)notification.Object;
-            /*
-            if(player.CurrentRoom == Exit)
-            {
-                player.OutputMessage("\n*** The player arrived at the exit ***");
-            }
-            */
-
             player.OutputMessage("\n*** The player is " + player.CurrentRoom.Tag + " ***");
         }
 
@@ -166,7 +149,7 @@ namespace StarterGame
             room3_1.SetExit("east", room3_3);
             room3_1.SetExit("south", room3_0);
 
-            //room3_2.SetExit("teleporter");
+            //room3_2.SetExit("teleporter", );
             room3_2.SetExit("south", room3_1);
 
             room3_3.SetExit("north", room3_4);
@@ -188,8 +171,6 @@ namespace StarterGame
             room3_8.SetExit("east", room3_7);
 
             room3_9.SetExit("south", room3_5);
-
-            //Exit = room3_9;
 
             return town;
         }

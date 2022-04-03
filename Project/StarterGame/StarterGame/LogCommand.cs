@@ -3,17 +3,17 @@ using System.Collections.Generic;
 
 namespace StarterGame
 {
-    public class HelpCommand : Command
+    public class LogCommand : Command
     {
         private CommandWords _words;
 
-        public HelpCommand() : this(new CommandWords()){}
+        public LogCommand() : this(new CommandWords()){}
 
         // Designated Constructor
-        public HelpCommand(CommandWords commands) : base()
+        public LogCommand(CommandWords commands) : base()
         {
             _words = commands;
-            this.Name = "help";
+            this.Name = "log";
         }
 
         override
@@ -21,11 +21,11 @@ namespace StarterGame
         {
             if (this.HasSecondWord())
             {
-                player.OutputMessage("\nHelp does not contain " + this.SecondWord);
+                player.OutputMessage("\nLog does not contain " + this.SecondWord);
             }
             else
             {
-                player.OutputMessage("\nYou are lost. You are alone. You are not ready to face the dungeon, \n\nYour available commands are: " + _words.Description());
+                player.OutputMessage("\nYou suddenly remember everything you have done:\n" + _words.Log());
             }
             return false;
         }

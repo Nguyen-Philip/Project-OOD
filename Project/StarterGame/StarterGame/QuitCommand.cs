@@ -5,7 +5,6 @@ namespace StarterGame
 {
     public class QuitCommand : Command
     {
-
         public QuitCommand() : base()
         {
             this.Name = "quit";
@@ -17,7 +16,7 @@ namespace StarterGame
             bool answer = true;
             if (this.HasSecondWord())
             {
-                player.OutputMessage("\nI cannot quit " + this.SecondWord);
+                player.OutputMessage("\nQuit does not contain " + this.SecondWord);
                 answer = false;
             }
             return answer;

@@ -3,17 +3,17 @@ using System.Collections.Generic;
 
 namespace StarterGame
 {
-    public class HelpCommand : Command
+    public class RestartCommand : Command
     {
         private CommandWords _words;
 
-        public HelpCommand() : this(new CommandWords()){}
+        public RestartCommand() : this(new CommandWords()){}
 
         // Designated Constructor
-        public HelpCommand(CommandWords commands) : base()
+        public RestartCommand(CommandWords commands) : base()
         {
             _words = commands;
-            this.Name = "help";
+            this.Name = "restart";
         }
 
         override
@@ -21,11 +21,11 @@ namespace StarterGame
         {
             if (this.HasSecondWord())
             {
-                player.OutputMessage("\nHelp does not contain " + this.SecondWord);
+                player.OutputMessage("\nRestart does not contain " + this.SecondWord);
             }
             else
             {
-                player.OutputMessage("\nYou are lost. You are alone. You are not ready to face the dungeon, \n\nYour available commands are: " + _words.Description());
+                player.OutputMessage("\nSpace and time starts warping around you.\n");
             }
             return false;
         }

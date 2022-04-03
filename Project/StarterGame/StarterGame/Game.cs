@@ -9,12 +9,19 @@ namespace StarterGame
         private Player _player;
         private Parser _parser;
         private bool _playing;
+        public List<string> _log = new List<string>();
 
         public Game()
         {
             _playing = false;
             _parser = new Parser(new CommandWords());
             _player = new Player(GameWorld.Instance().Town);
+            _log = new List<string>();
+        }
+
+        public List<string> GetLog()
+        {
+            return _log;
         }
 
         /**
@@ -37,6 +44,7 @@ namespace StarterGame
                 }
                 else
                 {
+                    _log.Add(command.ToString());
                     finished = command.Execute(_player);
                 }
             }
@@ -47,6 +55,7 @@ namespace StarterGame
         {
             _playing = true;
             _player.OutputMessage(Welcome());
+
         }
 
         public void End()

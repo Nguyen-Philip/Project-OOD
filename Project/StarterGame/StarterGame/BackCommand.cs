@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace StarterGame
 {
-    public class GoCommand : Command
+    public class BackCommand : Command
     {
-        public GoCommand() : base()
+        public BackCommand() : base()
         {
-            this.Name = "go";
+            this.Name = "back";
         }
 
         override
@@ -15,7 +15,7 @@ namespace StarterGame
         {
             if (this.HasSecondWord())
             {
-                player.WaltTo(this.SecondWord);
+                player.WaltBack(this.SecondWord);
             }
             else
             {

@@ -42,6 +42,24 @@ namespace StarterGame
             }
         }
 
+        public void WaltBack(string direction)
+        {
+            Room nextRoom = this.CurrentRoom.GetExit(direction);
+            if (nextRoom != null)
+            {
+                Notification notification = new Notification("PlayerWillEnterRoom", this);
+                NotificationCenter.Instance.PostNotification(notification);
+                this.CurrentRoom = nextRoom;
+                notification = new Notification("PlayerDidEnterRoom", this);
+                NotificationCenter.Instance.PostNotification(notification);
+                this.OutputMessage("\n" + this.CurrentRoom.Description());
+            }
+            else
+            {
+                this.OutputMessage("\nThere is no door on " + direction);
+            }
+        }
+
         public void OutputMessage(string message)
         {
             Console.WriteLine(message);

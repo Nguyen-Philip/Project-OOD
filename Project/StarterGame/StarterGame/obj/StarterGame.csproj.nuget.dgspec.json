@@ -1,26 +1,21 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\nguyen_philip\\Downloads\\Project-OOD-main\\Project-OOD-main\\Project\\StarterGame\\StarterGame\\StarterGame.csproj": {}
+    "C:\\Users\\Konos\\Downloads\\Project-OOD-main(1)\\Project-OOD-main\\Project\\StarterGame\\StarterGame\\StarterGame.csproj": {}
   },
   "projects": {
-    "C:\\Users\\nguyen_philip\\Downloads\\Project-OOD-main\\Project-OOD-main\\Project\\StarterGame\\StarterGame\\StarterGame.csproj": {
+    "C:\\Users\\Konos\\Downloads\\Project-OOD-main(1)\\Project-OOD-main\\Project\\StarterGame\\StarterGame\\StarterGame.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\nguyen_philip\\Downloads\\Project-OOD-main\\Project-OOD-main\\Project\\StarterGame\\StarterGame\\StarterGame.csproj",
+        "projectUniqueName": "C:\\Users\\Konos\\Downloads\\Project-OOD-main(1)\\Project-OOD-main\\Project\\StarterGame\\StarterGame\\StarterGame.csproj",
         "projectName": "StarterGame",
-        "projectPath": "C:\\Users\\nguyen_philip\\Downloads\\Project-OOD-main\\Project-OOD-main\\Project\\StarterGame\\StarterGame\\StarterGame.csproj",
-        "packagesPath": "C:\\Users\\nguyen_philip\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\nguyen_philip\\Downloads\\Project-OOD-main\\Project-OOD-main\\Project\\StarterGame\\StarterGame\\obj\\",
+        "projectPath": "C:\\Users\\Konos\\Downloads\\Project-OOD-main(1)\\Project-OOD-main\\Project\\StarterGame\\StarterGame\\StarterGame.csproj",
+        "packagesPath": "C:\\Users\\Konos\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Konos\\Downloads\\Project-OOD-main(1)\\Project-OOD-main\\Project\\StarterGame\\StarterGame\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Microsoft\\Xamarin\\NuGet\\",
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
-          "C:\\Users\\nguyen_philip\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+          "C:\\Users\\Konos\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp2.1"
@@ -31,6 +26,7 @@
         },
         "frameworks": {
           "netcoreapp2.1": {
+            "targetAlias": "netcoreapp2.1",
             "projectReferences": {}
           }
         },
@@ -42,18 +38,26 @@
       },
       "frameworks": {
         "netcoreapp2.1": {
+          "targetAlias": "netcoreapp2.1",
           "dependencies": {
             "Microsoft.NETCore.App": {
+              "suppressParent": "All",
               "target": "Package",
               "version": "[2.1.0, )",
               "autoReferenced": true
             }
           },
           "imports": [
-            "net461"
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
           ],
           "assetTargetFallback": true,
-          "warn": true
+          "warn": true,
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.101\\RuntimeIdentifierGraph.json"
         }
       }
     }
