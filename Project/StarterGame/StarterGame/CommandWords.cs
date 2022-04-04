@@ -8,7 +8,6 @@ namespace StarterGame
     {
         private Dictionary<string, Command> commands;
         private static Command[] commandArray = { new GoCommand(), new BackCommand(), new QuitCommand() };
-
         public CommandWords() : this(commandArray) {}
 
         // Designated Constructor
@@ -48,11 +47,11 @@ namespace StarterGame
         public String Log()
         {
             Game _game = new Game();
+            List<string> logList = _game.GetLog();
             string loggedCommands = "";
-            foreach (String loggedCommand in _game.GetLog())
+            foreach(string loggedCommand in logList)
             {
-                //Console.WriteLine(loggedCommand);
-                loggedCommands += loggedCommand + "\n";
+                loggedCommands = loggedCommand + "\n";
             }
             return loggedCommands;
         }

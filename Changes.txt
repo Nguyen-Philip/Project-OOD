@@ -46,3 +46,9 @@ Added list log in GameWorld
 Added Restart and Log Command Base
 
 Time Spent: 1h 55m 31s (fifth session)
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Added Teleporter that is created when you enter the room and disappear when you leave it.
+
+Time Spent : 5m 00s (sixth session)

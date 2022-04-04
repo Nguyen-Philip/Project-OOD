@@ -9,6 +9,8 @@ namespace StarterGame
 
         private static GameWorld _instance;
         private Room _town;
+        private Room _exit;
+        private Room _trigger;
 
         public static GameWorld Instance()
         {
@@ -34,15 +36,43 @@ namespace StarterGame
             }
         }
 
+        public Room Trigger
+        {
+            get
+            {
+                return _trigger;
+            }
+        }
+        public Room Exit
+        {
+            get
+            {
+                return _exit;
+            }
+        }
+
         public void PlayerWillEnterRoom(Notification notification)
         {
             Player player = (Player)notification.Object;
+            /*if(player.CurrentRoom == _exit)
+            {
+                Room room = player.CurrentRoom.GetExit("teleporter");
+                if(room != null)
+                {
+                    player.CurrentRoom.SetExit("teleporter", null);
+                }
+            }*/
             player.OutputMessage("\n*** The player is " + player.CurrentRoom.Tag + ", getting ready to leave ***");
         }
 
         public void PlayerDidEnterRoom(Notification notification)
         {
             Player player = (Player)notification.Object;
+            if (player.CurrentRoom == _trigger)
+            {
+                _exit.SetExit("teleporter", _town);
+                player.OutputMessage("\n*** You hear a loud noise. A teleporter has been created nearby. ***");
+            }
             player.OutputMessage("\n*** The player is " + player.CurrentRoom.Tag + " ***");
         }
 
@@ -149,7 +179,6 @@ namespace StarterGame
             room3_1.SetExit("east", room3_3);
             room3_1.SetExit("south", room3_0);
 
-            //room3_2.SetExit("teleporter", );
             room3_2.SetExit("south", room3_1);
 
             room3_3.SetExit("north", room3_4);
@@ -171,6 +200,12 @@ namespace StarterGame
             room3_8.SetExit("east", room3_7);
 
             room3_9.SetExit("south", room3_5);
+
+            _exit = room1_4;
+
+            _trigger = room1_5;
+
+            _town = town;
 
             return town;
         }

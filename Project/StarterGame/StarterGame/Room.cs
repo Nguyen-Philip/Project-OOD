@@ -32,7 +32,14 @@ namespace StarterGame
 
         public void SetExit(string exitName, Room room)
         {
-            _exits[exitName] = room;
+            if (room != null)
+            {
+                _exits[exitName] = room;
+            }
+            else
+            {
+                _exits.Remove(exitName);
+            }
         }
 
         public Room GetExit(string exitName)
