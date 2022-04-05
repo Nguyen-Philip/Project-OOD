@@ -6,6 +6,8 @@ namespace StarterGame
 {
     public class Player
     {
+
+
         private Room _currentRoom = null;
         public Room CurrentRoom
         {
@@ -63,6 +65,12 @@ namespace StarterGame
         public void OutputMessage(string message)
         {
             Console.WriteLine(message);
+        }
+
+        public void Log()
+        {
+            Game _game = new Game();
+            _game.GetLog();
         }
     }
 

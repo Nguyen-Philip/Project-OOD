@@ -43,17 +43,5 @@ namespace StarterGame
             }
             return commandNames;
         }
-
-        public String Log()
-        {
-            Game _game = new Game();
-            List<string> logList = _game.GetLog();
-            string loggedCommands = "";
-            foreach(string loggedCommand in logList)
-            {
-                loggedCommands = loggedCommand + "\n";
-            }
-            return loggedCommands;
-        }
     }
 }

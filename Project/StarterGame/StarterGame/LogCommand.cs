@@ -25,7 +25,8 @@ namespace StarterGame
             }
             else
             {
-                player.OutputMessage("\nYou suddenly remember everything you have done:\n" + _words.Log());
+                player.OutputMessage("\nYou suddenly remember everything you have done:\n");
+                player.Log();
             }
             return false;
         }

@@ -9,7 +9,7 @@ namespace StarterGame
         private Player _player;
         private Parser _parser;
         private bool _playing;
-        public List<string> _log = new List<string>();
+        public List<string> _log;
 
         public Game()
         {
@@ -19,9 +19,12 @@ namespace StarterGame
             _log = new List<string>();
         }
 
-        public List<string> GetLog()
+        public void GetLog()
         {
-            return _log;
+            foreach (string loggedCommand in _log)
+            {
+                Console.WriteLine(loggedCommand);
+            }
         }
 
         /**
@@ -37,14 +40,19 @@ namespace StarterGame
             while (!finished)
             {
                 Console.Write("\n>");
-                Command command = _parser.ParseCommand(Console.ReadLine());
+                String temp = Console.ReadLine();
+                Command command = _parser.ParseCommand(temp);
                 if (command == null)
                 {
                     Console.WriteLine("I don't understand...");
                 }
                 else
                 {
-                    _log.Add(command.ToString());
+                    _log.Add(temp);
+                    foreach (string loggedCommand in _log)
+                    {
+                        Console.WriteLine(loggedCommand);
+                    }
                     finished = command.Execute(_player);
                 }
             }
