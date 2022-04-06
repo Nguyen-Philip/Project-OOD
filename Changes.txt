@@ -52,3 +52,9 @@ Time Spent: 1h 55m 31s (fifth session)
 Added Teleporter that is created when you enter the room and disappear when you leave it.
 
 Time Spent : 5m 00s (sixth session)
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+RestartCommands Still Need to Worked on (It ends then starts the game. It prints out the town location, but your location has not been updated. Also needs to reset each room when called, maybe reset log?)
+LogCommand Stills Needs to be Worked on (Unable to print list since it is creating a new list, not getting the already made list)
+BackCommand is the Same as GoCommand (Need to implement a dictionary or list where it reads Go commands)

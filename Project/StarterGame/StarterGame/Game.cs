@@ -9,7 +9,7 @@ namespace StarterGame
         private Player _player;
         private Parser _parser;
         private bool _playing;
-        public List<string> _log;
+        private List<string> _log = new List<string>();
 
         public Game()
         {
@@ -41,7 +41,6 @@ namespace StarterGame
                 else
                 {
                     _log.Add(temp);
-                    GetLog();
                     finished = command.Execute(_player);
                 }
             }
@@ -65,7 +64,6 @@ namespace StarterGame
             _playing = false;
             _player.OutputMessage(Goodbye());
         }
-
         public void GetLog()
         {
             foreach (string loggedCommand in _log)
