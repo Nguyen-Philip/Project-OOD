@@ -49,10 +49,7 @@ namespace StarterGame
                 else
                 {
                     _log.Add(temp);
-                    foreach (string loggedCommand in _log)
-                    {
-                        Console.WriteLine(loggedCommand);
-                    }
+                    GetLog();
                     finished = command.Execute(_player);
                 }
             }
@@ -62,10 +59,16 @@ namespace StarterGame
         public void Start()
         {
             _playing = true;
+            _log = new List<string>();
             _player.OutputMessage(Welcome());
 
         }
 
+        public void Restart()
+        {
+            _playing = false;
+            Start();
+        }
         public void End()
         {
             _playing = false;

@@ -201,9 +201,9 @@ namespace StarterGame
 
             room3_9.SetExit("south", room3_5);
 
-            _exit = room1_4;
+            _exit = room1_0;
 
-            _trigger = room1_5;
+            _trigger = entrance;
 
             _town = town;
 

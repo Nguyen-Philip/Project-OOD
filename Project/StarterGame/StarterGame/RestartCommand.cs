@@ -26,6 +26,7 @@ namespace StarterGame
             else
             {
                 player.OutputMessage("\nSpace and time starts warping around you.\n");
+                player.RestartGame();
             }
             return false;
         }

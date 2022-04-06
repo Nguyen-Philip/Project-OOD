@@ -67,10 +67,16 @@ namespace StarterGame
             Console.WriteLine(message);
         }
 
-        public void Log()
+        public void ShowLog()
         {
             Game _game = new Game();
             _game.GetLog();
+        }
+
+        public void RestartGame()
+        {
+            Game _game = new Game();
+            _game.Restart();
         }
     }
 
