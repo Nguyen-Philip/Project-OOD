@@ -15,16 +15,8 @@ namespace StarterGame
         {
             _playing = false;
             _parser = new Parser(new CommandWords());
-            _player = new Player(GameWorld.Instance().Town);
+            _player = new Player(GameWorld.Instance().Entrance);
             _log = new List<string>();
-        }
-
-        public void GetLog()
-        {
-            foreach (string loggedCommand in _log)
-            {
-                Console.WriteLine(loggedCommand);
-            }
         }
 
         /**
@@ -59,7 +51,6 @@ namespace StarterGame
         public void Start()
         {
             _playing = true;
-            _log = new List<string>();
             _player.OutputMessage(Welcome());
 
         }
@@ -75,6 +66,14 @@ namespace StarterGame
             _player.OutputMessage(Goodbye());
         }
 
+        public void GetLog()
+        {
+            foreach (string loggedCommand in _log)
+            {
+                Console.WriteLine(loggedCommand);
+            }
+        }
+
         public string Welcome()
         {
             return "Welcome to ###.\n\nThe World of ### is an exciting adventure game.\n\nType 'help' if you need help. " + _player.CurrentRoom.Description();
@@ -84,6 +83,5 @@ namespace StarterGame
         {
             return "\nThank you for playing, Goodbye. \n";
         }
-
     }
 }

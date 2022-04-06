@@ -5,14 +5,10 @@ namespace StarterGame
 {
     public class LogCommand : Command
     {
-        private CommandWords _words;
-
-        public LogCommand() : this(new CommandWords()){}
-
+        public LogCommand() : this(new CommandWords()) { }
         // Designated Constructor
         public LogCommand(CommandWords commands) : base()
         {
-            _words = commands;
             this.Name = "log";
         }
 

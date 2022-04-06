@@ -5,6 +5,60 @@ using System;
 
 namespace StarterGame
 {
+    public interface IRoomDelegate
+    {
+        Room GetExit(string exitName);
+        string GetExit();
+        string Description();
+        Room ContainingRoom { set; get; }
+    }
+
+    public class TrapRoom : IRoomDelegate
+    {
+        private string unlockword;
+        public Room ContainingRoom { set; get; }
+        public TrapRoom() : this("test") { }
+
+        public TrapRoom(string theword)
+        {
+            unlockword = theword;
+            NotificationCenter.Instance.AddObserver("PlayerSaidWord", PlayerSaidWord);
+        }
+        public Room GetExit(string exitName)
+        {
+            return null;
+        }
+
+        public string GetExit()
+        {
+            return "You are trapped.";
+        }
+
+        public string Description()
+        {
+            return "You are in " + ContainingRoom.Tag + ".\nYou have entered a trap room. " + "\n" + GetExit(); ;
+        }
+
+        public void PlayerSaidWord(Notification notification)
+        {
+            Player player = (Player)notification.Object;
+            if(player.CurrentRoom == ContainingRoom)
+            {
+                Dictionary<string, Object> userInfo = notification.UserInfo;
+                string word = (string)userInfo["word"];
+                if(word.Equals(unlockword))
+                {
+                    ContainingRoom.Delegate = null;
+                    player.OutputMessage("You said the correct word.");
+                }
+                else
+                {
+                    player.OutputMessage("You said the wrong word.");
+                }
+            }
+        }
+
+    }
     public class Room
     {
         private Dictionary<string, Room> _exits;
@@ -21,11 +75,29 @@ namespace StarterGame
             }
         }
 
+        private IRoomDelegate _delegate;
+
+        public IRoomDelegate Delegate
+        {
+            set
+            {
+                _delegate = value;
+                if(value != null)
+                {
+                    _delegate.ContainingRoom = this;
+                }
+            }
+            get
+            {
+                return _delegate;
+            }
+        }
         public Room() : this("No Tag"){}
 
         // Designated Constructor
         public Room(string tag)
         {
+            Delegate = null;
             _exits = new Dictionary<string, Room>();
             this.Tag = tag;
         }
@@ -44,26 +116,47 @@ namespace StarterGame
 
         public Room GetExit(string exitName)
         {
-            Room room = null;
-            _exits.TryGetValue(exitName, out room);
-            return room;
+            if(Delegate == null)
+            { 
+                Room room = null;
+                _exits.TryGetValue(exitName, out room);
+                return room;
+            }
+            else
+            {
+                return Delegate.GetExit(exitName);
+            }
         }
 
         public string GetExits()
         {
-            string exitNames = "Exits:";
-            Dictionary<string, Room>.KeyCollection keys = _exits.Keys;
-            foreach (string exitName in keys)
+            if (Delegate == null)
             {
-                exitNames += " " + exitName;
-            }
+                string exitNames = "Exits:";
+                Dictionary<string, Room>.KeyCollection keys = _exits.Keys;
+                foreach (string exitName in keys)
+                {
+                    exitNames += " " + exitName;
+                }
 
-            return exitNames;
+                return exitNames;
+            }
+            else
+            {
+                return Delegate.GetExit();
+            }
         }
         
         public string Description()
         {
-            return "You are " + this.Tag + ".\n *** " + this.GetExits();
+            if (Delegate == null)
+            {
+                return "You are " + this.Tag + ".\n *** " + this.GetExits();
+            }
+            else
+            {
+                return Delegate.Description();
+            }
         }
     }
 }

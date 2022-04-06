@@ -62,6 +62,15 @@ namespace StarterGame
             }
         }
 
+        public void Say(string word)
+        {
+            OutputMessage("\n" + word + "\n");
+            Dictionary<string, object> userInfo = new Dictionary<string, object>();
+            userInfo["word"] = word;
+            Notification notification = new Notification("PlayerSaidWord", this, userInfo);
+            NotificationCenter.Instance.PostNotification(notification);
+        }
+
         public void OutputMessage(string message)
         {
             Console.WriteLine(message);
@@ -79,5 +88,4 @@ namespace StarterGame
             _game.Restart();
         }
     }
-
 }

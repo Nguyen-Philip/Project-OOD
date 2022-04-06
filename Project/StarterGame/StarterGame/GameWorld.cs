@@ -8,9 +8,10 @@ namespace StarterGame
     {
 
         private static GameWorld _instance;
-        private Room _town;
+        private Room _entrance;
         private Room _exit;
         private Room _trigger;
+        private Room _portalExit;
 
         public static GameWorld Instance()
         {
@@ -23,16 +24,16 @@ namespace StarterGame
 
         private GameWorld()
         {
-            _town = CreateWorld();
+            _entrance = CreateWorld();
             NotificationCenter.Instance.AddObserver("PlayerWillEnterRoom", PlayerWillEnterRoom);
             NotificationCenter.Instance.AddObserver("PlayerDidEnterRoom", PlayerDidEnterRoom);
         }
 
-        public Room Town
+        public Room Entrance
         {
             get
             {
-                return _town;
+                return _entrance;
             }
         }
 
@@ -41,6 +42,14 @@ namespace StarterGame
             get
             {
                 return _trigger;
+            }
+        }
+
+        public Room PortalExit
+        {
+            get
+            {
+                return _portalExit;
             }
         }
         public Room Exit
@@ -70,7 +79,7 @@ namespace StarterGame
             Player player = (Player)notification.Object;
             if (player.CurrentRoom == _trigger)
             {
-                _exit.SetExit("teleporter", _town);
+                _exit.SetExit("teleporter", _portalExit);
                 player.OutputMessage("\n*** You hear a loud noise. A teleporter has been created nearby. ***");
             }
             player.OutputMessage("\n*** The player is " + player.CurrentRoom.Tag + " ***");
@@ -201,11 +210,17 @@ namespace StarterGame
 
             room3_9.SetExit("south", room3_5);
 
-            _exit = room1_0;
+            _exit = entrance;
 
             _trigger = entrance;
 
-            _town = town;
+            _portalExit = room1_4;
+
+            _entrance = town;
+
+            //set the Delegates
+            room1_4.Delegate = new TrapRoom("test");
+            //room1_4.Delegate.ContainingRoom = room1_4;
 
             return town;
         }
