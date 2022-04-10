@@ -5,14 +5,10 @@ namespace StarterGame
 {
     public class RestartCommand : Command
     {
-        private CommandWords _words;
-
         public RestartCommand() : this(new CommandWords()){}
-
         // Designated Constructor
         public RestartCommand(CommandWords commands) : base()
         {
-            _words = commands;
             this.Name = "restart";
         }
 

@@ -24,6 +24,7 @@ namespace StarterGame
             unlockword = theword;
             NotificationCenter.Instance.AddObserver("PlayerSaidWord", PlayerSaidWord);
         }
+
         public Room GetExit(string exitName)
         {
             return null;
@@ -50,15 +51,18 @@ namespace StarterGame
                 {
                     ContainingRoom.Delegate = null;
                     player.OutputMessage("You said the correct word.");
+                    player.OutputMessage("The trap is cleared.");
                 }
                 else
                 {
                     player.OutputMessage("You said the wrong word.");
+                    player.OutputMessage("The trap has not been cleared.");
                 }
             }
         }
 
     }
+
     public class Room
     {
         private Dictionary<string, Room> _exits;
@@ -92,6 +96,7 @@ namespace StarterGame
                 return _delegate;
             }
         }
+
         public Room() : this("No Tag"){}
 
         // Designated Constructor
@@ -102,6 +107,7 @@ namespace StarterGame
             this.Tag = tag;
         }
 
+        //Set Room Exits
         public void SetExit(string exitName, Room room)
         {
             if (room != null)
@@ -114,6 +120,7 @@ namespace StarterGame
             }
         }
 
+        //Get Room Exits
         public Room GetExit(string exitName)
         {
             if(Delegate == null)
@@ -128,6 +135,7 @@ namespace StarterGame
             }
         }
 
+        //Get Room Exits
         public string GetExits()
         {
             if (Delegate == null)
@@ -147,6 +155,7 @@ namespace StarterGame
             }
         }
         
+        //Get Room Description
         public string Description()
         {
             if (Delegate == null)

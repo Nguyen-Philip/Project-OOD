@@ -55,6 +55,13 @@ Time Spent : 5m 00s (sixth session)
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+LogCommand Works, Added ClearCommand to clear log if the player wants to use it
+
+Time Spent : 23m 23s (seventh session)
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 RestartCommands Still Need to Worked on (It ends then starts the game. It prints out the town location, but your location has not been updated. Also needs to reset each room when called, maybe reset log?)
-LogCommand Stills Needs to be Worked on (Unable to print list since it is creating a new list, not getting the already made list)
 BackCommand is the Same as GoCommand (Need to implement a dictionary or list where it reads Go commands)
+
+

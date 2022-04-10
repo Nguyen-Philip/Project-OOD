@@ -7,9 +7,7 @@ namespace StarterGame
     public abstract class Command
     {
         private string _name;
-
         private string _secondWord;
-
         public string Name { get { return _name; } set { _name = value; } }
         public string SecondWord { get { return _secondWord; } set { _secondWord = value; } }
 

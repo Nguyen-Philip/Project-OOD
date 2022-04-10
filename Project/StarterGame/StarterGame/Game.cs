@@ -9,23 +9,21 @@ namespace StarterGame
         private Player _player;
         private Parser _parser;
         private bool _playing;
-        private List<string> _log = new List<string>();
 
         public Game()
         {
             _playing = false;
             _parser = new Parser(new CommandWords());
             _player = new Player(GameWorld.Instance().Entrance);
-            _log = new List<string>();
         }
 
         /**
-     *  Main play routine.  Loops until end of play.
-     */
+        *  Main play routine.  Loops until end of play.
+         */
         public void Play()
         {
 
-            // Enter the main command loop.  Here we repeatedly read commands and
+            // Enter the main command loop.  Here we repeatedly read commands, input commands into a log and
             // execute them until the game is over.
 
             bool finished = false;
@@ -40,13 +38,13 @@ namespace StarterGame
                 }
                 else
                 {
-                    _log.Add(temp);
+                    _player.InputLog(temp);
                     finished = command.Execute(_player);
                 }
             }
         }
 
-
+        //starts the program
         public void Start()
         {
             _playing = true;
@@ -54,29 +52,27 @@ namespace StarterGame
 
         }
 
+        //restarts the program
         public void Restart()
         {
             _playing = false;
             Start();
         }
+
+        //ends the program
         public void End()
         {
             _playing = false;
             _player.OutputMessage(Goodbye());
         }
-        public void GetLog()
-        {
-            foreach (string loggedCommand in _log)
-            {
-                Console.WriteLine(loggedCommand);
-            }
-        }
 
+        //prints a welcome message when Start() is called
         public string Welcome()
         {
             return "Welcome to ###.\n\nThe World of ### is an exciting adventure game.\n\nType 'help' if you need help. " + _player.CurrentRoom.Description();
         }
 
+        //prints a goodbye message when End() is called
         public string Goodbye()
         {
             return "\nThank you for playing, Goodbye. \n";

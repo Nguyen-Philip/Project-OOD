@@ -24,6 +24,8 @@ namespace StarterGame
             commands[log.Name] = log;
             Command restart = new RestartCommand(this);
             commands[restart.Name] = restart;
+            Command clear = new ClearCommand(this);
+            commands[clear.Name] = clear;
         }
 
         public Command Get(string word)
