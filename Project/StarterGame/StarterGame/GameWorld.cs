@@ -218,9 +218,9 @@ namespace StarterGame
 
             _entrance = town;
 
-            //set the Delegates
-            room1_4.Delegate = new TrapRoom("test");
-            //room1_4.Delegate.ContainingRoom = room1_4;
+            //set the Delegate Rooms
+            room1_4.Delegate = new TrapRoom("help");
+            room1_6.Delegate = new EchoRoom();
 
             return town;
         }

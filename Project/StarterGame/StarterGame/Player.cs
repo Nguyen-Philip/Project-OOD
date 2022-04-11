@@ -8,6 +8,7 @@ namespace StarterGame
     {
         private Room _currentRoom = null;
         private List<string> _log = new List<string>();
+        private List<string> _movementlog = new List<string>();
         public Room CurrentRoom
         {
             get
@@ -24,7 +25,7 @@ namespace StarterGame
         {
             _currentRoom = room;
         }
-            
+
         //used by GoCommand, move to next room
         public void WaltTo(string direction)
         {
@@ -66,7 +67,7 @@ namespace StarterGame
         //
         public void Say(string word)
         {
-            OutputMessage("\n" + word + "\n");
+            OutputMessage("\n" + word);
             Dictionary<string, object> userInfo = new Dictionary<string, object>();
             userInfo["word"] = word;
             Notification notification = new Notification("PlayerSaidWord", this, userInfo);
@@ -83,7 +84,7 @@ namespace StarterGame
         //gets a string input to put into _log
         public void InputLog(string command)
         {
-            _log.Add(command);  
+            _log.Add(command);
         }
 
         //used by LogCommand, shows the log
@@ -96,11 +97,16 @@ namespace StarterGame
             this.OutputMessage("\n" + this.CurrentRoom.Description());
         }
 
+        public void InputMovementLog(string command)
+        {
+            _movementlog.Add(command);
+        }
+
         //used by ClearLog(), clears the log
         public void ClearLog()
         {
             _log.Clear();
-            this.OutputMessage("\n" + this.CurrentRoom.Description());
+            this.OutputMessage(this.CurrentRoom.Description());
         }
 
         //used by RestartCommand, restarts the program and clears the log

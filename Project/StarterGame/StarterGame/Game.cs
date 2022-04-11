@@ -39,6 +39,10 @@ namespace StarterGame
                 else
                 {
                     _player.InputLog(temp);
+                    if(command.Name == "go")
+                    {
+                        _player.InputMovementLog(temp);
+                    }
                     finished = command.Execute(_player);
                 }
             }

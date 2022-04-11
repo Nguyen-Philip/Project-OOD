@@ -25,7 +25,8 @@ namespace StarterGame
             }
             else
             {
-                player.OutputMessage("\nYou are lost. You are alone. You are not ready to face the dungeon, \n\nYour available commands are: " + _words.Description());
+                player.OutputMessage("\nYou are lost. You are alone. You are not ready to face the dungeon, \n\nYour available commands are: " + _words.Description() + "\n");
+                player.OutputMessage(player.CurrentRoom.Description());
             }
             return false;
         }

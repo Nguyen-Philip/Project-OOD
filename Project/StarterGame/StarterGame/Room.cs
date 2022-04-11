@@ -8,15 +8,17 @@ namespace StarterGame
     public interface IRoomDelegate
     {
         Room GetExit(string exitName);
-        string GetExit();
+        string GetExits();
         string Description();
         Room ContainingRoom { set; get; }
+        Dictionary<string, Room> ContainingRoomExits { set; get; }
     }
 
     public class TrapRoom : IRoomDelegate
     {
         private string unlockword;
         public Room ContainingRoom { set; get; }
+        public Dictionary<string, Room> ContainingRoomExits { set; get; }
         public TrapRoom() : this("test") { }
 
         public TrapRoom(string theword)
@@ -30,14 +32,14 @@ namespace StarterGame
             return null;
         }
 
-        public string GetExit()
+        public string GetExits()
         {
             return "You are trapped.";
         }
 
         public string Description()
         {
-            return "You are in " + ContainingRoom.Tag + ".\nYou have entered a trap room. " + "\n" + GetExit(); ;
+            return "You are in " + ContainingRoom.Tag + ".\nYou have entered a trap room. " + "\n" + GetExits();
         }
 
         public void PlayerSaidWord(Notification notification)
@@ -51,17 +53,60 @@ namespace StarterGame
                 {
                     ContainingRoom.Delegate = null;
                     player.OutputMessage("You said the correct word.");
-                    player.OutputMessage("The trap is cleared.");
                 }
                 else
                 {
                     player.OutputMessage("You said the wrong word.");
-                    player.OutputMessage("The trap has not been cleared.");
                 }
             }
         }
 
     }
+
+    public class EchoRoom : IRoomDelegate
+    {
+        public Room ContainingRoom { set; get; }
+        public Dictionary<string, Room> ContainingRoomExits { set; get; }
+        public EchoRoom()
+        {
+            NotificationCenter.Instance.AddObserver("PlayerSaidWord", PlayerSaidWord);
+        }
+
+        public Room GetExit(string exitName)
+        {
+            Room room = null;
+            ContainingRoomExits.TryGetValue(exitName, out room);
+            return room;
+        }
+
+        public string GetExits()
+        {
+            string exitNames = "Exits: ";
+            Dictionary<string, Room>.KeyCollection keys = ContainingRoomExits.Keys;
+            foreach(string exitName in keys)
+            {
+                exitNames += " " + exitName;
+            }
+
+            return exitNames;
+        }
+
+        public string Description()
+        {
+            return "You are in " + ContainingRoom.Tag + ".\nYou have entered an echo room. " + "\n" + GetExits();
+        }
+
+        public void PlayerSaidWord(Notification notification)
+        {
+            Player player = (Player)notification.Object;
+            if(ContainingRoom == player.CurrentRoom)
+            {
+                Dictionary<string, object> userInfo = notification.UserInfo;
+                string word = (string)userInfo["word"];
+                player.OutputMessage("\n" + word + "... " + word + "... " + word + "...\n");
+            }
+        }
+    } 
 
     public class Room
     {
@@ -89,6 +134,7 @@ namespace StarterGame
                 if(value != null)
                 {
                     _delegate.ContainingRoom = this;
+                    _delegate.ContainingRoomExits = _exits;
                 }
             }
             get
@@ -151,7 +197,7 @@ namespace StarterGame
             }
             else
             {
-                return Delegate.GetExit();
+                return Delegate.GetExits();
             }
         }
         
