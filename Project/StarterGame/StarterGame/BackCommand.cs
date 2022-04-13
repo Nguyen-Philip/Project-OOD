@@ -15,11 +15,11 @@ namespace StarterGame
         {
             if (this.HasSecondWord())
             {
-                player.WaltBack(this.SecondWord);
+                player.OutputMessage("\nBack does not contain " + this.SecondWord);
             }
             else
             {
-                player.OutputMessage("\nGo Where?");
+                player.WaltBack();
             }
             return false;
         }

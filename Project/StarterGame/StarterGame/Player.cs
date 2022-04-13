@@ -46,21 +46,47 @@ namespace StarterGame
         }
 
         //used by BackCommand, move to previous room
-        public void WaltBack(string direction)
+        public void WaltBack()
         {
-            Room nextRoom = this.CurrentRoom.GetExit(direction);
-            if (nextRoom != null)
+            Parser _parser = new Parser(new CommandWords());
+            string movementLog = "";
+            if(_movementlog.Count > 0)
             {
-                Notification notification = new Notification("PlayerWillEnterRoom", this);
-                NotificationCenter.Instance.PostNotification(notification);
-                this.CurrentRoom = nextRoom;
-                notification = new Notification("PlayerDidEnterRoom", this);
-                NotificationCenter.Instance.PostNotification(notification);
-                this.OutputMessage("\n" + this.CurrentRoom.Description());
+                movementLog = _movementlog[_movementlog.Count - 1];
+            }
+
+            if(_movementlog.Count != 0)
+            {
+                Command command = _parser.ParseCommand(movementLog);
+                _movementlog.RemoveAt(_movementlog.Count - 1);
+                switch (command.SecondWord)
+                {
+                    case "north":
+                        command.SecondWord = "south";
+                        this.WaltTo(command.SecondWord);
+                        break;
+                    case "south":
+                        command.SecondWord = "north";
+                        this.WaltTo(command.SecondWord);
+                        break;
+                    case "west":
+                        command.SecondWord = "east";
+                        this.WaltTo(command.SecondWord);
+                        break;
+                    case "east":
+                        command.SecondWord = "west";
+                        this.WaltTo(command.SecondWord);
+                        break;
+                    default:
+                        this.OutputMessage("There is no way to go back");
+                        this.OutputMessage("\n" + this.CurrentRoom.Description());
+                        break;
+                }
             }
             else
             {
-                this.OutputMessage("\nThere is no door on " + direction);
+                this.OutputMessage("There is no way to go back");
+                this.OutputMessage("\n" + this.CurrentRoom.Description());
             }
         }
 
@@ -112,7 +138,6 @@ namespace StarterGame
         //used by RestartCommand, restarts the program and clears the log
         public void RestartGame()
         {
-            Game _game = new Game();
             _log.Clear();
         }
     }
