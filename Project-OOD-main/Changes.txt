@@ -1,0 +1,67 @@
+Change HelpCommand.cs 
+Change 2nd player.OutputMessage().
+
+Change Game.cs CreateWorld(). 
+Removed outside, scctparking, boulevard, universityParking, parkingDeck, scct, theGreen, university, and schuster. Added town and rooms
+
+Change Program.cs
+Removed Console.WriteLine("Hello World!");
+
+Time Spent: 50m 35s (first session) 
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Change Game.cs CreateWorld().
+Added more rooms
+
+Time Spent: 25m 34s (second session)
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Change Room.cs
+Remove a space in GetExits(). In the string "Exits: " to "Exits:"
+
+Change Program.cs
+Removed CreateWorld()
+
+Create GameWorld.cs
+Moved CreateWorld() to GameWorld. Create a static instance of GameWorld. Change GameWorld to private. Change CreateWorld to private. Create private room entrance.
+
+Time Spent: 48m 00s (third session)
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Added Notifications
+
+Added BackCommand, will begin implementing a log
+
+Time Spent: 59m 45s (fourth session)
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Added LogCommand
+
+Added list log in GameWorld
+
+Added Restart and Log Command Base
+
+Time Spent: 1h 55m 31s (fifth session)
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Added Teleporter that is created when you enter the room and disappear when you leave it.
+
+Time Spent : 5m 00s (sixth session)
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+LogCommand Works, Added ClearCommand to clear log if the player wants to use it
+
+Time Spent : 23m 23s (seventh session)
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+RestartCommands Still Need to Worked on (It ends then starts the game. It prints out the town location, but your location has not been updated. Also needs to reset each room when called, maybe reset log?)
+BackCommand is the Same as GoCommand (Need to implement a dictionary or list where it reads Go commands)
+
+
