@@ -7,18 +7,18 @@ namespace StarterGame
 {
     public interface IRoomDelegate
     {
-        Room GetExit(string exitName);
+        Door GetExit(string exitName);
         string GetExits();
         string Description();
         Room ContainingRoom { set; get; }
-        Dictionary<string, Room> ContainingRoomExits { set; get; }
+        Dictionary<string, Door> ContainingRoomExits { set; get; }
     }
 
     public class TrapRoom : IRoomDelegate
     {
         private string unlockword;
         public Room ContainingRoom { set; get; }
-        public Dictionary<string, Room> ContainingRoomExits { set; get; }
+        public Dictionary<string, Door> ContainingRoomExits { set; get; }
         public TrapRoom() : this("test") { }
 
         public TrapRoom(string theword)
@@ -27,7 +27,7 @@ namespace StarterGame
             NotificationCenter.Instance.AddObserver("PlayerSaidWord", PlayerSaidWord);
         }
 
-        public Room GetExit(string exitName)
+        public Door GetExit(string exitName)
         {
             return null;
         }
@@ -66,15 +66,15 @@ namespace StarterGame
     public class EchoRoom : IRoomDelegate
     {
         public Room ContainingRoom { set; get; }
-        public Dictionary<string, Room> ContainingRoomExits { set; get; }
+        public Dictionary<string, Door> ContainingRoomExits { set; get; }
         public EchoRoom()
         {
             NotificationCenter.Instance.AddObserver("PlayerSaidWord", PlayerSaidWord);
         }
 
-        public Room GetExit(string exitName)
+        public Door GetExit(string exitName)
         {
-            Room room = null;
+            Door room = null;
             ContainingRoomExits.TryGetValue(exitName, out room);
             return room;
         }
@@ -82,7 +82,7 @@ namespace StarterGame
         public string GetExits()
         {
             string exitNames = "Exits: ";
-            Dictionary<string, Room>.KeyCollection keys = ContainingRoomExits.Keys;
+            Dictionary<string, Door>.KeyCollection keys = ContainingRoomExits.Keys;
             foreach(string exitName in keys)
             {
                 exitNames += " " + exitName;
@@ -110,7 +110,7 @@ namespace StarterGame
 
     public class Room
     {
-        private Dictionary<string, Room> _exits;
+        private Dictionary<string, Door> _exits;
         private string _tag;
         public string Tag
         {
@@ -149,12 +149,12 @@ namespace StarterGame
         public Room(string tag)
         {
             Delegate = null;
-            _exits = new Dictionary<string, Room>();
+            _exits = new Dictionary<string, Door>();
             this.Tag = tag;
         }
 
         //Set Room Exits
-        public void SetExit(string exitName, Room room)
+        public void SetExit(string exitName, Door room)
         {
             if (room != null)
             {
@@ -167,11 +167,11 @@ namespace StarterGame
         }
 
         //Get Room Exits
-        public Room GetExit(string exitName)
+        public Door GetExit(string exitName)
         {
             if(Delegate == null)
-            { 
-                Room room = null;
+            {
+                Door room = null;
                 _exits.TryGetValue(exitName, out room);
                 return room;
             }
@@ -187,7 +187,7 @@ namespace StarterGame
             if (Delegate == null)
             {
                 string exitNames = "Exits:";
-                Dictionary<string, Room>.KeyCollection keys = _exits.Keys;
+                Dictionary<string, Door>.KeyCollection keys = _exits.Keys;
                 foreach (string exitName in keys)
                 {
                     exitNames += " " + exitName;

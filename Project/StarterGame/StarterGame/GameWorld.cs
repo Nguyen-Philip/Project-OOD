@@ -79,7 +79,7 @@ namespace StarterGame
             Player player = (Player)notification.Object;
             if (player.CurrentRoom == _trigger)
             {
-                _exit.SetExit("teleporter", _portalExit);
+                //_exit.SetExit("teleporter", _portalExit);
                 player.OutputMessage("\n*** You hear a loud noise. A teleporter has been created nearby. ***");
             }
             player.OutputMessage("\n*** The player is " + player.CurrentRoom.Tag + " ***");
@@ -121,8 +121,9 @@ namespace StarterGame
             Room room3_8 = new Room("in room 3_8");
             Room room3_9 = new Room("in room 3_9");
 
+            Door door = Door.CreateDoor(town, entrance, "north", "south");
 
-            town.SetExit("north", entrance);
+            /*town.SetExit("north", entrance);
 
             entrance.SetExit("north", room1_0);
             entrance.SetExit("west", room2_0);
@@ -220,7 +221,7 @@ namespace StarterGame
 
             //set the Delegate Rooms
             room1_4.Delegate = new TrapRoom("help");
-            room1_6.Delegate = new EchoRoom();
+            room1_6.Delegate = new EchoRoom();*/
 
             return town;
         }

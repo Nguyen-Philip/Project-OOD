@@ -29,15 +29,23 @@ namespace StarterGame
         //used by GoCommand, move to next room
         public void WaltTo(string direction)
         {
-            Room nextRoom = this.CurrentRoom.GetExit(direction);
-            if (nextRoom != null)
+            Door door = this.CurrentRoom.GetExit(direction);
+            if(door != null)
             {
-                Notification notification = new Notification("PlayerWillEnterRoom", this);
-                NotificationCenter.Instance.PostNotification(notification);
-                this.CurrentRoom = nextRoom;
-                notification = new Notification("PlayerDidEnterRoom", this);
-                NotificationCenter.Instance.PostNotification(notification);
-                this.OutputMessage("\n" + this.CurrentRoom.Description());
+                if (door.IsOpen)
+                {
+                    Room nextRoom = door.GetRoomOnTheOtherSide(this.CurrentRoom);
+                    Notification notification = new Notification("PlayerWillEnterRoom", this);
+                    NotificationCenter.Instance.PostNotification(notification);
+                    this.CurrentRoom = nextRoom;
+                    notification = new Notification("PlayerDidEnterRoom", this);
+                    NotificationCenter.Instance.PostNotification(notification);
+                    this.OutputMessage("\n" + this.CurrentRoom.Description());
+                }
+                else
+                {
+                    this.OutputMessage("\nThe door is locked");
+                }
             }
             else
             {
@@ -102,6 +110,11 @@ namespace StarterGame
             Notification notification = new Notification("PlayerSaidWord", this, userInfo);
             NotificationCenter.Instance.PostNotification(notification);
             this.OutputMessage("\n" + this.CurrentRoom.Description());
+        }
+
+        public void Open(string exitName)
+        {
+
         }
 
         //prints a message

@@ -696,11 +696,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\nguyen_philip\\Downloads\\Project-OOD-main - Copy\\Project-OOD-main\\Project\\StarterGame\\StarterGame\\StarterGame.csproj",
+      "projectUniqueName": "C:\\Users\\nguyen_philip\\Downloads\\Project-OOD-main\\Project-OOD-main\\Project\\StarterGame\\StarterGame\\StarterGame.csproj",
       "projectName": "StarterGame",
-      "projectPath": "C:\\Users\\nguyen_philip\\Downloads\\Project-OOD-main - Copy\\Project-OOD-main\\Project\\StarterGame\\StarterGame\\StarterGame.csproj",
+      "projectPath": "C:\\Users\\nguyen_philip\\Downloads\\Project-OOD-main\\Project-OOD-main\\Project\\StarterGame\\StarterGame\\StarterGame.csproj",
       "packagesPath": "C:\\Users\\nguyen_philip\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\nguyen_philip\\Downloads\\Project-OOD-main - Copy\\Project-OOD-main\\Project\\StarterGame\\StarterGame\\obj\\",
+      "outputPath": "C:\\Users\\nguyen_philip\\Downloads\\Project-OOD-main\\Project-OOD-main\\Project\\StarterGame\\StarterGame\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Microsoft\\Xamarin\\NuGet\\",
