@@ -58,24 +58,27 @@ namespace StarterGame
             if(_movementlog.Count != 0)
             {
                 Command command = _parser.ParseCommand(movementLog);
-                _movementlog.RemoveAt(_movementlog.Count - 1);
                 switch (command.SecondWord)
                 {
                     case "north":
                         command.SecondWord = "south";
                         this.WaltTo(command.SecondWord);
+                        _movementlog.RemoveAt(_movementlog.Count - 1);
                         break;
                     case "south":
                         command.SecondWord = "north";
                         this.WaltTo(command.SecondWord);
+                        _movementlog.RemoveAt(_movementlog.Count - 1);
                         break;
                     case "west":
                         command.SecondWord = "east";
                         this.WaltTo(command.SecondWord);
+                        _movementlog.RemoveAt(_movementlog.Count - 1);
                         break;
                     case "east":
                         command.SecondWord = "west";
                         this.WaltTo(command.SecondWord);
+                        _movementlog.RemoveAt(_movementlog.Count - 1);
                         break;
                     default:
                         this.OutputMessage("There is no way to go back");
