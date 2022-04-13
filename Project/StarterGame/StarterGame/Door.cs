@@ -50,5 +50,12 @@ namespace StarterGame
             room2.SetExit(label2, door);
             return door;
         }
+
+        public static Door CreateTeleporter(Room room1, Room room2, string label1)
+        {
+            Door door = new Door(room1, room2);
+            room1.SetExit(label1, door);
+            return door;
+        }
     }
 }
