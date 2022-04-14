@@ -21,7 +21,7 @@ namespace StarterGame
             _open = true;
         }
 
-        public  void Open()
+        public void Open()
         {
             _open = true;
         }
@@ -51,7 +51,7 @@ namespace StarterGame
             return door;
         }
 
-        public static Door CreateTeleporter(Room room1, Room room2, string label1)
+        public static Door CreatePortal(Room room1, Room room2, string label1)
         {
             Door door = new Door(room1, room2);
             room1.SetExit(label1, door);

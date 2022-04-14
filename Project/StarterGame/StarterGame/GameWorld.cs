@@ -66,14 +66,15 @@ namespace StarterGame
             Player player = (Player)notification.Object;
             if(player.CurrentRoom == _exit)
             {
-                door = player.CurrentRoom.GetExit("teleporter");
+                door = player.CurrentRoom.GetExit("portal");
                 if(door != null)
                 {
-                    player.CurrentRoom.SetExit("teleporter", null);
+                    player.CurrentRoom.SetExit("portal", null);
                     _trigger = null;
+                    player.OutputMessage("\n*** The portal collapses behind you. ***");
                 }
             }
-            player.OutputMessage("\n*** The player is " + player.CurrentRoom.Tag + ", getting ready to leave ***");
+            //player.OutputMessage("\n*** The player is " + player.CurrentRoom.Tag + ", getting ready to leave ***");
         }
 
         public void PlayerDidEnterRoom(Notification notification)
@@ -81,8 +82,8 @@ namespace StarterGame
             Player player = (Player)notification.Object;
             if (player.CurrentRoom == _trigger)
             {
-                door = Door.CreateTeleporter(_exit, _portalExit, "teleporter");
-                player.OutputMessage("\n*** You hear a loud noise. A teleporter has been created nearby. ***");
+                door = Door.CreatePortal(_exit, _portalExit, "portal");
+                player.OutputMessage("\n*** You hear a loud noise. A portal has been created nearby. ***");
             }
             player.OutputMessage("\n*** The player is " + player.CurrentRoom.Tag + " ***");
         }
