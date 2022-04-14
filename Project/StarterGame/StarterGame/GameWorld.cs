@@ -12,6 +12,7 @@ namespace StarterGame
         private Room _exit;
         private Room _trigger;
         private Room _portalExit;
+        private Door door;
 
         public static GameWorld Instance()
         {
@@ -63,14 +64,15 @@ namespace StarterGame
         public void PlayerWillEnterRoom(Notification notification)
         {
             Player player = (Player)notification.Object;
-            /*if(player.CurrentRoom == _exit)
+            if(player.CurrentRoom == _exit)
             {
-                Room room = player.CurrentRoom.GetExit("teleporter");
-                if(room != null)
+                door = player.CurrentRoom.GetExit("teleporter");
+                if(door != null)
                 {
                     player.CurrentRoom.SetExit("teleporter", null);
+                    _trigger = null;
                 }
-            }*/
+            }
             player.OutputMessage("\n*** The player is " + player.CurrentRoom.Tag + ", getting ready to leave ***");
         }
 
@@ -79,7 +81,7 @@ namespace StarterGame
             Player player = (Player)notification.Object;
             if (player.CurrentRoom == _trigger)
             {
-                _exit.SetExit("teleporter", _portalExit);
+                door = Door.CreateTeleporter(_exit, _portalExit, "teleporter");
                 player.OutputMessage("\n*** You hear a loud noise. A teleporter has been created nearby. ***");
             }
             player.OutputMessage("\n*** The player is " + player.CurrentRoom.Tag + " ***");
@@ -121,101 +123,42 @@ namespace StarterGame
             Room room3_8 = new Room("in room 3_8");
             Room room3_9 = new Room("in room 3_9");
 
+            door = Door.CreateDoor(town, entrance, "north", "south");
 
-            town.SetExit("north", entrance);
+            door = Door.CreateDoor(entrance, room1_0, "north", "south");
+            door = Door.CreateDoor(room1_0, room1_1, "north", "south");
+            door = Door.CreateDoor(room1_1, room1_2, "north", "south");
+            door = Door.CreateDoor(room1_2, room1_3, "east", "west");
+            door = Door.CreateDoor(room1_3, room1_4, "east", "west");
+            door = Door.CreateDoor(room1_3, room1_5, "north", "south");
+            door = Door.CreateDoor(room1_5, room1_6, "east", "west");
+            door = Door.CreateDoor(room1_5, room1_7, "west", "east");
+            door = Door.CreateDoor(room1_7, room1_8, "north", "south");
 
-            entrance.SetExit("north", room1_0);
-            entrance.SetExit("west", room2_0);
-            entrance.SetExit("east", room3_0);
-            entrance.SetExit("south", town);
+            door = Door.CreateDoor(entrance, room2_0, "west", "east");
+            door = Door.CreateDoor(room2_0, room2_1, "north", "south");
+            door = Door.CreateDoor(room2_1, room2_2, "west", "east");
+            door = Door.CreateDoor(room2_1, room2_3, "north", "south");
+            door = Door.CreateDoor(room2_3, room2_4, "north", "south");
+            door = Door.CreateDoor(room2_4, room2_5, "west", "east");
+            door = Door.CreateDoor(room2_5, room2_6, "south", "north");
+            door = Door.CreateDoor(room2_5, room2_7, "north", "south");
+            door = Door.CreateDoor(room2_7, room2_8, "east", "west");
 
-            room1_0.SetExit("north", room1_1);
-            room1_0.SetExit("south", entrance);
-
-            room1_1.SetExit("north", room1_2);
-            room1_1.SetExit("south", room1_0);
-
-            room1_2.SetExit("east", room1_3);
-            room1_2.SetExit("south", room1_1);
-
-            room1_3.SetExit("north", room1_5);
-            room1_3.SetExit("west", room1_2);
-            room1_3.SetExit("east", room1_4);
-
-            room1_4.SetExit("west", room1_3);
-
-            room1_5.SetExit("west", room1_7);
-            room1_5.SetExit("east", room1_6);
-            room1_5.SetExit("south", room1_3);
-
-            room1_6.SetExit("west", room1_5);
-
-            room1_7.SetExit("north", room1_8);
-            room1_7.SetExit("east", room1_5);
-
-            room1_8.SetExit("south", room1_7);
-
-            room2_0.SetExit("north", room2_1);
-            room2_0.SetExit("east", entrance);
-
-            room2_1.SetExit("north", room2_3);
-            room2_1.SetExit("west", room2_2);
-            room2_1.SetExit("south", room2_0);
-
-            room2_2.SetExit("east", room2_1);
-
-            room2_3.SetExit("north", room2_4);
-            room2_3.SetExit("south", room2_1);
-
-            room2_4.SetExit("west", room2_5);
-            room2_4.SetExit("south", room2_3);
-
-            room2_5.SetExit("north", room2_7);
-            room2_5.SetExit("east", room2_4);
-            room2_5.SetExit("south", room2_6);
-
-            room2_6.SetExit("north", room2_5);
-
-            room2_7.SetExit("east", room2_8);
-            room2_7.SetExit("south", room2_5);
-
-            room2_8.SetExit("west", room2_7);
-
-            room3_0.SetExit("north", room3_1);
-            room3_0.SetExit("west", entrance);
-
-            room3_1.SetExit("north", room3_2);
-            room3_1.SetExit("east", room3_3);
-            room3_1.SetExit("south", room3_0);
-
-            room3_2.SetExit("south", room3_1);
-
-            room3_3.SetExit("north", room3_4);
-            room3_3.SetExit("west", room3_1);
-
-            room3_4.SetExit("east", room3_5);
-            room3_4.SetExit("south", room3_3);
-
-            room3_5.SetExit("north", room3_9);
-            room3_5.SetExit("west", room3_4);
-            room3_5.SetExit("south", room3_6);
-
-            room3_6.SetExit("north", room3_5);
-            room3_6.SetExit("south", room3_7);
-
-            room3_7.SetExit("north", room3_6);
-            room3_7.SetExit("west", room3_8);
-
-            room3_8.SetExit("east", room3_7);
-
-            room3_9.SetExit("south", room3_5);
+            door = Door.CreateDoor(entrance, room3_0, "east", "west");
+            door = Door.CreateDoor(room3_0, room3_1, "north", "south");
+            door = Door.CreateDoor(room3_1, room3_2, "north", "south");
+            door = Door.CreateDoor(room3_1, room3_3, "east", "west");
+            door = Door.CreateDoor(room3_3, room3_4, "north", "south");
+            door = Door.CreateDoor(room3_4, room3_5, "east", "west");
+            door = Door.CreateDoor(room3_5, room3_6, "south", "north");
+            door = Door.CreateDoor(room3_5, room3_9, "north", "south");
+            door = Door.CreateDoor(room3_6, room3_7, "south", "north");
+            door = Door.CreateDoor(room3_7, room3_8, "west", "east");
 
             _exit = entrance;
-
             _trigger = entrance;
-
             _portalExit = room1_4;
-
             _entrance = town;
 
             //set the Delegate Rooms
