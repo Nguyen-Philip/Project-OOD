@@ -1,73 +1,126 @@
-Change HelpCommand.cs 
-Change 2nd player.OutputMessage().
+Changes: 
+HelpCommand.cs 
 
-Change Game.cs CreateWorld(). 
-Removed outside, scctparking, boulevard, universityParking, parkingDeck, scct, theGreen, university, and schuster. Added town and rooms
+Game.cs
 
-Change Program.cs
-Removed Console.WriteLine("Hello World!");
+Program.cs
 
-Time Spent: 50m 35s 
+Time Spent: 10m 35s 
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Change Game.cs CreateWorld().
-Added more rooms
+Changes:
+Game.cs
+	Added Rooms
 
 Time Spent: 25m 34s 
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Change Room.cs
-Remove a space in GetExits(). In the string "Exits: " to "Exits:"
+Changes:
+Room.cs
 
-Change Program.cs
-Removed CreateWorld()
+Program.cs
+	Remove CreateWorld()
 
-Create GameWorld.cs
-Moved CreateWorld() to GameWorld. Create a static instance of GameWorld. Change GameWorld to private. Change CreateWorld to private. Create private room entrance.
+Added:
+GameWorld.cs
+	Moved CreateWorld() to GameWorld. Create a static instance of GameWorld. Change GameWorld to private. Change CreateWorld to private. Create private room entrance.
 
 Time Spent: 48m 00s 
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Added Notifications
+Added: 
+Notification.cs
 
-Added BackCommand, will begin implementing a log
+NotificationCenter.cs
+
+BackCommand.cs
+	Currently Working On
 
 Time Spent: 59m 45s 
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Added LogCommand
+Changes:
+Game.cs
+	Added list for log
 
-Added list log in GameWorld
+Added:
+LogCommand.cs
+	Currently Working On
 
-Added Restart and Log Command Base
-
+Restart.cs
+	Currently Working On
+	
 Time Spent: 1h 55m 31s 
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Added Teleporter that is created when you enter the room and disappear when you leave it.
+Changes:
+GameWorld.cs
+	Teleporter that is created when you enter the room and disappear when you leave it.
 
 Time Spent : 5m 00s 
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-LogCommand Works, Added ClearCommand to clear log if the player wants to use it
+Changes:
+LogCommand.cs
+	Works Now
+
+Game.cs
+	Remove list
+
+Player.cs
+	Added lists that records log and movement
+
+Added:
+ClearCommand.cs
+	Clears log
 
 Time Spent : 23m 23s 
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-BackCommand Works, Door.cs implemented to create doors and teleporters. Merged Jacob and Philip Code Together
+Changes:
+BackCommand.cs 
+	Works Now
+
+Room.cs
+	Rooms are made, however it no longer creates the entrance directly
+
+Added:
+Door.cs 
+	Used to link rooms together, and create portals
+
+Merged Philip's and Jacobs Files Together
 
 Time Spent : 50m 35s 
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Renamed teleporters to portals, Created functional Open and Close for doors, not teleporters. Open may also be used for chest as well.
+Changes:
+GameWorld.cs
+	Change name of teleporters to portals
+
+Player.cs
+	Change name of teleporters to portals
+	Added Open, Close, Pickup, and Drop
+
+Added:
+OpenCommand.cs
+	Open Doors, Will Open Chest Later
+
+CloseCommand.cs
+	Closes/Lock Doors
+
+PickupCommand.cs
+	Currently Working On
+
+DropCommand.cs
+	Currently Working On
 
 Time Spent : 10m 13s
 
