@@ -9,6 +9,7 @@ namespace StarterGame
         private Room _currentRoom = null;
         private List<string> _log = new List<string>();
         private List<string> _movementlog = new List<string>();
+        private BackPack _backPack = new BackPack();
 
         public Room CurrentRoom
         {
@@ -114,12 +115,32 @@ namespace StarterGame
 
         public void Pickup(string word)
         {
+            Item pItem = this.CurrentRoom.Remove(word);
+            if (pItem != null)
+            {
+                _backPack.Add(pItem);
+                this.OutputMessage("\nYou have picked up " + word);
 
+            }
+            else
+            {
+                this.OutputMessage("\nThere is no " + word);
+            }
         }
 
         public void Drop(string word)
         {
+            Item pItem = _backPack.Remove(word);
+            if (pItem != null)
+            {
+                this.CurrentRoom.Add(pItem);
+                this.OutputMessage("\nYou have droped " + word + " on the ground of the room");
 
+            }
+            else
+            {
+                this.OutputMessage("\nThere is no " + word);
+            }
         }
 
         //

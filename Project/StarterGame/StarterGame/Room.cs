@@ -214,5 +214,47 @@ namespace StarterGame
                 return Delegate.Description();
             }
         }
+
+        private Dictionary<string, Item> _items;
+
+        public bool Add(Item item)
+        {
+            bool success = false;
+            if (item.CanBeHeld)
+            {
+                _items?.Add(item.Name, item);
+                success = true;
+            }
+
+            return success;
+        }
+
+        public Item Remove(string item)
+        {
+            Item thing = _items?[item];
+            if (thing != null)
+            {
+                _items?.Remove(item);
+                return thing;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public string Inventory
+        {
+            get
+            {
+                string inventory = "";
+                foreach (Item item in _items?.Values)
+                {
+                    inventory += item + "\n";
+                }
+
+                return inventory;
+            }
+        }
     }
 }

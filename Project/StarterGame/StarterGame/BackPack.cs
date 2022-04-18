@@ -15,7 +15,7 @@ namespace StarterGame
             bool success = false;
             if (item.CanBeHeld && item.Weight <= Limit)
             {
-                _items.Add(item.Name, item);
+                _items?.Add(item.Name, item);
                 Limit -= item.Weight;
                 success = true;
             }
@@ -23,10 +23,18 @@ namespace StarterGame
             return success;
         }
 
-        public bool Remove(Item item)
+        public Item Remove(string item)
         {
-            bool success = _items.Remove(item.Name);
-            return success;
+            Item thing = _items?[item];
+            if (thing != null)
+            {
+                _items?.Remove(item);
+                return thing;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public string Inventory
@@ -34,7 +42,7 @@ namespace StarterGame
             get
             {
                 string inventory = "";
-                foreach (Item item in _items.Values)
+                foreach (Item item in _items?.Values)
                 {
                     inventory += item + "\n";
                 }

@@ -91,6 +91,26 @@ namespace StarterGame
         private Room CreateWorld()
         {
             Room town = new Room("in the town");
+            Gem ruby = new Gem("ruby", "town", 10, 30);
+            Gem onyx = new Gem("onyx", "town", 10, 30);
+            if(ruby != null)
+            {
+                town.Add(ruby);
+            }
+            else
+            {
+                Console.WriteLine("\nThere is no ruby");
+            }
+            if (onyx != null)
+            {
+                town.Add(onyx);
+            }
+            else
+            {
+                Console.WriteLine("\nThere is no ruby");
+            }
+
+
             Room entrance = new Room("in the entrance of the dungeon");
 
             Room room1_0 = new Room("in room 1_0");
