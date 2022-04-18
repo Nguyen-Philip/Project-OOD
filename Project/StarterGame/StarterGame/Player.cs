@@ -45,7 +45,7 @@ namespace StarterGame
                 }
                 else
                 {
-                    this.OutputMessage("\nThe door is locked");
+                    this.OutputMessage("\nThe door is closed");
                     this.OutputMessage("\n" + this.CurrentRoom.Description());
                 }
             }
@@ -122,7 +122,6 @@ namespace StarterGame
 
         }
 
-        //
         public void Say(string word)
         {
             OutputMessage("\n" + word);
@@ -142,9 +141,17 @@ namespace StarterGame
                 {
                     if (door.IsClosed)
                     {
-                        door.Open();
-                        this.OutputMessage("\nThe door has been opened");
-                        this.OutputMessage("\n" + this.CurrentRoom.Description());
+                        if (door.IsLocked)
+                        {
+                            this.OutputMessage("\nThe door is closed and locked");
+                            this.OutputMessage("\n" + this.CurrentRoom.Description());
+                        }
+                        else
+                        {
+                            door.Open();
+                            this.OutputMessage("\nThe door has been opened");
+                            this.OutputMessage("\n" + this.CurrentRoom.Description());
+                        }
                     }
                     else
                     {
@@ -152,14 +159,16 @@ namespace StarterGame
                         this.OutputMessage("\n" + this.CurrentRoom.Description());
                     }
                 }
-            }
-            else if (exitName == "portal")
-            {
-                this.OutputMessage("\nYou cannot open a portal");
+                else
+                {
+                    this.OutputMessage("\nThere is no door " + exitName + " to close");
+                    this.OutputMessage("\n" + this.CurrentRoom.Description());
+                }
             }
             else
             {
-                this.OutputMessage("\nThere is no door on " + exitName + " to open");
+                this.OutputMessage("\nYou cannot open a portal");
+                this.OutputMessage("\n" + this.CurrentRoom.Description());
             }
         }
 
@@ -173,23 +182,99 @@ namespace StarterGame
                     if (door.IsOpen)
                     {
                         door.Close();
-                        this.OutputMessage("\nThe door has been locked");
+                        this.OutputMessage("\nThe door has been closed");
                         this.OutputMessage("\n" + this.CurrentRoom.Description());
                     }
                     else
                     {
-                        this.OutputMessage("\nThe door is not open");
+                        this.OutputMessage("\nThe door is close");
                         this.OutputMessage("\n" + this.CurrentRoom.Description());
                     }
                 }
-            }
-            else if(exitName == "portal")
-            {
-                this.OutputMessage("\nYou cannot close a portal");
+                else
+                {
+                    this.OutputMessage("\nThere is no door " + exitName + " to close");
+                    this.OutputMessage("\n" + this.CurrentRoom.Description());
+                }
             }
             else
             {
-                this.OutputMessage("\nThere is no door on " + exitName + " to close");
+                this.OutputMessage("\nYou cannot close a portal");
+                this.OutputMessage("\n" + this.CurrentRoom.Description());
+            }
+        }
+
+        public void Unlock(string exitName)
+        {
+            Door door = this.CurrentRoom.GetExit(exitName);
+            if (exitName != "portal")
+            {
+                if (door != null)
+                {
+                    if (door.IsOpen)
+                    {
+                        this.OutputMessage("\nThe door is open");
+                        this.OutputMessage("\n" + this.CurrentRoom.Description());
+                    }
+                    else
+                    {
+                        if (door.IsLocked)
+                        {
+                            door.Unlock();
+                            this.OutputMessage("\nThe door has been unlocked");
+                            this.OutputMessage("\n" + this.CurrentRoom.Description());
+                        }
+                        else
+                        {
+                            this.OutputMessage("\nThe door is not locked");
+                            this.OutputMessage("\n" + this.CurrentRoom.Description());
+                        }
+                    }
+                }
+                else
+                {
+                    this.OutputMessage("\nThere is no door " + exitName + " to unlock");
+                    this.OutputMessage("\n" + this.CurrentRoom.Description());
+                }
+            }
+            else
+            {
+                this.OutputMessage("\nYou cannot unlock a portal");
+                this.OutputMessage("\n" + this.CurrentRoom.Description());
+            }
+        }
+
+        public void Lock(string exitName)
+        {
+            Door door = this.CurrentRoom.GetExit(exitName);
+            if (exitName != "portal")
+            {
+                if (door != null)
+                {
+                    if (door.IsOpen)
+                    {
+                        this.OutputMessage("\nThe door is open");
+                        this.OutputMessage("\n" + this.CurrentRoom.Description());
+                    }
+                    else
+                    {
+                        Regularlock aLock = new Regularlock();
+                        door.InstallLock(aLock);
+                        door.Lock();
+                        this.OutputMessage("\nThe door has been locked");
+                        this.OutputMessage("\n" + this.CurrentRoom.Description());
+                    }
+                }
+                else
+                {
+                    this.OutputMessage("\nThere is no door " + exitName + " to lock");
+                    this.OutputMessage("\n" + this.CurrentRoom.Description());
+                }
+            }
+            else
+            {
+                this.OutputMessage("\nYou cannot lock a portal");
+                this.OutputMessage("\n" + this.CurrentRoom.Description());
             }
         }
 

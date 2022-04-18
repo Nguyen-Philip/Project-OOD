@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace StarterGame
 {
-    public class OpenCommand : Command
+    public class LockCommand : Command
     {
-        public OpenCommand() : base()
+        public LockCommand() : base()
         {
-            this.Name = "open";
+            this.Name = "lock";
         }
 
         override
@@ -15,7 +15,7 @@ namespace StarterGame
         {
             if (this.HasSecondWord())
             {
-                player.Open(this.SecondWord);
+                player.Lock(this.SecondWord);
             }
             else
             {

@@ -126,7 +126,29 @@ Time Spent : 10m 13s
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+Changes:
+Door.cs
+It implements the interface ICloseable
 
+Room.cs
+Moved IRoomDelegates to GameInterfaces.cs
+
+Player.cs
+Added the methods lock and unlock, improved close and open
+
+Added:
+GameInterfaces.cs
+Will hold all interfaces now. Has IRoomDelegate, ICloseable, and ILockable
+
+RegularLock.cs
+Creates a lock whenever a lock is made
+
+Chest.cs
+Still in works
+
+Time Spent : 32m 28s
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 RestartCommands Still Need to Worked on (It ends then starts the game. It prints out the town location, but your location has not been updated. Also needs to reset each room when called, maybe reset log?)
 

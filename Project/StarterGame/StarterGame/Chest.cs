@@ -4,10 +4,9 @@ using System;
 
 namespace StarterGame
 {
-    public class Door : ICloseable
+    public class Chest : ICloseable
     {
         private Room _roomA;
-        private Room _roomB;
         private bool _open;
         private ILockable _lock;
 
@@ -21,10 +20,9 @@ namespace StarterGame
 
         public bool IsUnlocked { get { return _lock == null ? true : _lock.IsUnlocked; } }
 
-        public Door(Room roomA, Room roomB)
+        public Chest(Room roomA)
         {
             _roomA = roomA;
-            _roomB = roomB;
             _open = true;
             _lock = null;
         }
@@ -68,31 +66,6 @@ namespace StarterGame
             return oldLock;
         }
 
-        public Room GetRoomOnTheOtherSide(Room ofThisRoom)
-        {
-            if(ofThisRoom == _roomA)
-            {
-                return _roomB;
-            }
-            else
-            {
-                return _roomA;
-            }
-        }
 
-        public static Door CreateDoor(Room room1, Room room2, string label1, string label2)
-        {
-            Door door = new Door(room1, room2);
-            room1.SetExit(label1, door);
-            room2.SetExit(label2, door);
-            return door;
-        }
-
-        public static Door CreatePortal(Room room1, Room room2, string label1)
-        {
-            Door door = new Door(room1, room2);
-            room1.SetExit(label1, door);
-            return door;
-        }
     }
 }

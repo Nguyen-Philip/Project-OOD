@@ -5,14 +5,14 @@ using System;
 
 namespace StarterGame
 {
-    public interface IRoomDelegate
+    /*public interface IRoomDelegate
     {
         Door GetExit(string exitName);
         string GetExits();
         string Description();
         Room ContainingRoom { set; get; }
         Dictionary<string, Door> ContainingRoomExits { set; get; }
-    }
+    }*/
 
     public class TrapRoom : IRoomDelegate
     {

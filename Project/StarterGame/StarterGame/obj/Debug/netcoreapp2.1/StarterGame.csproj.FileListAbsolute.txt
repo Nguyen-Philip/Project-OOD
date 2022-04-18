@@ -98,3 +98,16 @@ C:\Users\Konos\Downloads\Test - Copy\Project-OOD-Test-Branch-patch-1\Project\Sta
 C:\Users\Konos\Downloads\Test - Copy\Project-OOD-Test-Branch-patch-1\Project\StarterGame\StarterGame\obj\Debug\netcoreapp2.1\StarterGame.dll
 C:\Users\Konos\Downloads\Test - Copy\Project-OOD-Test-Branch-patch-1\Project\StarterGame\StarterGame\obj\Debug\netcoreapp2.1\StarterGame.pdb
 C:\Users\Konos\Downloads\Test - Copy\Project-OOD-Test-Branch-patch-1\Project\StarterGame\StarterGame\obj\Debug\netcoreapp2.1\StarterGame.genruntimeconfig.cache
+C:\Users\Konos\Downloads\Project-OOD-Test-Branch-patch-1\Project-OOD-Test-Branch-patch-1\Project\StarterGame\StarterGame\bin\Debug\netcoreapp2.1\StarterGame.deps.json
+C:\Users\Konos\Downloads\Project-OOD-Test-Branch-patch-1\Project-OOD-Test-Branch-patch-1\Project\StarterGame\StarterGame\bin\Debug\netcoreapp2.1\StarterGame.runtimeconfig.json
+C:\Users\Konos\Downloads\Project-OOD-Test-Branch-patch-1\Project-OOD-Test-Branch-patch-1\Project\StarterGame\StarterGame\bin\Debug\netcoreapp2.1\StarterGame.runtimeconfig.dev.json
+C:\Users\Konos\Downloads\Project-OOD-Test-Branch-patch-1\Project-OOD-Test-Branch-patch-1\Project\StarterGame\StarterGame\bin\Debug\netcoreapp2.1\StarterGame.dll
+C:\Users\Konos\Downloads\Project-OOD-Test-Branch-patch-1\Project-OOD-Test-Branch-patch-1\Project\StarterGame\StarterGame\bin\Debug\netcoreapp2.1\StarterGame.pdb
+C:\Users\Konos\Downloads\Project-OOD-Test-Branch-patch-1\Project-OOD-Test-Branch-patch-1\Project\StarterGame\StarterGame\obj\Debug\netcoreapp2.1\StarterGame.csproj.AssemblyReference.cache
+C:\Users\Konos\Downloads\Project-OOD-Test-Branch-patch-1\Project-OOD-Test-Branch-patch-1\Project\StarterGame\StarterGame\obj\Debug\netcoreapp2.1\StarterGame.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Konos\Downloads\Project-OOD-Test-Branch-patch-1\Project-OOD-Test-Branch-patch-1\Project\StarterGame\StarterGame\obj\Debug\netcoreapp2.1\StarterGame.AssemblyInfoInputs.cache
+C:\Users\Konos\Downloads\Project-OOD-Test-Branch-patch-1\Project-OOD-Test-Branch-patch-1\Project\StarterGame\StarterGame\obj\Debug\netcoreapp2.1\StarterGame.AssemblyInfo.cs
+C:\Users\Konos\Downloads\Project-OOD-Test-Branch-patch-1\Project-OOD-Test-Branch-patch-1\Project\StarterGame\StarterGame\obj\Debug\netcoreapp2.1\StarterGame.csproj.CoreCompileInputs.cache
+C:\Users\Konos\Downloads\Project-OOD-Test-Branch-patch-1\Project-OOD-Test-Branch-patch-1\Project\StarterGame\StarterGame\obj\Debug\netcoreapp2.1\StarterGame.dll
+C:\Users\Konos\Downloads\Project-OOD-Test-Branch-patch-1\Project-OOD-Test-Branch-patch-1\Project\StarterGame\StarterGame\obj\Debug\netcoreapp2.1\StarterGame.pdb
+C:\Users\Konos\Downloads\Project-OOD-Test-Branch-patch-1\Project-OOD-Test-Branch-patch-1\Project\StarterGame\StarterGame\obj\Debug\netcoreapp2.1\StarterGame.genruntimeconfig.cache

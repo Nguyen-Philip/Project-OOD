@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace StarterGame
 {
-    public class OpenCommand : Command
+    public class UnlockCommand : Command
     {
-        public OpenCommand() : base()
+        public UnlockCommand() : base()
         {
-            this.Name = "open";
+            this.Name = "unlock";
         }
 
         override
@@ -15,11 +15,11 @@ namespace StarterGame
         {
             if (this.HasSecondWord())
             {
-                player.Open(this.SecondWord);
+                player.Unlock(this.SecondWord);
             }
             else
             {
-                player.OutputMessage("\nOpen what?");
+                player.OutputMessage("\nUnlock what?");
                 player.OutputMessage("\n" + player.CurrentRoom.Description());
             }
             return false;
