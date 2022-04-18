@@ -5,14 +5,14 @@ using System;
 
 namespace StarterGame
 {
-    public interface IRoomDelegate
+    /*public interface IRoomDelegate
     {
         Door GetExit(string exitName);
         string GetExits();
         string Description();
         Room ContainingRoom { set; get; }
         Dictionary<string, Door> ContainingRoomExits { set; get; }
-    }
+    }*/
 
     public class TrapRoom : IRoomDelegate
     {
@@ -60,13 +60,13 @@ namespace StarterGame
                 }
             }
         }
-
     }
 
     public class EchoRoom : IRoomDelegate
     {
         public Room ContainingRoom { set; get; }
         public Dictionary<string, Door> ContainingRoomExits { set; get; }
+
         public EchoRoom()
         {
             NotificationCenter.Instance.AddObserver("PlayerSaidWord", PlayerSaidWord);
@@ -112,6 +112,7 @@ namespace StarterGame
     {
         private Dictionary<string, Door> _exits;
         private string _tag;
+
         public string Tag
         {
             get

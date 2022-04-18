@@ -64,15 +64,17 @@ namespace StarterGame
         public void PlayerWillEnterRoom(Notification notification)
         {
             Player player = (Player)notification.Object;
-            /*if(player.CurrentRoom == _exit)
+            if(player.CurrentRoom == _exit)
             {
-                Room room = player.CurrentRoom.GetExit("teleporter");
-                if(room != null)
+                door = player.CurrentRoom.GetExit("portal");
+                if(door != null)
                 {
-                    player.CurrentRoom.SetExit("teleporter", null);
+                    player.CurrentRoom.SetExit("portal", null);
+                    _trigger = null;
+                    player.OutputMessage("\n*** The portal collapses behind you. ***");
                 }
-            }*/
-            player.OutputMessage("\n*** The player is " + player.CurrentRoom.Tag + ", getting ready to leave ***");
+            }
+            //player.OutputMessage("\n*** The player is " + player.CurrentRoom.Tag + ", getting ready to leave ***");
         }
 
         public void PlayerDidEnterRoom(Notification notification)
@@ -80,8 +82,8 @@ namespace StarterGame
             Player player = (Player)notification.Object;
             if (player.CurrentRoom == _trigger)
             {
-                door = Door.CreateTeleporter(_exit, _portalExit, "teleporter");
-                player.OutputMessage("\n*** You hear a loud noise. A teleporter has been created nearby. ***");
+                door = Door.CreatePortal(_exit, _portalExit, "portal");
+                player.OutputMessage("\n*** You hear a loud noise. A portal has been created nearby. ***");
             }
             player.OutputMessage("\n*** The player is " + player.CurrentRoom.Tag + " ***");
         }
@@ -123,6 +125,10 @@ namespace StarterGame
             Room room3_9 = new Room("in room 3_9");
 
             door = Door.CreateDoor(town, entrance, "north", "south");
+            door.Close();
+            Regularlock aLock = new Regularlock();
+            door.InstallLock(aLock);
+            door.Lock();
 
             door = Door.CreateDoor(entrance, room1_0, "north", "south");
             door = Door.CreateDoor(room1_0, room1_1, "north", "south");
@@ -145,7 +151,6 @@ namespace StarterGame
             door = Door.CreateDoor(room2_7, room2_8, "east", "west");
 
             door = Door.CreateDoor(entrance, room3_0, "east", "west");
-
             door = Door.CreateDoor(room3_0, room3_1, "north", "south");
             door = Door.CreateDoor(room3_1, room3_2, "north", "south");
             door = Door.CreateDoor(room3_1, room3_3, "east", "west");
@@ -154,15 +159,11 @@ namespace StarterGame
             door = Door.CreateDoor(room3_5, room3_6, "south", "north");
             door = Door.CreateDoor(room3_5, room3_9, "north", "south");
             door = Door.CreateDoor(room3_6, room3_7, "south", "north");
-
             door = Door.CreateDoor(room3_7, room3_8, "west", "east");
 
             _exit = entrance;
-
             _trigger = entrance;
-
             _portalExit = room1_4;
-
             _entrance = town;
 
             //set the Delegate Rooms

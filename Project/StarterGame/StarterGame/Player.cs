@@ -9,6 +9,7 @@ namespace StarterGame
         private Room _currentRoom = null;
         private List<string> _log = new List<string>();
         private List<string> _movementlog = new List<string>();
+
         public Room CurrentRoom
         {
             get
@@ -44,12 +45,22 @@ namespace StarterGame
                 }
                 else
                 {
-                    this.OutputMessage("\nThe door is locked");
+                    this.OutputMessage("\nThe door is closed");
+                    this.OutputMessage("\n" + this.CurrentRoom.Description());
                 }
             }
             else
             {
-                this.OutputMessage("\nThere is no door on " + direction);
+                if (direction == "portal")
+                {
+                    this.OutputMessage("\nThere is no " + direction);
+                    this.OutputMessage("\n" + this.CurrentRoom.Description());
+                }
+                else
+                {
+                    this.OutputMessage("\nThere is no door on " + direction);
+                    this.OutputMessage("\n" + this.CurrentRoom.Description());
+                }
             }
         }
 
@@ -101,6 +112,16 @@ namespace StarterGame
             }
         }
 
+        public void Pickup(string word)
+        {
+
+        }
+
+        public void Drop(string word)
+        {
+
+        }
+
         //
         public void Say(string word)
         {
@@ -113,6 +134,75 @@ namespace StarterGame
         }
 
         public void Open(string exitName)
+        {
+            Door door = this.CurrentRoom.GetExit(exitName);
+            if (exitName != "portal")
+            {
+                if (door != null)
+                {
+                    if (door.IsClosed)
+                    {
+                        door.Open();
+                        this.OutputMessage("\nThe door has been opened");
+                        this.OutputMessage("\n" + this.CurrentRoom.Description());
+                    }
+                    else
+                    {
+                        this.OutputMessage("\nThe door is not locked");
+                        this.OutputMessage("\n" + this.CurrentRoom.Description());
+                    }
+                }
+                else
+                {
+                    this.OutputMessage("\nThere is no door " + exitName + " to close");
+                    this.OutputMessage("\n" + this.CurrentRoom.Description());
+                }
+            }
+            else
+            {
+                this.OutputMessage("\nYou cannot open a portal");
+                this.OutputMessage("\n" + this.CurrentRoom.Description());
+            }
+        }
+
+        public void Close(string exitName)
+        {
+            Door door = this.CurrentRoom.GetExit(exitName);
+            if (exitName != "portal")
+            {
+                if (door != null)
+                {
+                    if (door.IsOpen)
+                    {
+                        door.Close();
+                        this.OutputMessage("\nThe door has been closed");
+                        this.OutputMessage("\n" + this.CurrentRoom.Description());
+                    }
+                    else
+                    {
+                        this.OutputMessage("\nThe door is not open");
+                        this.OutputMessage("\n" + this.CurrentRoom.Description());
+                    }
+                }
+                else
+                {
+                    this.OutputMessage("\nThere is no door " + exitName + " to close");
+                    this.OutputMessage("\n" + this.CurrentRoom.Description());
+                }
+            }
+            else
+            {
+                this.OutputMessage("\nYou cannot close a portal");
+                this.OutputMessage("\n" + this.CurrentRoom.Description());
+            }
+        }
+
+        public void Lock(string name)
+        {
+
+        }
+
+        public void Unlock(string name)
         {
 
         }
