@@ -161,7 +161,7 @@ Player.cs
 Search added to look for chest as well as possible items
 
 Added:
-Search.cs
+SearchCommand.cs
 Able to search for chest at the moment, unable to find items.
 
 Time Spent : 35m 40s
