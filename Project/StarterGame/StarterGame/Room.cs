@@ -111,6 +111,7 @@ namespace StarterGame
     public class Room
     {
         private Dictionary<string, Door> _exits;
+        private Dictionary<string, Chest> _chests;
         private string _tag;
 
         public string Tag
@@ -151,6 +152,7 @@ namespace StarterGame
         {
             Delegate = null;
             _exits = new Dictionary<string, Door>();
+            _chests = new Dictionary<string, Chest>();
             this.Tag = tag;
         }
 
@@ -201,7 +203,43 @@ namespace StarterGame
                 return Delegate.GetExits();
             }
         }
-        
+
+        public void SetChest(string name, Chest chest)
+        {
+            if (chest != null)
+            {
+                _chests[name] = chest;
+            }
+            else
+            {
+                _chests.Remove(name);
+            }
+        }
+
+        public Chest GetChest(string name)
+        {
+            Chest chest = null;
+            _chests.TryGetValue(name, out chest);
+            return chest;
+        }
+
+        public string GetChest()
+        {
+            string names = "Findings:";
+            Dictionary<string, Chest>.KeyCollection keys = _chests.Keys;
+            foreach (string name in keys)
+            {
+                names += " " + name;
+            }
+
+            return names;
+        }
+
+        public string Chest()
+        {
+            return "You are " + this.Tag + ".\n *** " + this.GetChest();
+        }
+
         //Get Room Description
         public string Description()
         {

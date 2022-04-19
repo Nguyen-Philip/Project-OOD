@@ -13,7 +13,7 @@ namespace StarterGame
         private Room _trigger;
         private Room _portalExit;
         private Door door;
-
+        private Chest chest;
         public static GameWorld Instance()
         {
             if(_instance == null)
@@ -125,6 +125,7 @@ namespace StarterGame
             Room room3_9 = new Room("in room 3_9");
 
             door = Door.CreateDoor(town, entrance, "north", "south");
+            chest = Chest.CreateChest(town, "chest");
 
             door = Door.CreateDoor(entrance, room1_0, "north", "south");
             door = Door.CreateDoor(room1_0, room1_1, "north", "south");

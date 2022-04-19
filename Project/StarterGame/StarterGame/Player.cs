@@ -132,10 +132,11 @@ namespace StarterGame
             this.OutputMessage("\n" + this.CurrentRoom.Description());
         }
 
-        public void Open(string exitName)
+        public void Open(string name)
         {
-            Door door = this.CurrentRoom.GetExit(exitName);
-            if (exitName != "portal")
+            Door door = this.CurrentRoom.GetExit(name);
+            Chest chest = this.CurrentRoom.GetChest(name);
+            if (name != "portal" && name != "chest")
             {
                 if (door != null)
                 {
@@ -155,13 +156,43 @@ namespace StarterGame
                     }
                     else
                     {
-                        this.OutputMessage("\nThe door is not locked");
+                        this.OutputMessage("\nThe door is open");
                         this.OutputMessage("\n" + this.CurrentRoom.Description());
                     }
                 }
                 else
                 {
-                    this.OutputMessage("\nThere is no door " + exitName + " to close");
+                    this.OutputMessage("\nThere is no door " + name + " to close");
+                    this.OutputMessage("\n" + this.CurrentRoom.Description());
+                }
+            }
+            else if (name == "chest")
+            {
+                if (chest != null)
+                {
+                    if (chest.IsClosed)
+                    {
+                        if (chest.IsLocked)
+                        {
+                            this.OutputMessage("\nThe chest is closed and locked");
+                            this.OutputMessage("\n" + this.CurrentRoom.Description());
+                        }
+                        else
+                        {
+                            chest.Open();
+                            this.OutputMessage("\nThe chest has been opened");
+                            this.OutputMessage("\n" + this.CurrentRoom.Description());
+                        }
+                    }
+                    else
+                    {
+                        this.OutputMessage("\nThe chest is open");
+                        this.OutputMessage("\n" + this.CurrentRoom.Description());
+                    }
+                }
+                else
+                {
+                    this.OutputMessage("\nThere is no " + name + " to open");
                     this.OutputMessage("\n" + this.CurrentRoom.Description());
                 }
             }
@@ -172,10 +203,11 @@ namespace StarterGame
             }
         }
 
-        public void Close(string exitName)
+        public void Close(string name)
         {
-            Door door = this.CurrentRoom.GetExit(exitName);
-            if (exitName != "portal")
+            Door door = this.CurrentRoom.GetExit(name);
+            Chest chest = this.CurrentRoom.GetChest(name);
+            if (name != "portal" && name != "chest")
             {
                 if (door != null)
                 {
@@ -193,7 +225,29 @@ namespace StarterGame
                 }
                 else
                 {
-                    this.OutputMessage("\nThere is no door " + exitName + " to close");
+                    this.OutputMessage("\nThere is no door " + name + " to close");
+                    this.OutputMessage("\n" + this.CurrentRoom.Description());
+                }
+            }
+            else if (name == "chest")
+            {
+                if (chest != null)
+                {
+                    if (chest.IsOpen)
+                    {
+                        chest.Close();
+                        this.OutputMessage("\nThe chest has been closed");
+                        this.OutputMessage("\n" + this.CurrentRoom.Description());
+                    }
+                    else
+                    {
+                        this.OutputMessage("\nThe chest is close");
+                        this.OutputMessage("\n" + this.CurrentRoom.Description());
+                    }
+                }
+                else
+                {
+                    this.OutputMessage("\nThere is no " + name + " to close");
                     this.OutputMessage("\n" + this.CurrentRoom.Description());
                 }
             }
@@ -204,10 +258,11 @@ namespace StarterGame
             }
         }
 
-        public void Unlock(string exitName)
+        public void Unlock(string name)
         {
-            Door door = this.CurrentRoom.GetExit(exitName);
-            if (exitName != "portal")
+            Door door = this.CurrentRoom.GetExit(name);
+            Chest chest = this.CurrentRoom.GetChest(name);
+            if (name != "portal" && name != "chest")
             {
                 if (door != null)
                 {
@@ -233,7 +288,37 @@ namespace StarterGame
                 }
                 else
                 {
-                    this.OutputMessage("\nThere is no door " + exitName + " to unlock");
+                    this.OutputMessage("\nThere is no door " + name + " to unlock");
+                    this.OutputMessage("\n" + this.CurrentRoom.Description());
+                }
+            }
+            else if (name == "chest")
+            {
+                if (chest != null)
+                {
+                    if (chest.IsOpen)
+                    {
+                        this.OutputMessage("\nThe chest is open");
+                        this.OutputMessage("\n" + this.CurrentRoom.Description());
+                    }
+                    else
+                    {
+                        if (chest.IsLocked)
+                        {
+                            chest.Unlock();
+                            this.OutputMessage("\nThe chest has been unlocked");
+                            this.OutputMessage("\n" + this.CurrentRoom.Description());
+                        }
+                        else
+                        {
+                            this.OutputMessage("\nThe chest is not locked");
+                            this.OutputMessage("\n" + this.CurrentRoom.Description());
+                        }
+                    }
+                }
+                else
+                {
+                    this.OutputMessage("\nThere is no " + name + " to unlock");
                     this.OutputMessage("\n" + this.CurrentRoom.Description());
                 }
             }
@@ -244,10 +329,11 @@ namespace StarterGame
             }
         }
 
-        public void Lock(string exitName)
+        public void Lock(string name)
         {
-            Door door = this.CurrentRoom.GetExit(exitName);
-            if (exitName != "portal")
+            Door door = this.CurrentRoom.GetExit(name);
+            Chest chest = this.CurrentRoom.GetChest(name);
+            if (name != "portal" && name != "chest")
             {
                 if (door != null)
                 {
@@ -267,7 +353,31 @@ namespace StarterGame
                 }
                 else
                 {
-                    this.OutputMessage("\nThere is no door " + exitName + " to lock");
+                    this.OutputMessage("\nThere is no door " + name + " to lock");
+                    this.OutputMessage("\n" + this.CurrentRoom.Description());
+                }
+            }
+            else if (name == "chest")
+            {
+                if (chest != null)
+                {
+                    if (chest.IsOpen)
+                    {
+                        this.OutputMessage("\nThe chest is open");
+                        this.OutputMessage("\n" + this.CurrentRoom.Description());
+                    }
+                    else
+                    {
+                        Regularlock aLock = new Regularlock();
+                        chest.InstallLock(aLock);
+                        chest.Lock();
+                        this.OutputMessage("\nThe chest has been locked");
+                        this.OutputMessage("\n" + this.CurrentRoom.Description());
+                    }
+                }
+                else
+                {
+                    this.OutputMessage("\nThere is no " + name + " to lock");
                     this.OutputMessage("\n" + this.CurrentRoom.Description());
                 }
             }
@@ -276,6 +386,11 @@ namespace StarterGame
                 this.OutputMessage("\nYou cannot lock a portal");
                 this.OutputMessage("\n" + this.CurrentRoom.Description());
             }
+        }
+
+        public void Search()
+        {
+            this.OutputMessage("\n" + this.CurrentRoom.Chest());
         }
 
         //prints a message

@@ -150,6 +150,25 @@ Time Spent : 32m 28s
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+Changes:
+Chest.cs
+Can lock, unlock, open, close a chest.
+
+Room.cs
+Added SetChest, GetChest(string), GetChests
+
+Player.cs
+Search added to look for chest as well as possible items
+
+Added:
+Search.cs
+Able to search for chest at the moment, unable to find items.
+
+Time Spent : 35m 40s
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
 RestartCommands Still Need to Worked on (It ends then starts the game. It prints out the town location, but your location has not been updated. Also needs to reset each room when called, maybe reset log?)
 
 

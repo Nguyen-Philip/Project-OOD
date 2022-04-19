@@ -66,6 +66,11 @@ namespace StarterGame
             return oldLock;
         }
 
-
+        public static Chest CreateChest(Room room1, string label1)
+        {
+            Chest chest = new Chest(room1);
+            room1.SetChest(label1, chest);
+            return chest;
+        }
     }
 }
