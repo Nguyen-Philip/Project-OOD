@@ -4,7 +4,7 @@ namespace StarterGame
     public class Weapon : Item
     {
         private string _Name;
-        private string _Location;
+        private Room _Location;
         private int _Value;
         private int _Weight;
         private int _AR;
@@ -12,7 +12,7 @@ namespace StarterGame
         private bool _IsUsable = true;
 
         public string Name { set { _Name = value; } get { return _Name; } }
-        public string Location { set { _Location = value; } get { return _Location; } }
+        public Room Location { set { _Location = value; } get { return _Location; } }
         public int Value { set { _Value = value; } get { return _Value; } }
         public int Weight { set { _Weight = value; } get { return _Weight; } }
         public int AR { set { _AR = value; } get { return _AR; } }
@@ -31,17 +31,35 @@ namespace StarterGame
             }
         }
 
-        public Weapon(string name) : this(name, "NO LOCATION") { }
-        public Weapon(string name, string location) : this(name, location, 0) { }
-        public Weapon(string name, string location, int value) : this(name, location, value, 0) { }
-        public Weapon(string name, string location, int value, int weight) : this(name, location, value, weight, 1) { }
-        public Weapon(string name, string location, int value, int weight, int ar)
+        public Weapon(Room location)
         {
-            _Name = name;
+            _Location = location;
+            _CanBeHeld = true;
+            _IsUsable = false;
+        }
+
+        public Weapon(Room location, int value, int weight, int ar)
+        {
             _Location = location;
             _Value = value;
             _Weight = weight;
             _AR = ar;
+            _CanBeHeld = true;
+            _IsUsable = false;
+        }
+
+        public static Weapon CreateWeapon(Room location, string name)
+        {
+            Weapon weapon = new Weapon(location);
+            location.SetWeapon(name, weapon);
+            return weapon;
+        }
+
+        public static Weapon CreateWeapon(Room location, string name, int value, int weight, int ar)
+        {
+            Weapon weapon = new Weapon(location, value, weight, ar);
+            location.SetWeapon(name, weapon);
+            return weapon;
         }
     }
 }

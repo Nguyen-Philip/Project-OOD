@@ -8,7 +8,7 @@ namespace StarterGame
     {
 
         private string _Name;
-        private string _Location;
+        private Room _Location;
         private bool _CanTalk = false;
         private int _Hp;
         private int _Ar;
@@ -51,13 +51,14 @@ namespace StarterGame
         }
 
         public string Name { set { _Name = value; } get { return _Name; } }
-        public string Location { set { _Location = value; } get { return _Location; } }
+        public Room Location { set { _Location = value; } get { return _Location; } }
         public bool CanTalk { set { _CanTalk = value; } get { return _CanTalk; } }
         public int Hp { set { _Hp = value; } get { return _Hp; } }
         public int Ar { set { _Ar = value; } get { return _Ar; } }
         public int Priority { set { _Priority = value; } get { return _Priority; } }
         public List<Item> Dropped { get { return _Dropped; } }
-        public Enemy(string name) : this(name, "NO LOCATION") { }
+
+        /*public Enemy(string name) : this(name, "NO LOCATION") { }
         public Enemy(string name, string location) : this(name, location, 1, 1, 2) { }
         public Enemy(string name, string location, int hp) : this(name, location, hp, 1, 2) { }
         public Enemy(string name, string location, int hp, int ar) : this(name, location, hp, ar, 2) { }
@@ -68,7 +69,7 @@ namespace StarterGame
             _Hp = hp;
             _Ar = ar;
             _Priority = priority;
-        }
+        }*/
 
     }
 }

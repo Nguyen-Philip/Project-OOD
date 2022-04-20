@@ -6,15 +6,16 @@ namespace StarterGame
     {
         
         private string _Name;
-        private string _Location;
+        private Room _Location;
         private bool _CanTalk;
         private string _Dialog;
         
         public string Name { set { _Name = value; } get { return _Name; } }
-        public string Location { set { _Location = value; } get { return _Location; } }
+        public Room Location { set { _Location = value; } get { return _Location; } }
         public bool CanTalk { set { _CanTalk = value; } get { return _CanTalk; } }
         public string Dialog { set { _Dialog = value; } get { return _Dialog; } }
-        public NPC(string name) : this(name, "NO LOCATION") { }
+        
+        /*public NPC(string name) : this(name, "NO LOCATION") { }
         public NPC(string name, string location) : this(name, location, false, null) { }
         public NPC(string name, string location, bool canTalk, string dialog)
         {
@@ -22,7 +23,7 @@ namespace StarterGame
             _Location = location;
             _CanTalk = canTalk;
             _Dialog = dialog;
-        }
+        }*/
        
     }
 }

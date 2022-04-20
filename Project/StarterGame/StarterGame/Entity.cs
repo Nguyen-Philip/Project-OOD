@@ -7,7 +7,7 @@ namespace StarterGame
     public interface IEntity
     {
         string Name { set; get; }
-        string Location { set; get; }
+        Room Location { set; get; }
 
     }
 }

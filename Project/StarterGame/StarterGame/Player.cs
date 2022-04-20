@@ -390,7 +390,7 @@ namespace StarterGame
 
         public void Search()
         {
-            this.OutputMessage("\n" + this.CurrentRoom.Chest());
+            this.OutputMessage("\n" + this.CurrentRoom.SearchRoom());
         }
 
         //prints a message

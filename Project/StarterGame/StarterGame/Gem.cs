@@ -4,14 +4,14 @@ namespace StarterGame
     public class Gem : Item
     {
         private string _Name;
-        private string _Location;
+        private Room _Location;
         private int _Value;
         private int _Weight;
         private bool _CanBeHeld = true;
         private bool _IsUsable = false;
 
         public string Name { set { _Name = value; } get { return _Name; } }
-        public string Location { set { _Location = value; } get { return _Location; } }
+        public Room Location { set { _Location = value; } get { return _Location; } }
         public int Value { set { _Value = value; } get { return _Value; } }
         public int Weight { set { _Weight = value; } get { return _Weight; } }
 
@@ -30,15 +30,34 @@ namespace StarterGame
             }
         }
 
-        public Gem(string name) : this(name, "NO LOCATION") { }
-        public Gem(string name, string location) : this(name, location, 1) { }
-        public Gem(string name, string location, int value) : this(name, location, value, 1) { }
-        public Gem(string name, string location, int value, int weight)
+        public Gem(Room location)
         {
-            _Name = name;
+            _Location = location;
+            _CanBeHeld = true;
+            _IsUsable = false;
+        }
+
+        public Gem(Room location, int value, int weight)
+        {
             _Location = location;
             _Value = value;
             _Weight = weight;
+            _CanBeHeld = true;
+            _IsUsable = false;
+        }
+
+        public static Gem CreateGem(Room location, string name)
+        {
+            Gem gem = new Gem(location);
+            location.SetGem(name, gem);
+            return gem;
+        }
+
+        public static Gem CreateGem(Room location, string name, int value, int weight)
+        {
+            Gem gem = new Gem(location, value, weight);
+            location.SetGem(name, gem);
+            return gem;
         }
     }
 }
