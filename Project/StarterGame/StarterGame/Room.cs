@@ -111,6 +111,14 @@ namespace StarterGame
     public class Room
     {
         private Dictionary<string, Door> _exits;
+        private Dictionary<string, Chest> _chests;
+        private Dictionary<string, Gem> _gem;
+        private Dictionary<string, Armor> _armor;
+        private Dictionary<string, Enemy> _enemy;
+        private Dictionary<string, NPC> _npc;
+        private Dictionary<string, Potion> _potion;
+        private Dictionary<string, Weapon> _weapon;
+
         private string _tag;
 
         public string Tag
@@ -151,6 +159,13 @@ namespace StarterGame
         {
             Delegate = null;
             _exits = new Dictionary<string, Door>();
+            _chests = new Dictionary<string, Chest>();
+            _gem = new Dictionary<string, Gem>();
+            _armor = new Dictionary<string, Armor>();
+            _enemy = new Dictionary<string, Enemy>();
+            _npc = new Dictionary<string, NPC>();
+            _potion = new Dictionary<string, Potion>();
+            _weapon = new Dictionary<string, Weapon>();
             this.Tag = tag;
         }
 
@@ -201,7 +216,167 @@ namespace StarterGame
                 return Delegate.GetExits();
             }
         }
-        
+
+        public void SetChest(string name, Chest chest)
+        {
+            if (chest != null)
+            {
+                _chests[name] = chest;
+            }
+            else
+            {
+                _chests.Remove(name);
+            }
+        }
+
+        public Chest GetChest(string name)
+        {
+            Chest chest = null;
+            _chests.TryGetValue(name, out chest);
+            return chest;
+        }
+
+        public string GetChests()
+        {
+            string names = "";
+            Dictionary<string, Chest>.KeyCollection keys = _chests.Keys;
+            foreach (string name in keys)
+            {
+                names += " " + name;
+            }
+
+            return names;
+        }
+
+        public void SetGem(string name, Gem gem)
+        {
+            if (gem != null)
+            {
+                _gem[name] = gem;
+            }
+            else
+            {
+                _gem.Remove(name);
+            }
+        }
+
+        public Gem GetGem(string name)
+        {
+            Gem gem = null;
+            _gem.TryGetValue(name, out gem);
+            return gem;
+        }
+
+        public string GetGems()
+        {
+            string names = "";
+            Dictionary<string, Gem>.KeyCollection keys = _gem.Keys;
+            foreach (string name in keys)
+            {
+                names += " " + name;
+            }
+
+            return names;
+        }
+
+        public void SetArmor(string name, Armor armor)
+        {
+            if (armor != null)
+            {
+                _armor[name] = armor;
+            }
+            else
+            {
+                _armor.Remove(name);
+            }
+        }
+
+        public Armor GetArmor(string name)
+        {
+            Armor armor = null;
+            _armor.TryGetValue(name, out armor);
+            return armor;
+        }
+
+        public string GetArmors()
+        {
+            string names = "";
+            Dictionary<string, Armor>.KeyCollection keys = _armor.Keys;
+            foreach (string name in keys)
+            {
+                names += " " + name;
+            }
+
+            return names;
+        }
+
+        public void SetPotion(string name, Potion potion)
+        {
+            if (potion != null)
+            {
+                _potion[name] = potion;
+            }
+            else
+            {
+                _potion.Remove(name);
+            }
+        }
+
+        public Potion GetPotion(string name)
+        {
+            Potion potion = null;
+            _potion.TryGetValue(name, out potion);
+            return potion;
+        }
+
+        public string GetPotions()
+        {
+            string names = "";
+            Dictionary<string, Potion>.KeyCollection keys = _potion.Keys;
+            foreach (string name in keys)
+            {
+                names += " " + name;
+            }
+
+            return names;
+        }
+
+        public void SetWeapon(string name, Weapon weapon)
+        {
+            if (weapon != null)
+            {
+                _weapon[name] = weapon;
+            }
+            else
+            {
+                _weapon.Remove(name);
+            }
+        }
+
+        public Weapon GetWeapon(string name)
+        {
+            Weapon weapon = null;
+            _weapon.TryGetValue(name, out weapon);
+            return weapon;
+        }
+
+        public string GetWeapons()
+        {
+            string names = "";
+            Dictionary<string, Weapon>.KeyCollection keys = _weapon.Keys;
+            foreach (string name in keys)
+            {
+                names += " " + name;
+            }
+
+            return names;
+        }
+
+        public string SearchRoom()
+        {
+            return "You are " + this.Tag + ".\n *** Findings:" + this.GetChests() + this.GetGems() + this.GetArmors() + this.GetWeapons() + this.GetPotions(); 
+        }
+
         //Get Room Description
         public string Description()
         {

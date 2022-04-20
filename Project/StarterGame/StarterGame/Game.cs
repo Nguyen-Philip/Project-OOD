@@ -60,7 +60,11 @@ namespace StarterGame
         public void Restart()
         {
             _playing = false;
+            _parser = new Parser(new CommandWords());
+            _player = new Player(GameWorld.Instance().Entrance);
             Start();
+            Play();
+            End();
         }
 
         //ends the program

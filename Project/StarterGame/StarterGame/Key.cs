@@ -1,21 +1,17 @@
 ﻿using System;
 namespace StarterGame
 {
-    public class Weapon : Item
+    public class Key : KeyItems
     {
         private string _Name;
         private Room _Location;
-        private int _Value;
         private int _Weight;
-        private int _AR;
         private bool _CanBeHeld = true;
         private bool _IsUsable = true;
 
         public string Name { set { _Name = value; } get { return _Name; } }
         public Room Location { set { _Location = value; } get { return _Location; } }
-        public int Value { set { _Value = value; } get { return _Value; } }
         public int Weight { set { _Weight = value; } get { return _Weight; } }
-        public int AR { set { _AR = value; } get { return _AR; } }
 
         public bool CanBeHeld {
             get
@@ -31,35 +27,33 @@ namespace StarterGame
             }
         }
 
-        public Weapon(Room location)
+        public Key(Room location)
         {
             _Location = location;
             _CanBeHeld = true;
             _IsUsable = false;
         }
 
-        public Weapon(Room location, int value, int weight, int ar)
+        public Key(Room location, int weight)
         {
             _Location = location;
-            _Value = value;
             _Weight = weight;
-            _AR = ar;
             _CanBeHeld = true;
             _IsUsable = false;
         }
 
-        public static Weapon CreateWeapon(Room location, string name)
+        public static Key CreateKey(Room location, string name)
         {
-            Weapon weapon = new Weapon(location);
-            location.SetWeapon(name, weapon);
-            return weapon;
+            Key key = new Key(location);
+            location.SetKey(name, key);
+            return key;
         }
 
-        public static Weapon CreateWeapon(Room location, string name, int value, int weight, int ar)
+        public static Key CreateKey(Room location, string name, int weight)
         {
-            Weapon weapon = new Weapon(location, value, weight, ar);
-            location.SetWeapon(name, weapon);
-            return weapon;
+            Key key = new Key(location, weight);
+            location.SetKey(name, key);
+            return key;
         }
     }
 }

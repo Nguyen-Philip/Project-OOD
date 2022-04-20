@@ -126,6 +126,84 @@ Time Spent : 10m 13s
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+Changes:
+Door.cs
+It implements the interface ICloseable
+
+Room.cs
+Moved IRoomDelegates to GameInterfaces.cs
+
+Player.cs
+Added the methods lock and unlock, improved close and open
+
+Added:
+GameInterfaces.cs
+Will hold all interfaces now. Has IRoomDelegate, ICloseable, and ILockable
+
+RegularLock.cs
+Creates a lock whenever a lock is made
+
+Chest.cs
+Still in works
+
+Time Spent : 32m 28s
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes:
+Chest.cs
+Can lock, unlock, open, close a chest.
+
+Room.cs
+Added SetChest, GetChest(string), GetChests
+
+Player.cs
+Search added to look for chest as well as possible items
+
+Added:
+SearchCommand.cs
+Able to search for chest at the moment, unable to find items.
+
+Time Spent : 35m 40s
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes:
+Entity, Items, and all that use the interface
+Comment out designators.
+
+Gem.cs
+Currently works to create the gem in a room
+
+Time Spent : 13m 20s
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Changes:
+Armor.cs
+Currently works to create the armor in a room
+
+Weapon.cs
+Currently works to create the weapon in a room
+
+Potion.cs
+Currently works to create the potion in a room, still working on Type type
+
+RestartCommands.cs
+Restart now works
+
+GameInterfaces.cs
+Added interfaces from item, and entity. Added KeyItems that have weight and a name.
+
+Added: 
+Key.cs
+Still Working On
+
+Removed:
+Item.cs and Entity.cs
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 RestartCommands Still Need to Worked on (It ends then starts the game. It prints out the town location, but your location has not been updated. Also needs to reset each room when called, maybe reset log?)
