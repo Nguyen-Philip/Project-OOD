@@ -118,6 +118,7 @@ namespace StarterGame
         private Dictionary<string, NPC> _npc;
         private Dictionary<string, Potion> _potion;
         private Dictionary<string, Weapon> _weapon;
+        private Dictionary<string, Key> _key;
 
         private string _tag;
 
@@ -166,6 +167,7 @@ namespace StarterGame
             _npc = new Dictionary<string, NPC>();
             _potion = new Dictionary<string, Potion>();
             _weapon = new Dictionary<string, Weapon>();
+            _key = new Dictionary<string, Key>();
             this.Tag = tag;
         }
 
@@ -372,9 +374,41 @@ namespace StarterGame
             return names;
         }
 
+        public void SetKey(string name, Key key)
+        {
+            if (key != null)
+            {
+                _key[name] = key;
+            }
+            else
+            {
+                _key.Remove(name);
+            }
+        }
+
+        public Key GetKey(string name)
+        {
+            Key key = null;
+            _key.TryGetValue(name, out key);
+            return key;
+        }
+
+        public string GetKeys()
+        {
+            string names = "";
+            Dictionary<string, Key>.KeyCollection keys = _key.Keys;
+            foreach (string name in keys)
+            {
+                names += " " + name;
+            }
+
+            return names;
+        }
+
+
         public string SearchRoom()
         {
-            return "You are " + this.Tag + ".\n *** Findings:" + this.GetChests() + this.GetGems() + this.GetArmors() + this.GetWeapons() + this.GetPotions(); 
+            return "You are " + this.Tag + ".\n *** Findings:" + this.GetChests() + this.GetGems() + this.GetArmors() + this.GetWeapons() + this.GetPotions() + this.GetKeys(); 
         }
 
         //Get Room Description

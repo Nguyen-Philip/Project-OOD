@@ -143,7 +143,8 @@ namespace StarterGame
             potion = Potion.CreatePotion(entrance, "strength_potion", 10, 2, 20, "AR");
             weapon = Weapon.CreateWeapon(town, "dagger");
             weapon = Weapon.CreateWeapon(entrance, "axe", 10, 2, 20);
-            key = Key.CreateKey(town, "key", 1);
+            key = Key.CreateKey(town, "key", 0);
+            key = Key.CreateKey(entrance, "key", 0);
 
             door = Door.CreateDoor(entrance, room1_0, "north", "south");
             door = Door.CreateDoor(room1_0, room1_1, "north", "south");

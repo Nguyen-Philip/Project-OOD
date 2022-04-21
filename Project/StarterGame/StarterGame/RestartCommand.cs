@@ -18,6 +18,7 @@ namespace StarterGame
             if (this.HasSecondWord())
             {
                 player.OutputMessage("\nRestart does not contain " + this.SecondWord);
+                player.OutputMessage("\n" + player.CurrentRoom.Description());
             }
             else
             {

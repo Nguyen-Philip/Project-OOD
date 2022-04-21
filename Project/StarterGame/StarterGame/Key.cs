@@ -1,7 +1,7 @@
 ﻿using System;
 namespace StarterGame
 {
-    public class Key : KeyItems
+    public class Key : KeyItem
     {
         private string _Name;
         private Room _Location;

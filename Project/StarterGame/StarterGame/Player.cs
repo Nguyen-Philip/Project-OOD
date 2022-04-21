@@ -8,7 +8,7 @@ namespace StarterGame
     {
         private Room _currentRoom = null;
         private List<string> _log = new List<string>();
-        private List<string> _movementlog = new List<string>();
+        private Stack<string> _movementlog = new Stack<string>();
 
         public Room CurrentRoom
         {
@@ -68,36 +68,31 @@ namespace StarterGame
         public void WaltBack()
         {
             Parser _parser = new Parser(new CommandWords());
-            string movementLog = "";
-            if(_movementlog.Count > 0)
-            {
-                movementLog = _movementlog[_movementlog.Count - 1];
-            }
-
             if(_movementlog.Count != 0)
             {
-                Command command = _parser.ParseCommand(movementLog);
+                Command command = _parser.ParseCommand(_movementlog.Pop());
                 switch (command.SecondWord)
                 {
                     case "north":
                         command.SecondWord = "south";
                         this.WaltTo(command.SecondWord);
-                        _movementlog.RemoveAt(_movementlog.Count - 1);
                         break;
                     case "south":
                         command.SecondWord = "north";
                         this.WaltTo(command.SecondWord);
-                        _movementlog.RemoveAt(_movementlog.Count - 1);
                         break;
                     case "west":
                         command.SecondWord = "east";
                         this.WaltTo(command.SecondWord);
-                        _movementlog.RemoveAt(_movementlog.Count - 1);
                         break;
                     case "east":
                         command.SecondWord = "west";
                         this.WaltTo(command.SecondWord);
-                        _movementlog.RemoveAt(_movementlog.Count - 1);
+                        break;
+                    case "portal":
+                        _movementlog.Clear();
+                        this.OutputMessage("There is no way to go back, the portal has closed");
+                        this.OutputMessage("\n" + this.CurrentRoom.Description());
                         break;
                     default:
                         this.OutputMessage("There is no way to go back");
@@ -423,9 +418,15 @@ namespace StarterGame
             this.OutputMessage("\n" + this.CurrentRoom.Description());
         }
 
-        public void InputMovementLog(string command)
+        public void InputMovementLog(string movementCommand)
         {
-            _movementlog.Add(command);
+            Parser _parser = new Parser(new CommandWords());
+            Command command = _parser.ParseCommand(movementCommand);
+            Door door = this.CurrentRoom.GetExit(command.SecondWord);
+            if (door != null)
+            {
+                _movementlog.Push(movementCommand);
+            }
         }
 
         //used by ClearLog(), clears the log

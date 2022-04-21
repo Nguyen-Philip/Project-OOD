@@ -196,16 +196,15 @@ Restart now works
 GameInterfaces.cs
 Added interfaces from item, and entity. Added KeyItems that have weight and a name.
 
+Player.cs
+Updated back function, now uses a stack instead of a list
+
 Added: 
 Key.cs
 Still Working On
 
 Removed:
 Item.cs and Entity.cs
-
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-RestartCommands Still Need to Worked on (It ends then starts the game. It prints out the town location, but your location has not been updated. Also needs to reset each room when called, maybe reset log?)
 
 

@@ -20,6 +20,7 @@ namespace StarterGame
             else
             {
                 player.OutputMessage("\nSay what?");
+                player.OutputMessage("\n" + player.CurrentRoom.Description());
             }
             return false;
         }

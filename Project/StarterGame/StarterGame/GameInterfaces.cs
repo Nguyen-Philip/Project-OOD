@@ -46,10 +46,11 @@ namespace StarterGame
 
     }
 
-    public interface KeyItems : IEntity
+    public interface KeyItem : IEntity
     {
         int Weight { set; get; }
         bool CanBeHeld { get; }
         bool IsUsable { get; }
+
     }
 }
