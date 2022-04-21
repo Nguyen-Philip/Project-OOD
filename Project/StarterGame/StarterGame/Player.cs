@@ -8,7 +8,7 @@ namespace StarterGame
     {
         private Room _currentRoom = null;
         private List<string> _log = new List<string>();
-        private List<string> _movementlog = new List<string>();
+        private Stack<string> _movementlog = new Stack<string>();
 
         public Room CurrentRoom
         {
@@ -68,36 +68,31 @@ namespace StarterGame
         public void WaltBack()
         {
             Parser _parser = new Parser(new CommandWords());
-            string movementLog = "";
-            if(_movementlog.Count > 0)
-            {
-                movementLog = _movementlog[_movementlog.Count - 1];
-            }
-
             if(_movementlog.Count != 0)
             {
-                Command command = _parser.ParseCommand(movementLog);
+                Command command = _parser.ParseCommand(_movementlog.Pop());
                 switch (command.SecondWord)
                 {
                     case "north":
                         command.SecondWord = "south";
                         this.WaltTo(command.SecondWord);
-                        _movementlog.RemoveAt(_movementlog.Count - 1);
                         break;
                     case "south":
                         command.SecondWord = "north";
                         this.WaltTo(command.SecondWord);
-                        _movementlog.RemoveAt(_movementlog.Count - 1);
                         break;
                     case "west":
                         command.SecondWord = "east";
                         this.WaltTo(command.SecondWord);
-                        _movementlog.RemoveAt(_movementlog.Count - 1);
                         break;
                     case "east":
                         command.SecondWord = "west";
                         this.WaltTo(command.SecondWord);
-                        _movementlog.RemoveAt(_movementlog.Count - 1);
+                        break;
+                    case "portal":
+                        _movementlog.Clear();
+                        this.OutputMessage("There is no way to go back");
+                        this.OutputMessage("\n" + this.CurrentRoom.Description());
                         break;
                     default:
                         this.OutputMessage("There is no way to go back");
@@ -112,16 +107,19 @@ namespace StarterGame
             }
         }
 
+        //used by PickupCommand, pick ups items
         public void Pickup(string word)
         {
 
         }
 
+        //used by DropCommand, drops items
         public void Drop(string word)
         {
 
         }
 
+        //used by SayCommand, allows you to say a word
         public void Say(string word)
         {
             OutputMessage("\n" + word);
@@ -132,6 +130,7 @@ namespace StarterGame
             this.OutputMessage("\n" + this.CurrentRoom.Description());
         }
 
+        //used by OpenCommand, opens doors and chests
         public void Open(string name)
         {
             Door door = this.CurrentRoom.GetExit(name);
@@ -203,6 +202,7 @@ namespace StarterGame
             }
         }
 
+        //used by CloseCommand, closes doors and chests
         public void Close(string name)
         {
             Door door = this.CurrentRoom.GetExit(name);
@@ -258,6 +258,7 @@ namespace StarterGame
             }
         }
 
+        //used by UnlockCommand, unlocks doors and chests
         public void Unlock(string name)
         {
             Door door = this.CurrentRoom.GetExit(name);
@@ -329,6 +330,7 @@ namespace StarterGame
             }
         }
 
+        //used by LockCommand, used to lock doors and chests
         public void Lock(string name)
         {
             Door door = this.CurrentRoom.GetExit(name);
@@ -388,6 +390,7 @@ namespace StarterGame
             }
         }
 
+        //used by SearchCommand, searches for items and chest
         public void Search()
         {
             this.OutputMessage("\n" + this.CurrentRoom.SearchRoom());
@@ -415,9 +418,15 @@ namespace StarterGame
             this.OutputMessage("\n" + this.CurrentRoom.Description());
         }
 
-        public void InputMovementLog(string command)
+        public void InputMovementLog(string movementCommand)
         {
-            _movementlog.Add(command);
+            Parser _parser = new Parser(new CommandWords());
+            Command command = _parser.ParseCommand(movementCommand);
+            Door door = this.CurrentRoom.GetExit(command.SecondWord);
+            if (door != null)
+            {
+                _movementlog.Push(movementCommand);
+            }
         }
 
         //used by ClearLog(), clears the log
@@ -431,6 +440,8 @@ namespace StarterGame
         public void RestartGame()
         {
             _log.Clear();
+            Game game = new Game();
+            game.Restart();
         }
     }
 }

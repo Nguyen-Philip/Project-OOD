@@ -17,6 +17,7 @@ namespace StarterGame
             if (this.HasSecondWord())
             {
                 player.OutputMessage("\nQuit does not contain " + this.SecondWord);
+                player.OutputMessage("\n" + player.CurrentRoom.Description());
                 answer = false;
             }
             return answer;

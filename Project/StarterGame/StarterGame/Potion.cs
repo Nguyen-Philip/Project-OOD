@@ -54,13 +54,13 @@ namespace StarterGame
             _IsUsable = false;
         }
 
-        public Potion(Room location, int value, int weight, int modifier, TYPE type)
+        public Potion(Room location, int value, int weight, int modifier, string type)
         {
             _Location = location;
             _Value = value;
             _Weight = weight;
             _Modifier = modifier;
-            _Type = type;
+            _Type = (TYPE) Enum.Parse(typeof(TYPE), type, true);
             _CanBeHeld = true;
             _IsUsable = false;
         }
@@ -72,15 +72,9 @@ namespace StarterGame
             return potion;
         }
 
-        public static Potion CreatePotion(Room location, string name, int value, int weight, int modifier)
+        public static Potion CreatePotion(Room location, string name, int value, int weight, int modifier, string type)
         {
-            Potion potion = new Potion(location, value, weight, modifier);
-            location.SetPotion(name, potion);
-            return potion;
-        }
 
-        public static Potion CreatePotion(Room location, string name, int value, int weight, int modifier, TYPE type)
-        {
             Potion potion = new Potion(location, value, weight, modifier, type);
             location.SetPotion(name, potion);
             return potion;
