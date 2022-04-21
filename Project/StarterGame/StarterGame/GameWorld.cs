@@ -20,6 +20,7 @@ namespace StarterGame
         private NPC npc;
         private Potion potion;
         private Weapon weapon;
+        private Key key;
         public static GameWorld Instance()
         {
             if(_instance == null)
@@ -139,9 +140,11 @@ namespace StarterGame
             armor = Armor.CreateArmor(town, "chestplate");
             armor = Armor.CreateArmor(entrance, "boots", 10, 2, 20);
             potion = Potion.CreatePotion(town, "healing_potion");
-            potion = Potion.CreatePotion(entrance, "strength_potion", 10, 2, 20);
+            potion = Potion.CreatePotion(entrance, "strength_potion", 10, 2, 20, "AR");
             weapon = Weapon.CreateWeapon(town, "dagger");
             weapon = Weapon.CreateWeapon(entrance, "axe", 10, 2, 20);
+            key = Key.CreateKey(town, "key", 0);
+            key = Key.CreateKey(entrance, "key", 0);
 
             door = Door.CreateDoor(entrance, room1_0, "north", "south");
             door = Door.CreateDoor(room1_0, room1_1, "north", "south");
