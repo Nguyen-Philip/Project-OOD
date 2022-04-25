@@ -23,27 +23,38 @@ namespace StarterGame
             return success;
         }
 
-        public bool Remove(Item item)
+        public bool Remove(string item)
         {
-            bool success = _items.Remove(item.Name);
+            bool success = _items.Remove(item);
             return success;
         }
 
-        public string Inventory
+        public Item GetItem(string name)
         {
-            get
+            Item item = null;
+            if (name != null)
             {
-                string inventory = "";
-                foreach (Item item in _items.Values)
-                {
-                    inventory += item + "\n";
-                }
-
-                return inventory;
+                _items?.TryGetValue(name, out item);
             }
+            return item;
         }
+
+
+        public string GetItems()
+        {
+            string names = "";
+            Dictionary<string, Item>.KeyCollection keys = _items.Keys;
+            foreach (string name in keys)
+            {
+                names += " " + name;
+            }
+
+            return names;
+        }
+
         public BackPack()
         {
+            _items = new Dictionary<string, Item>();
         }
     }
 }

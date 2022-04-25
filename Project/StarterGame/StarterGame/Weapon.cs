@@ -31,16 +31,18 @@ namespace StarterGame
             }
         }
 
-        public Weapon(Room location)
+        public Weapon(Room location, string name)
         {
             _Location = location;
+            _Name = name;
             _CanBeHeld = true;
             _IsUsable = false;
         }
 
-        public Weapon(Room location, int value, int weight, int ar)
+        public Weapon(Room location, string name, int value, int weight, int ar)
         {
             _Location = location;
+            _Name = name;
             _Value = value;
             _Weight = weight;
             _AR = ar;
@@ -50,15 +52,15 @@ namespace StarterGame
 
         public static Weapon CreateWeapon(Room location, string name)
         {
-            Weapon weapon = new Weapon(location);
-            location.SetWeapon(name, weapon);
+            Weapon weapon = new Weapon(location, name);
+            location.SetItem(name, weapon);
             return weapon;
         }
 
         public static Weapon CreateWeapon(Room location, string name, int value, int weight, int ar)
         {
-            Weapon weapon = new Weapon(location, value, weight, ar);
-            location.SetWeapon(name, weapon);
+            Weapon weapon = new Weapon(location, name, value, weight, ar);
+            location.SetItem(name, weapon);
             return weapon;
         }
     }

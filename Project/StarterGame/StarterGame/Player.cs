@@ -9,6 +9,7 @@ namespace StarterGame
         private Room _currentRoom = null;
         private List<string> _log = new List<string>();
         private Stack<string> _movementlog = new Stack<string>();
+        private BackPack _backPack = new BackPack();
 
         public Room CurrentRoom
         {
@@ -108,15 +109,42 @@ namespace StarterGame
         }
 
         //used by PickupCommand, pick ups items
-        public void Pickup(string word)
+        public bool Pickup(string word)
         {
-
+            bool success = false;
+            Item item = CurrentRoom.GetItem(word);
+            if (item != null)
+            {
+                this.OutputMessage("\nYou have picked up the " + item.Name);
+                success = _backPack.Add(item);
+                CurrentRoom.RemoveItem(word);
+                //this.OutputMessage("\n" + this._backPack.GetItems());
+            }
+            else
+            {
+                this.OutputMessage("\nThere is nothing named " + word + " to pick up");
+            }
+            return success;
         }
 
         //used by DropCommand, drops items
-        public void Drop(string word)
+        public bool Drop(string word)
         {
+            bool success = false;
+            Item item = _backPack.GetItem(word);
+            if (item != null)
+            {
+                this.OutputMessage("\nYou have dropped the " + item.Name);
+                CurrentRoom.SetItem(item.Name, item);
+                success = _backPack.Remove(word);
+                //this.OutputMessage("\n" + this._backPack.GetItems());
+            }
+            else
+            {
+                this.OutputMessage("\nThere is nothing named " + word + " to drop");
+            }
 
+            return success;
         }
 
         //used by SayCommand, allows you to say a word

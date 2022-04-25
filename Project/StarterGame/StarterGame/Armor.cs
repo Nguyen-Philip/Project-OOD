@@ -32,16 +32,18 @@ namespace StarterGame
             }
         }
 
-        public Armor(Room location)
+        public Armor(Room location, string name)
         {
             _Location = location;
+            _Name = name;
             _CanBeHeld = true;
             _IsUsable = false;
         }
 
-        public Armor(Room location, int value, int weight, int av)
+        public Armor(Room location, string name, int value, int weight, int av)
         {
             _Location = location;
+            _Name = name;
             _Value = value;
             _Weight = weight;
             _AV = av;
@@ -51,15 +53,15 @@ namespace StarterGame
 
         public static Armor CreateArmor(Room location, string name)
         {
-            Armor armor = new Armor(location);
-            location.SetArmor(name, armor);
+            Armor armor = new Armor(location, name);
+            location.SetItem(name, armor);
             return armor;
         }
 
         public static Armor CreateArmor(Room location, string name, int value, int weight, int av)
         {
-            Armor armor = new Armor(location, value, weight, av);
-            location.SetArmor(name, armor);
+            Armor armor = new Armor(location, name, value, weight, av);
+            location.SetItem(name, armor);
             return armor;
         }
     }

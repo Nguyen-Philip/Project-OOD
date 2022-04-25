@@ -30,16 +30,18 @@ namespace StarterGame
             }
         }
 
-        public Gem(Room location)
+        public Gem(Room location, string name)
         {
             _Location = location;
+            _Name = name;
             _CanBeHeld = true;
             _IsUsable = false;
         }
 
-        public Gem(Room location, int value, int weight)
+        public Gem(Room location, string name, int value, int weight)
         {
             _Location = location;
+            _Name = name;
             _Value = value;
             _Weight = weight;
             _CanBeHeld = true;
@@ -48,15 +50,15 @@ namespace StarterGame
 
         public static Gem CreateGem(Room location, string name)
         {
-            Gem gem = new Gem(location);
-            location.SetGem(name, gem);
+            Gem gem = new Gem(location, name);
+            location.SetItem(name, gem);
             return gem;
         }
 
         public static Gem CreateGem(Room location, string name, int value, int weight)
         {
-            Gem gem = new Gem(location, value, weight);
-            location.SetGem(name, gem);
+            Gem gem = new Gem(location, name, value, weight);
+            location.SetItem(name, gem);
             return gem;
         }
     }
