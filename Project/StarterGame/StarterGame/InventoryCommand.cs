@@ -3,11 +3,13 @@ using System.Collections.Generic;
 
 namespace StarterGame
 {
-    public class DropCommand : Command
+    public class InventoryCommand : Command
     {
-        public DropCommand() : base()
+        public InventoryCommand() : this(new CommandWords()) { }
+        // Designated Constructor
+        public InventoryCommand(CommandWords commands) : base()
         {
-            this.Name = "drop";
+            this.Name = "inventory";
         }
 
         override
@@ -15,17 +17,16 @@ namespace StarterGame
         {
             if (this.HasSecondWord())
             {
-                player.Drop(this.SecondWord);
-                player.Inventory();
+                player.OutputMessage("\nInventory does not contain " + this.SecondWord);
                 player.OutputMessage("\n" + player.CurrentRoom.Description());
             }
             else
             {
-                player.OutputMessage("\nDrop what?");
+                player.OutputMessage("\nYou look in your backpack");
+                player.Inventory();
                 player.OutputMessage("\n" + player.CurrentRoom.Description());
             }
             return false;
         }
-
     }
 }

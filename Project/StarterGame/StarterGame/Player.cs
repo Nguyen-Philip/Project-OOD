@@ -147,6 +147,11 @@ namespace StarterGame
             return success;
         }
 
+        public void Inventory()
+        {
+            this.OutputMessage("\nInventory:" + this._backPack.GetItems());
+        }
+
         //used by SayCommand, allows you to say a word
         public void Say(string word)
         {

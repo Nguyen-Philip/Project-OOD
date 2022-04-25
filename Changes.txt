@@ -199,12 +199,46 @@ Added interfaces from item, and entity. Added KeyItems that have weight and a na
 Player.cs
 Updated back function, now uses a stack instead of a list
 
+Gem.cs
+Gem now is in rooms
+
 Added: 
 Key.cs
 Still Working On
 
 Removed:
 Item.cs and Entity.cs
+
+Time Spent: 30m 43s
+
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+Changes:
+Armor.cs
+Armor now is in rooms
 
+Potion.cs
+Potion now is in rooms
+
+Weapon.cs
+Weapon now is in rooms
+
+Player.cs
+Pickup and Drop Added
+
+DropCommand.cs
+Drop items
+
+PickupCommand.cs
+Pickup items
+
+Room.cs
+Made all items get stored in _items
+
+Added
+InventoryCommand.cs
+Display inventory
+
+Time Spent: 20m 23s
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

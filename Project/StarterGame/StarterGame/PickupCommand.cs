@@ -16,6 +16,7 @@ namespace StarterGame
             if (this.HasSecondWord())
             {
                 player.Pickup(this.SecondWord);
+                player.Inventory();
                 player.OutputMessage("\n" + player.CurrentRoom.Description());
             }
             else
