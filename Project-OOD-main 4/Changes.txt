@@ -1,0 +1,195 @@
+Changes: 
+HelpCommand.cs 
+
+Game.cs
+
+Program.cs
+
+Time Spent: 10m 35s 
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes:
+Game.cs
+	Added Rooms
+
+Time Spent: 25m 34s 
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes:
+Room.cs
+
+Program.cs
+	Remove CreateWorld()
+
+Added:
+GameWorld.cs
+	Moved CreateWorld() to GameWorld. Create a static instance of GameWorld. Change GameWorld to private. Change CreateWorld to private. Create private room entrance.
+
+Time Spent: 48m 00s 
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Added: 
+Notification.cs
+
+NotificationCenter.cs
+
+BackCommand.cs
+	Currently Working On
+
+Time Spent: 59m 45s 
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes:
+Game.cs
+	Added list for log
+
+Added:
+LogCommand.cs
+	Currently Working On
+
+Restart.cs
+	Currently Working On
+	
+Time Spent: 1h 55m 31s 
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes:
+GameWorld.cs
+	Teleporter that is created when you enter the room and disappear when you leave it.
+
+Time Spent : 5m 00s 
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes:
+LogCommand.cs
+	Works Now
+
+Game.cs
+	Remove list
+
+Player.cs
+	Added lists that records log and movement
+
+Added:
+ClearCommand.cs
+	Clears log
+
+Time Spent : 23m 23s 
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes:
+BackCommand.cs 
+	Works Now
+
+Room.cs
+	Rooms are made, however it no longer creates the entrance directly
+
+Added:
+Door.cs 
+	Used to link rooms together, and create portals
+
+Merged Philip's and Jacobs Files Together
+
+Time Spent : 50m 35s 
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes:
+GameWorld.cs
+	Change name of teleporters to portals
+
+Player.cs
+	Change name of teleporters to portals
+	Added Open, Close, Pickup, and Drop
+
+Added:
+OpenCommand.cs
+	Open Doors, Will Open Chest Later
+
+CloseCommand.cs
+	Closes/Lock Doors
+
+PickupCommand.cs
+	Currently Working On
+
+DropCommand.cs
+	Currently Working On
+
+Time Spent : 10m 13s
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes:
+Door.cs
+It implements the interface ICloseable
+
+Room.cs
+Moved IRoomDelegates to GameInterfaces.cs
+
+Player.cs
+Added the methods lock and unlock, improved close and open
+
+Added:
+GameInterfaces.cs
+Will hold all interfaces now. Has IRoomDelegate, ICloseable, and ILockable
+
+RegularLock.cs
+Creates a lock whenever a lock is made
+
+Chest.cs
+Still in works
+
+Time Spent : 32m 28s
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes:
+Chest.cs
+Can lock, unlock, open, close a chest.
+
+Room.cs
+Added SetChest, GetChest(string), GetChests
+
+Player.cs
+Search added to look for chest as well as possible items
+
+Added:
+SearchCommand.cs
+Able to search for chest at the moment, unable to find items.
+
+Time Spent : 35m 40s
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes:
+Entity, Items, and all that use the interface
+Comment out designators.
+
+Gem.cs
+Currently works to create the gem in a room
+
+Time Spent : 13m 20s
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Changes:
+Armor.cs
+Currently works to create the armor in a room
+
+Weapon.cs
+Currently works to create the weapon in a room
+
+Potion.cs
+Currently works to create the potion in a room, still working on Type type
+
+RestartCommands Still Need to Worked on (It ends then starts the game. It prints out the town location, but your location has not been updated. Also needs to reset each room when called, maybe reset log?)
+
+
