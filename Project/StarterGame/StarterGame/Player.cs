@@ -42,25 +42,25 @@ namespace StarterGame
                     this.CurrentRoom = nextRoom;
                     notification = new Notification("PlayerDidEnterRoom", this);
                     NotificationCenter.Instance.PostNotification(notification);
-                    this.OutputMessage("\n" + this.CurrentRoom.Description());
+                    this.LocationMessage("\n" + this.CurrentRoom.Description());
                 }
                 else
                 {
-                    this.OutputMessage("\nThe door is closed");
-                    this.OutputMessage("\n" + this.CurrentRoom.Description());
+                    this.ErrorMessage("\nThe door is closed");
+                    this.LocationMessage("\n" + this.CurrentRoom.Description());
                 }
             }
             else
             {
                 if (direction == "portal")
                 {
-                    this.OutputMessage("\nThere is no " + direction);
-                    this.OutputMessage("\n" + this.CurrentRoom.Description());
+                    this.ErrorMessage("\nThere is no " + direction);
+                    this.LocationMessage("\n" + this.CurrentRoom.Description());
                 }
                 else
                 {
-                    this.OutputMessage("\nThere is no door on " + direction);
-                    this.OutputMessage("\n" + this.CurrentRoom.Description());
+                    this.ErrorMessage("\nThere is no door on " + direction);
+                    this.LocationMessage("\n" + this.CurrentRoom.Description());
                 }
             }
         }
@@ -92,19 +92,19 @@ namespace StarterGame
                         break;
                     case "portal":
                         _movementlog.Clear();
-                        this.OutputMessage("There is no way to go back");
-                        this.OutputMessage("\n" + this.CurrentRoom.Description());
+                        this.ErrorMessage("There is no way to go back");
+                        this.LocationMessage("\n" + this.CurrentRoom.Description());
                         break;
                     default:
-                        this.OutputMessage("There is no way to go back");
-                        this.OutputMessage("\n" + this.CurrentRoom.Description());
+                        this.ErrorMessage("There is no way to go back");
+                        this.LocationMessage("\n" + this.CurrentRoom.Description());
                         break;
                 }
             }
             else
             {
-                this.OutputMessage("There is no way to go back");
-                this.OutputMessage("\n" + this.CurrentRoom.Description());
+                this.ErrorMessage("\nThere is no way to go back");
+                this.LocationMessage("\n" + this.CurrentRoom.Description());
             }
         }
 
@@ -112,17 +112,50 @@ namespace StarterGame
         public bool Pickup(string word)
         {
             bool success = false;
+            KeyItem keyitem = CurrentRoom.GetKeyItem(word);
             Item item = CurrentRoom.GetItem(word);
             if (item != null)
             {
-                this.OutputMessage("\nYou have picked up the " + item.Name);
-                success = _backPack.Add(item);
-                CurrentRoom.RemoveItem(word);
-                //this.OutputMessage("\n" + this._backPack.GetItems());
+                if (item.CanBeHeld == true)
+                {
+                    success = _backPack.Add(item);
+                    if (success == true)
+                    {
+                        this.NotificationMessage("\nYou have picked up the " + item.Name);
+                        CurrentRoom.RemoveItem(item.Name);
+                        this.LocationMessage("\n" + this.CurrentRoom.Description());
+                    }
+                    else
+                    {
+                        this.NotificationMessage("\nYour backpack is full, you need to drop something to pick up the " + item.Name);
+                        this.LocationMessage("\n" + this.CurrentRoom.Description());
+                    }
+                }
+                else
+                {
+                    this.NotificationMessage("\nYou cannot pickup the " + item.Name);
+                    this.LocationMessage("\n" + this.CurrentRoom.Description());
+                }
+            }
+            else if(keyitem != null)
+            {
+                if (keyitem.CanBeHeld == true)
+                {
+                    this.NotificationMessage("\nYou have picked up the " + keyitem.Name);
+                    success = _backPack.AddKeyItems(keyitem);
+                    CurrentRoom.RemoveItem(word);
+                    this.LocationMessage("\n" + this.CurrentRoom.Description());
+                }
+                else
+                {
+                    this.NotificationMessage("\nYou cannot pickup the " + keyitem.Name);
+                    this.LocationMessage("\n" + this.CurrentRoom.Description());
+                }
             }
             else
             {
-                this.OutputMessage("\nThere is nothing named " + word + " to pick up");
+                this.ErrorMessage("\nThere is nothing named " + word + " to pick up");
+                this.LocationMessage("\n" + this.CurrentRoom.Description());
             }
             return success;
         }
@@ -131,17 +164,33 @@ namespace StarterGame
         public bool Drop(string word)
         {
             bool success = false;
+            KeyItem keyitem = _backPack.GetKeyItem(word);
             Item item = _backPack.GetItem(word);
             if (item != null)
             {
-                this.OutputMessage("\nYou have dropped the " + item.Name);
+                this.NotificationMessage("\nYou have dropped the " + item.Name);
                 CurrentRoom.SetItem(item.Name, item);
                 success = _backPack.Remove(word);
-                //this.OutputMessage("\n" + this._backPack.GetItems());
+                this.LocationMessage("\n" + this.CurrentRoom.Description());
+            }
+            else if(keyitem != null)
+            {
+                if (keyitem.CanBeDropped == true)
+                {
+                    this.NotificationMessage("\nYou have dropped the " + keyitem.Name);
+                    this.LocationMessage("\n" + this.CurrentRoom.Description());
+                }
+                else
+                {
+                    this.NotificationMessage("\nYou cannot drop the " + keyitem.Name + " as it is a key item");
+                    this.LocationMessage("\n" + this.CurrentRoom.Description());
+                }
+
             }
             else
             {
-                this.OutputMessage("\nThere is nothing named " + word + " to drop");
+                this.ErrorMessage("\nThere is nothing named " + word + " to drop");
+                this.LocationMessage("\n" + this.CurrentRoom.Description());
             }
 
             return success;
@@ -149,18 +198,19 @@ namespace StarterGame
 
         public void Inventory()
         {
-            this.OutputMessage("\nInventory:" + this._backPack.GetItems());
+            this.OutputMessage("\nItems:" + this._backPack.GetItems() + "\nKey Items:" + this._backPack.GetKeyItems() + "\nWeight: " + this._backPack.GetWeight() + "/50");
+            this.LocationMessage("\n" + this.CurrentRoom.Description());
         }
 
         //used by SayCommand, allows you to say a word
         public void Say(string word)
         {
-            OutputMessage("\n" + word);
+            SayMessage("\n" + word);
             Dictionary<string, object> userInfo = new Dictionary<string, object>();
             userInfo["word"] = word;
             Notification notification = new Notification("PlayerSaidWord", this, userInfo);
             NotificationCenter.Instance.PostNotification(notification);
-            this.OutputMessage("\n" + this.CurrentRoom.Description());
+            this.LocationMessage("\n" + this.CurrentRoom.Description());
         }
 
         //used by OpenCommand, opens doors and chests
@@ -176,26 +226,26 @@ namespace StarterGame
                     {
                         if (door.IsLocked)
                         {
-                            this.OutputMessage("\nThe door is closed and locked");
-                            this.OutputMessage("\n" + this.CurrentRoom.Description());
+                            this.ErrorMessage("\nThe door is closed and locked");
+                            this.LocationMessage("\n" + this.CurrentRoom.Description());
                         }
                         else
                         {
                             door.Open();
-                            this.OutputMessage("\nThe door has been opened");
-                            this.OutputMessage("\n" + this.CurrentRoom.Description());
+                            this.NotificationMessage("\nThe door has been opened");
+                            this.LocationMessage("\n" + this.CurrentRoom.Description());
                         }
                     }
                     else
                     {
-                        this.OutputMessage("\nThe door is open");
-                        this.OutputMessage("\n" + this.CurrentRoom.Description());
+                        this.ErrorMessage("\nThe door is open");
+                        this.LocationMessage("\n" + this.CurrentRoom.Description());
                     }
                 }
                 else
                 {
-                    this.OutputMessage("\nThere is no door " + name + " to close");
-                    this.OutputMessage("\n" + this.CurrentRoom.Description());
+                    this.ErrorMessage("\nThere is no door " + name + " to close");
+                    this.LocationMessage("\n" + this.CurrentRoom.Description());
                 }
             }
             else if (name == "chest")
@@ -206,32 +256,32 @@ namespace StarterGame
                     {
                         if (chest.IsLocked)
                         {
-                            this.OutputMessage("\nThe chest is closed and locked");
-                            this.OutputMessage("\n" + this.CurrentRoom.Description());
+                            this.ErrorMessage("\nThe chest is closed and locked");
+                            this.LocationMessage("\n" + this.CurrentRoom.Description());
                         }
                         else
                         {
                             chest.Open();
-                            this.OutputMessage("\nThe chest has been opened");
-                            this.OutputMessage("\n" + this.CurrentRoom.Description());
+                            this.NotificationMessage("\nThe chest has been opened");
+                            this.LocationMessage("\n" + this.CurrentRoom.Description());
                         }
                     }
                     else
                     {
-                        this.OutputMessage("\nThe chest is open");
-                        this.OutputMessage("\n" + this.CurrentRoom.Description());
+                        this.ErrorMessage("\nThe chest is open");
+                        this.LocationMessage("\n" + this.CurrentRoom.Description());
                     }
                 }
                 else
                 {
-                    this.OutputMessage("\nThere is no " + name + " to open");
-                    this.OutputMessage("\n" + this.CurrentRoom.Description());
+                    this.ErrorMessage("\nThere is no " + name + " to open");
+                    this.LocationMessage("\n" + this.CurrentRoom.Description());
                 }
             }
             else
             {
-                this.OutputMessage("\nYou cannot open a portal");
-                this.OutputMessage("\n" + this.CurrentRoom.Description());
+                this.ErrorMessage("\nYou cannot open a portal");
+                this.LocationMessage("\n" + this.CurrentRoom.Description());
             }
         }
 
@@ -247,19 +297,19 @@ namespace StarterGame
                     if (door.IsOpen)
                     {
                         door.Close();
-                        this.OutputMessage("\nThe door has been closed");
-                        this.OutputMessage("\n" + this.CurrentRoom.Description());
+                        this.NotificationMessage("\nThe door has been closed");
+                        this.LocationMessage("\n" + this.CurrentRoom.Description());
                     }
                     else
                     {
-                        this.OutputMessage("\nThe door is close");
-                        this.OutputMessage("\n" + this.CurrentRoom.Description());
+                        this.ErrorMessage("\nThe door is close");
+                        this.LocationMessage("\n" + this.CurrentRoom.Description());
                     }
                 }
                 else
                 {
-                    this.OutputMessage("\nThere is no door " + name + " to close");
-                    this.OutputMessage("\n" + this.CurrentRoom.Description());
+                    this.ErrorMessage("\nThere is no door " + name + " to close");
+                    this.LocationMessage("\n" + this.CurrentRoom.Description());
                 }
             }
             else if (name == "chest")
@@ -269,25 +319,25 @@ namespace StarterGame
                     if (chest.IsOpen)
                     {
                         chest.Close();
-                        this.OutputMessage("\nThe chest has been closed");
-                        this.OutputMessage("\n" + this.CurrentRoom.Description());
+                        this.NotificationMessage("\nThe chest has been closed");
+                        this.LocationMessage("\n" + this.CurrentRoom.Description());
                     }
                     else
                     {
-                        this.OutputMessage("\nThe chest is close");
-                        this.OutputMessage("\n" + this.CurrentRoom.Description());
+                        this.ErrorMessage("\nThe chest is close");
+                        this.LocationMessage("\n" + this.CurrentRoom.Description());
                     }
                 }
                 else
                 {
-                    this.OutputMessage("\nThere is no " + name + " to close");
-                    this.OutputMessage("\n" + this.CurrentRoom.Description());
+                    this.ErrorMessage("\nThere is no " + name + " to close");
+                    this.LocationMessage("\n" + this.CurrentRoom.Description());
                 }
             }
             else
             {
-                this.OutputMessage("\nYou cannot close a portal");
-                this.OutputMessage("\n" + this.CurrentRoom.Description());
+                this.ErrorMessage("\nYou cannot close a portal");
+                this.LocationMessage("\n" + this.CurrentRoom.Description());
             }
         }
 
@@ -302,28 +352,28 @@ namespace StarterGame
                 {
                     if (door.IsOpen)
                     {
-                        this.OutputMessage("\nThe door is open");
-                        this.OutputMessage("\n" + this.CurrentRoom.Description());
+                        this.ErrorMessage("\nThe door is open");
+                        this.LocationMessage("\n" + this.CurrentRoom.Description());
                     }
                     else
                     {
                         if (door.IsLocked)
                         {
                             door.Unlock();
-                            this.OutputMessage("\nThe door has been unlocked");
-                            this.OutputMessage("\n" + this.CurrentRoom.Description());
+                            this.NotificationMessage("\nThe door has been unlocked");
+                            this.LocationMessage("\n" + this.CurrentRoom.Description());
                         }
                         else
                         {
-                            this.OutputMessage("\nThe door is not locked");
-                            this.OutputMessage("\n" + this.CurrentRoom.Description());
+                            this.ErrorMessage("\nThe door is not locked");
+                            this.LocationMessage("\n" + this.CurrentRoom.Description());
                         }
                     }
                 }
                 else
                 {
-                    this.OutputMessage("\nThere is no door " + name + " to unlock");
-                    this.OutputMessage("\n" + this.CurrentRoom.Description());
+                    this.ErrorMessage("\nThere is no door " + name + " to unlock");
+                    this.LocationMessage("\n" + this.CurrentRoom.Description());
                 }
             }
             else if (name == "chest")
@@ -332,34 +382,34 @@ namespace StarterGame
                 {
                     if (chest.IsOpen)
                     {
-                        this.OutputMessage("\nThe chest is open");
-                        this.OutputMessage("\n" + this.CurrentRoom.Description());
+                        this.ErrorMessage("\nThe chest is open");
+                        this.LocationMessage("\n" + this.CurrentRoom.Description());
                     }
                     else
                     {
                         if (chest.IsLocked)
                         {
                             chest.Unlock();
-                            this.OutputMessage("\nThe chest has been unlocked");
-                            this.OutputMessage("\n" + this.CurrentRoom.Description());
+                            this.NotificationMessage("\nThe chest has been unlocked");
+                            this.LocationMessage("\n" + this.CurrentRoom.Description());
                         }
                         else
                         {
-                            this.OutputMessage("\nThe chest is not locked");
-                            this.OutputMessage("\n" + this.CurrentRoom.Description());
+                            this.ErrorMessage("\nThe chest is not locked");
+                            this.LocationMessage("\n" + this.CurrentRoom.Description());
                         }
                     }
                 }
                 else
                 {
-                    this.OutputMessage("\nThere is no " + name + " to unlock");
-                    this.OutputMessage("\n" + this.CurrentRoom.Description());
+                    this.ErrorMessage("\nThere is no " + name + " to unlock");
+                    this.LocationMessage("\n" + this.CurrentRoom.Description());
                 }
             }
             else
             {
-                this.OutputMessage("\nYou cannot unlock a portal");
-                this.OutputMessage("\n" + this.CurrentRoom.Description());
+                this.ErrorMessage("\nYou cannot unlock a portal");
+                this.LocationMessage("\n" + this.CurrentRoom.Description());
             }
         }
 
@@ -374,22 +424,22 @@ namespace StarterGame
                 {
                     if (door.IsOpen)
                     {
-                        this.OutputMessage("\nThe door is open");
-                        this.OutputMessage("\n" + this.CurrentRoom.Description());
+                        this.ErrorMessage("\nThe door is open");
+                        this.LocationMessage("\n" + this.CurrentRoom.Description());
                     }
                     else
                     {
                         Regularlock aLock = new Regularlock();
                         door.InstallLock(aLock);
                         door.Lock();
-                        this.OutputMessage("\nThe door has been locked");
-                        this.OutputMessage("\n" + this.CurrentRoom.Description());
+                        this.NotificationMessage("\nThe door has been locked");
+                        this.LocationMessage("\n" + this.CurrentRoom.Description());
                     }
                 }
                 else
                 {
-                    this.OutputMessage("\nThere is no door " + name + " to lock");
-                    this.OutputMessage("\n" + this.CurrentRoom.Description());
+                    this.ErrorMessage("\nThere is no door " + name + " to lock");
+                    this.LocationMessage("\n" + this.CurrentRoom.Description());
                 }
             }
             else if (name == "chest")
@@ -398,41 +448,67 @@ namespace StarterGame
                 {
                     if (chest.IsOpen)
                     {
-                        this.OutputMessage("\nThe chest is open");
-                        this.OutputMessage("\n" + this.CurrentRoom.Description());
+                        this.ErrorMessage("\nThe chest is open");
+                        this.LocationMessage("\n" + this.CurrentRoom.Description());
                     }
                     else
                     {
                         Regularlock aLock = new Regularlock();
                         chest.InstallLock(aLock);
                         chest.Lock();
-                        this.OutputMessage("\nThe chest has been locked");
-                        this.OutputMessage("\n" + this.CurrentRoom.Description());
+                        this.NotificationMessage("\nThe chest has been locked");
+                        this.LocationMessage("\n" + this.CurrentRoom.Description());
                     }
                 }
                 else
                 {
-                    this.OutputMessage("\nThere is no " + name + " to lock");
-                    this.OutputMessage("\n" + this.CurrentRoom.Description());
+                    this.ErrorMessage("\nThere is no " + name + " to lock");
+                    this.LocationMessage("\n" + this.CurrentRoom.Description());
                 }
             }
             else
             {
-                this.OutputMessage("\nYou cannot lock a portal");
-                this.OutputMessage("\n" + this.CurrentRoom.Description());
+                this.ErrorMessage("\nYou cannot lock a portal");
+                this.LocationMessage("\n" + this.CurrentRoom.Description());
             }
         }
 
         //used by SearchCommand, searches for items and chest
         public void Search()
         {
-            this.OutputMessage("\n" + this.CurrentRoom.SearchRoom());
+            this.NotificationMessage(this.CurrentRoom.SearchRoom());
+            this.LocationMessage("\n" + this.CurrentRoom.Description());
         }
 
         //prints a message
         public void OutputMessage(string message)
         {
             Console.WriteLine(message);
+        }
+        public void NotificationMessage(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine(message);
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+        public void ErrorMessage(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(message);
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+        public void LocationMessage(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine(message);
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+
+        public void SayMessage(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine(message);
+            Console.ForegroundColor = ConsoleColor.White;
         }
 
         //gets a string input to put into _log
@@ -448,17 +524,20 @@ namespace StarterGame
             {
                 Console.WriteLine(loggedCommand);
             }
-            this.OutputMessage("\n" + this.CurrentRoom.Description());
+            this.LocationMessage("\n" + this.CurrentRoom.Description());
         }
 
         public void InputMovementLog(string movementCommand)
         {
             Parser _parser = new Parser(new CommandWords());
             Command command = _parser.ParseCommand(movementCommand);
-            Door door = this.CurrentRoom.GetExit(command.SecondWord);
-            if (door != null)
+            if (command.SecondWord != null)
             {
-                _movementlog.Push(movementCommand);
+                Door door = this.CurrentRoom.GetExit(command.SecondWord);
+                if (door != null)
+                {
+                    _movementlog.Push(movementCommand);
+                }
             }
         }
 
@@ -466,7 +545,7 @@ namespace StarterGame
         public void ClearLog()
         {
             _log.Clear();
-            this.OutputMessage(this.CurrentRoom.Description());
+            this.LocationMessage(this.CurrentRoom.Description());
         }
 
         //used by RestartCommand, restarts the program and clears the log
@@ -475,6 +554,24 @@ namespace StarterGame
             _log.Clear();
             Game game = new Game();
             game.Restart();
+        }
+
+        public void Map()
+        {
+            this.OutputMessage("\n                1_8               " + 
+                               "\n                 |                " + 
+                               "\n      2_7--2_8  1_7--1_5--1_6     " +
+                               "\n       |              |           " +
+                               "\n      2_5--2_4  1_2--1_3--1_4  3_9" +
+                               "\n       |    |    |              | " +
+                               "\n      2_6  2_3  1_1  3_2  3_4--3_5" +
+                               "\n            |    |    |    |    | " +
+                               "\n      2_2--2_1  1_0  3_1--3_3  3_6" +
+                               "\n            |    |    |         | " +
+                               "\n           2_0--ENT--3_0  3_8--3_7" +
+                               "\n                 |                " +
+                               "\n                TWN             \n");
+            this.LocationMessage(this.CurrentRoom.Description());
         }
     }
 }

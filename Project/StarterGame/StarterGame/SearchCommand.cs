@@ -17,12 +17,12 @@ namespace StarterGame
         {
             if (this.HasSecondWord())
             {
-                player.OutputMessage("\nSearch does not contain " + this.SecondWord);
-                player.OutputMessage("\n" + player.CurrentRoom.Description());
+                player.ErrorMessage("\nSearch does not contain " + this.SecondWord);
+                player.LocationMessage("\n" + player.CurrentRoom.Description());
             }
             else
             {
-                player.OutputMessage("\nYou look around the room\n");
+                player.NotificationMessage("\nYou look around the room\n");
                 player.Search();
             }
             return false;

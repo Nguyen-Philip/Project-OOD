@@ -17,12 +17,12 @@ namespace StarterGame
         {
             if (this.HasSecondWord())
             {
-                player.OutputMessage("\nRestart does not contain " + this.SecondWord);
-                player.OutputMessage("\n" + player.CurrentRoom.Description());
+                player.ErrorMessage("\nRestart does not contain " + this.SecondWord);
+                player.LocationMessage("\n" + player.CurrentRoom.Description());
             }
             else
             {
-                player.OutputMessage("\nSpace and time starts warping around you.\n");
+                player.NotificationMessage("\nSpace and time starts warping around you.\n");
                 player.RestartGame();
             }
             return false;

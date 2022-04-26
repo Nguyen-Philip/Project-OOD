@@ -19,8 +19,8 @@ namespace StarterGame
             }
             else
             {
-                player.OutputMessage("\nSay what?");
-                player.OutputMessage("\n" + player.CurrentRoom.Description());
+                player.ErrorMessage("\nSay what?");
+                player.LocationMessage("\n" + player.CurrentRoom.Description());
             }
             return false;
         }

@@ -53,6 +53,7 @@ namespace StarterGame
         {
             _playing = true;
             _player.OutputMessage(Welcome());
+            _player.LocationMessage(_player.CurrentRoom.Description());
 
         }
 
@@ -77,7 +78,7 @@ namespace StarterGame
         //prints a welcome message when Start() is called
         public string Welcome()
         {
-            return "Welcome to ###.\n\nThe World of ### is an exciting adventure game.\n\nType 'help' if you need help. " + _player.CurrentRoom.Description();
+            return "Welcome to ###.\n\nThe World of ### is an exciting adventure game.\n\nType 'help' if you need help.\n";
         }
 
         //prints a goodbye message when End() is called

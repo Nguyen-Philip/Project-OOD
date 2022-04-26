@@ -44,11 +44,11 @@ namespace StarterGame
                 if(word.Equals(unlockword))
                 {
                     ContainingRoom.Delegate = null;
-                    player.OutputMessage("You said the correct word.");
+                    player.NotificationMessage("\nYou said the correct word.");
                 }
                 else
                 {
-                    player.OutputMessage("You said the wrong word.");
+                    player.ErrorMessage("\nYou said the wrong word.");
                 }
             }
         }
@@ -95,7 +95,7 @@ namespace StarterGame
             {
                 Dictionary<string, object> userInfo = notification.UserInfo;
                 string word = (string)userInfo["word"];
-                player.OutputMessage("\n" + word + "... " + word + "... " + word + "...\n");
+                player.SayMessage("\n" + word + "... " + word + "... " + word + "...\n");
             }
         }
     } 
@@ -104,8 +104,9 @@ namespace StarterGame
     {
         private Dictionary<string, Door> _exits;
         private Dictionary<string, Chest> _chests;
-        private Dictionary<string, Key> _key;
+        private Dictionary<string, KeyItem> _keyitems;
         private Dictionary<string, Item> _items;
+        private Dictionary<string, IEntity> _entities;
 
         private string _tag;
 
@@ -148,8 +149,9 @@ namespace StarterGame
             Delegate = null;
             _exits = new Dictionary<string, Door>();
             _chests = new Dictionary<string, Chest>();;
-            _key = new Dictionary<string, Key>();
+            _keyitems = new Dictionary<string, KeyItem>();
             _items = new Dictionary<string, Item>();
+            _entities = new Dictionary<string, IEntity>();
             this.Tag = tag;
         }
 
@@ -251,7 +253,7 @@ namespace StarterGame
             return item;
         }
 
-        public void RemoveItem(string name)
+        public void RemoveItem(String name)
         {
             _items.Remove(name);
         }
@@ -268,29 +270,29 @@ namespace StarterGame
             return names;
         }
 
-        public void SetKey(string name, Key key)
+        public void SetEntity(string name, IEntity entity)
         {
-            if (key != null)
+            if (entity != null)
             {
-                _key[name] = key;
+                _entities[name] = entity;
             }
             else
             {
-                _key.Remove(name);
+                _entities.Remove(name);
             }
         }
 
-        public Key GetKey(string name)
+        public IEntity GetEntity(string name)
         {
-            Key key = null;
-            _key.TryGetValue(name, out key);
-            return key;
+            IEntity entity = null;
+            _entities.TryGetValue(name, out entity);
+            return entity;
         }
 
-        public string GetKeys()
+        public string GetEntities()
         {
             string names = "";
-            Dictionary<string, Key>.KeyCollection keys = _key.Keys;
+            Dictionary<string, IEntity>.KeyCollection keys = _entities.Keys;
             foreach (string name in keys)
             {
                 names += " " + name;
@@ -299,10 +301,45 @@ namespace StarterGame
             return names;
         }
 
+        public void SetKeyItem(string name, KeyItem keyitem)
+        {
+            if (keyitem != null)
+            {
+                _keyitems[name] = keyitem;
+            }
+            else
+            {
+                _keyitems.Remove(name);
+            }
+        }
+
+        public KeyItem GetKeyItem(string name)
+        {
+            KeyItem keyitem = null;
+            _keyitems.TryGetValue(name, out keyitem);
+            return keyitem;
+        }
+
+        public void RemoveKeyItems(string name)
+        {
+            _keyitems.Remove(name);
+        }
+
+        public string GetKeyItems()
+        {
+            string names = "";
+            Dictionary<string, KeyItem>.KeyCollection keys = _keyitems.Keys;
+            foreach (string name in keys)
+            {
+                names += " " + name;
+            }
+
+            return names;
+        }
 
         public string SearchRoom()
         {
-            return "You are " + this.Tag + ".\n *** Findings:" + this.GetChests() + this.GetItems() + this.GetKeys();
+            return " *** Chests:" + this.GetChests() + "\n *** Items:" + this.GetItems() + "\n *** Key Items:" + this.GetKeyItems() + "\n *** Entities:" + this.GetEntities();
         }
 
         //Get Room Description

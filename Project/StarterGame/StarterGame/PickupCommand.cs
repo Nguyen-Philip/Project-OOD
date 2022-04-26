@@ -16,13 +16,11 @@ namespace StarterGame
             if (this.HasSecondWord())
             {
                 player.Pickup(this.SecondWord);
-                player.Inventory();
-                player.OutputMessage("\n" + player.CurrentRoom.Description());
             }
             else
             {
-                player.OutputMessage("\nPick up what?");
-                player.OutputMessage("\n" + player.CurrentRoom.Description());
+                player.ErrorMessage("\nPick up what?");
+                player.LocationMessage("\n" + player.CurrentRoom.Description());
             }
             return false;
         }
