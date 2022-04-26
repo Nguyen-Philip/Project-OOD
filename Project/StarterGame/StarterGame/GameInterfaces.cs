@@ -51,6 +51,6 @@ namespace StarterGame
         int Weight { set; get; }
         bool CanBeHeld { get; }
         bool IsUsable { get; }
-
+        bool CanBeDropped { get; }
     }
 }

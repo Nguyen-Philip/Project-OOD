@@ -16,13 +16,11 @@ namespace StarterGame
             if (this.HasSecondWord())
             {
                 player.Drop(this.SecondWord);
-                player.Inventory();
-                player.OutputMessage("\n" + player.CurrentRoom.Description());
             }
             else
             {
-                player.OutputMessage("\nDrop what?");
-                player.OutputMessage("\n" + player.CurrentRoom.Description());
+                player.ErrorMessage("\nDrop what?");
+                player.LocationMessage("\n" + player.CurrentRoom.Description());
             }
             return false;
         }

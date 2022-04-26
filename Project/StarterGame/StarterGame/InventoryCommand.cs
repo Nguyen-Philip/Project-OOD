@@ -17,14 +17,13 @@ namespace StarterGame
         {
             if (this.HasSecondWord())
             {
-                player.OutputMessage("\nInventory does not contain " + this.SecondWord);
-                player.OutputMessage("\n" + player.CurrentRoom.Description());
+                player.ErrorMessage("\nInventory does not contain " + this.SecondWord);
+                player.LocationMessage("\n" + player.CurrentRoom.Description());
             }
             else
             {
-                player.OutputMessage("\nYou look in your backpack");
+                player.NotificationMessage("\nYou look in your backpack");
                 player.Inventory();
-                player.OutputMessage("\n" + player.CurrentRoom.Description());
             }
             return false;
         }

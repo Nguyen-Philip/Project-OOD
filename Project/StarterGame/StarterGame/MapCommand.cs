@@ -3,11 +3,13 @@ using System.Collections.Generic;
 
 namespace StarterGame
 {
-    public class BackCommand : Command
+    public class MapCommand : Command
     {
-        public BackCommand() : base()
+        public MapCommand() : this(new CommandWords()) { }
+        // Designated Constructor
+        public MapCommand(CommandWords commands) : base()
         {
-            this.Name = "back";
+            this.Name = "map";
         }
 
         override
@@ -15,15 +17,15 @@ namespace StarterGame
         {
             if (this.HasSecondWord())
             {
-                player.ErrorMessage("\nBack does not contain " + this.SecondWord);
+                player.ErrorMessage("\nMap does not contain " + this.SecondWord);
                 player.LocationMessage("\n" + player.CurrentRoom.Description());
             }
             else
             {
-                player.WaltBack();
+                player.NotificationMessage("\nYou open the map\n");
+                player.Map();
             }
             return false;
         }
-
     }
 }

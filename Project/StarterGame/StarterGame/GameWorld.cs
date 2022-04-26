@@ -78,7 +78,7 @@ namespace StarterGame
                 {
                     player.CurrentRoom.SetExit("portal", null);
                     _trigger = null;
-                    player.OutputMessage("\n*** The portal collapses behind you. ***");
+                    player.NotificationMessage("\n*** The portal collapses behind you. ***");
                 }
             }
             //player.OutputMessage("\n*** The player is " + player.CurrentRoom.Tag + ", getting ready to leave ***");
@@ -90,9 +90,9 @@ namespace StarterGame
             if (player.CurrentRoom == _trigger)
             {
                 door = Door.CreatePortal(_exit, _portalExit, "portal");
-                player.OutputMessage("\n*** You hear a loud noise. A portal has been created nearby. ***");
+                player.NotificationMessage("\n*** You hear a loud noise. A portal has been created nearby. ***");
             }
-            player.OutputMessage("\n*** The player is " + player.CurrentRoom.Tag + " ***");
+            player.NotificationMessage("\n*** The player is " + player.CurrentRoom.Tag + " ***");
         }
 
         private Room CreateWorld()
@@ -145,6 +145,8 @@ namespace StarterGame
             weapon = Weapon.CreateWeapon(entrance, "axe", 10, 2, 20);
             key = Key.CreateKey(town, "key", 0);
             key = Key.CreateKey(entrance, "key", 0);
+            npc = NPC.CreateNPC(town, "Jerry", true, "Hello There");
+            enemy = Enemy.CreateEnemy(town, "Skeleton", 10, 2, 10);
 
             door = Door.CreateDoor(entrance, room1_0, "north", "south");
             door = Door.CreateDoor(room1_0, room1_1, "north", "south");

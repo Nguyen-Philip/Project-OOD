@@ -8,6 +8,7 @@ namespace StarterGame
         private int _Weight;
         private bool _CanBeHeld = true;
         private bool _IsUsable = true;
+        private bool _CanBeDropped = false;
 
         public string Name { set { _Name = value; } get { return _Name; } }
         public Room Location { set { _Location = value; } get { return _Location; } }
@@ -26,33 +27,44 @@ namespace StarterGame
                 return _IsUsable;
             }
         }
-
-        public Key(Room location)
+        public bool CanBeDropped
         {
-            _Location = location;
-            _CanBeHeld = true;
-            _IsUsable = false;
+            get
+            {
+                return _CanBeDropped;
+            }
         }
 
-        public Key(Room location, int weight)
+        public Key(Room location, string name)
+        {
+            _Location = location;
+            _Name = name;
+            _CanBeHeld = true;
+            _IsUsable = false;
+            _CanBeDropped = false;
+        }
+
+        public Key(Room location, string name, int weight)
         {
             _Location = location;
             _Weight = weight;
+            _Name = name;
             _CanBeHeld = true;
             _IsUsable = false;
+            _CanBeDropped = false;
         }
 
         public static Key CreateKey(Room location, string name)
         {
-            Key key = new Key(location);
-            location.SetKey(name, key);
+            Key key = new Key(location, name);
+            location.SetKeyItem(name, key);
             return key;
         }
 
         public static Key CreateKey(Room location, string name, int weight)
         {
-            Key key = new Key(location, weight);
-            location.SetKey(name, key);
+            Key key = new Key(location, name, weight);
+            location.SetKeyItem(name, key);
             return key;
         }
     }

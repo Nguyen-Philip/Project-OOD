@@ -70,6 +70,33 @@ namespace StarterGame
             _Ar = ar;
             _Priority = priority;
         }*/
+        public Enemy(Room location, string name)
+        {
+            _Location = location;
+            _Name = name;
+        }
 
+        public Enemy(Room location, string name, int hp, int ar, int priority)
+        {
+            _Location = location;
+            _Name = name;
+            _Hp = hp;
+            _Ar = ar;
+            _Priority = priority;
+        }
+
+        public static Enemy CreateEnemy(Room location, string name)
+        {
+            Enemy enemy = new Enemy(location, name);
+            location.SetEntity(name, enemy);
+            return enemy;
+        }
+
+        public static Enemy CreateEnemy(Room location, string name, int hp, int ar, int priority)
+        {
+            Enemy enemy = new Enemy(location, name, hp, ar, priority);
+            location.SetEntity(name, enemy);
+            return enemy;
+        }
     }
 }

@@ -30,6 +30,8 @@ namespace StarterGame
             commands[search.Name] = search;
             Command inventory = new InventoryCommand(this);
             commands[inventory.Name] = inventory;
+            Command map = new MapCommand(this);
+            commands[map.Name] = map;
         }
 
         public Command Get(string word)

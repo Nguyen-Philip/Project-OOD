@@ -17,12 +17,12 @@ namespace StarterGame
         {
             if (this.HasSecondWord())
             {
-                player.OutputMessage("\nLog does not contain " + this.SecondWord);
-                player.OutputMessage("\n" + player.CurrentRoom.Description());
+                player.ErrorMessage("\nLog does not contain " + this.SecondWord);
+                player.LocationMessage("\n" + player.CurrentRoom.Description());
             }
             else
             {
-                player.OutputMessage("\nYou suddenly remember everything you have done:\n");
+                player.NotificationMessage("\nYou suddenly remember everything you have done:\n");
                 player.ShowLog();
             }
             return false;
