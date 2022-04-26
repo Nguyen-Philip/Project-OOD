@@ -20,7 +20,6 @@ namespace StarterGame
                 Limit -= item.Weight;
                 success = true;
             }
-
             return success;
         }
 
@@ -36,9 +35,11 @@ namespace StarterGame
             return success;
         }
 
-        public bool Remove(string item)
+        public bool Remove(string name)
         {
-            bool success = _items.Remove(item);
+            Item item = this.GetItem(name);
+            bool success = _items.Remove(name);
+            Limit += item.Weight;
             return success;
         }
 
@@ -84,6 +85,11 @@ namespace StarterGame
             }
 
             return names;
+        }
+
+        public int GetWeight()
+        {
+            return Limit;
         }
 
         public BackPack()

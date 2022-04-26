@@ -39,7 +39,7 @@ namespace StarterGame
 
         public void Close()
         {
-            if(IsOpen && CanClose)
+            if (IsOpen && CanClose)
             {
                 _open = false;
             }
@@ -47,7 +47,7 @@ namespace StarterGame
 
         public void Lock()
         {
-            if(_lock != null)
+            if (_lock != null)
             {
                 _lock.Lock();
             }
@@ -55,7 +55,7 @@ namespace StarterGame
 
         public void Unlock()
         {
-            if(_lock != null)
+            if (_lock != null)
             {
                 _lock.Unlock();
             }
@@ -70,7 +70,7 @@ namespace StarterGame
 
         public Room GetRoomOnTheOtherSide(Room ofThisRoom)
         {
-            if(ofThisRoom == _roomA)
+            if (ofThisRoom == _roomA)
             {
                 return _roomB;
             }

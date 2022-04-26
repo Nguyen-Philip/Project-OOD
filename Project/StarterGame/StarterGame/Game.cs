@@ -34,7 +34,7 @@ namespace StarterGame
                 Command command = _parser.ParseCommand(temp);
                 if (command == null)
                 {
-                    Console.WriteLine("I don't understand...");
+                    Console.WriteLine("\nI don't understand...");
                 }
                 else
                 {
