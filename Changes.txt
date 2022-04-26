@@ -235,10 +235,16 @@ Pickup items
 Room.cs
 Made all items get stored in _items
 
+Player.cs
+Added different color for types of messages
+
 Added
 InventoryCommand.cs
 Display inventory
 
-Time Spent: 20m 23s
+MapCommand.cs
+Displays map
+
+Time Spent: 30m 23s
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
