@@ -19,8 +19,7 @@ namespace StarterGame
             }
             else
             {
-                player.ErrorMessage("\nDrop what?");
-                player.LocationMessage("\n" + player.CurrentRoom.Description());
+                player.OutputMessage("\nDrop what?");
             }
             return false;
         }

@@ -14,33 +14,16 @@ namespace StarterGame
         public Room Location { set { _Location = value; } get { return _Location; } }
         public bool CanTalk { set { _CanTalk = value; } get { return _CanTalk; } }
         public string Dialog { set { _Dialog = value; } get { return _Dialog; } }
-
-        public NPC(Room location, string name)
+        
+        /*public NPC(string name) : this(name, "NO LOCATION") { }
+        public NPC(string name, string location) : this(name, location, false, null) { }
+        public NPC(string name, string location, bool canTalk, string dialog)
         {
-            _Location = location;
             _Name = name;
-        }
-
-        public NPC(Room location, string name, bool canTalk, string dialog)
-        {
             _Location = location;
-            _Name = name;
             _CanTalk = canTalk;
             _Dialog = dialog;
-        }
-
-        public static NPC CreateNPC(Room location, string name)
-        {
-            NPC npc = new NPC(location, name);
-            location.SetNPC(name, npc);
-            return npc;
-        }
-
-        public static NPC CreateNPC(Room location, string name, bool canTalk, string dialog)
-        {
-            NPC npc = new NPC(location, name, canTalk, dialog);
-            location.SetNPC(name, npc);
-            return npc;
-        }
+        }*/
+       
     }
 }

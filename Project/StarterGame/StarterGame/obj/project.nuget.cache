@@ -1,16 +1,16 @@
 {
   "version": 2,
-  "dgSpecHash": "xw2YhVDH6HOKQaZ6v2Wr0ErzNSPFIXyQibMUoN+gQk41MJ795/B5Qjpurm7mj6lVb5jGMgg8OqlVgXT/HgSSBQ==",
+  "dgSpecHash": "mkQ0GJf6MRGiadrZkL/4r38sMXL9tRrNMIPiNo8psZEA9xDMW4+GQI598gkRt50Ke6EXndbwcHxRaC81lPSDPg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Konos\\Downloads\\Project-OOD-main\\Project-OOD-main\\Project\\StarterGame\\StarterGame\\StarterGame.csproj",
+  "projectFilePath": "/Users/jacobcasina/Documents/Project-OOD-main 4/Project/StarterGame/StarterGame/StarterGame.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Konos\\.nuget\\packages\\microsoft.netcore.app\\2.1.0\\microsoft.netcore.app.2.1.0.nupkg.sha512",
-    "C:\\Users\\Konos\\.nuget\\packages\\microsoft.netcore.dotnetapphost\\2.1.0\\microsoft.netcore.dotnetapphost.2.1.0.nupkg.sha512",
-    "C:\\Users\\Konos\\.nuget\\packages\\microsoft.netcore.dotnethostpolicy\\2.1.0\\microsoft.netcore.dotnethostpolicy.2.1.0.nupkg.sha512",
-    "C:\\Users\\Konos\\.nuget\\packages\\microsoft.netcore.dotnethostresolver\\2.1.0\\microsoft.netcore.dotnethostresolver.2.1.0.nupkg.sha512",
-    "C:\\Users\\Konos\\.nuget\\packages\\microsoft.netcore.platforms\\2.1.0\\microsoft.netcore.platforms.2.1.0.nupkg.sha512",
-    "C:\\Users\\Konos\\.nuget\\packages\\microsoft.netcore.targets\\2.1.0\\microsoft.netcore.targets.2.1.0.nupkg.sha512",
-    "C:\\Users\\Konos\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512"
+    "/Users/jacobcasina/.nuget/packages/microsoft.netcore.app/2.1.0/microsoft.netcore.app.2.1.0.nupkg.sha512",
+    "/Users/jacobcasina/.nuget/packages/microsoft.netcore.dotnetapphost/2.1.0/microsoft.netcore.dotnetapphost.2.1.0.nupkg.sha512",
+    "/Users/jacobcasina/.nuget/packages/microsoft.netcore.dotnethostpolicy/2.1.0/microsoft.netcore.dotnethostpolicy.2.1.0.nupkg.sha512",
+    "/Users/jacobcasina/.nuget/packages/microsoft.netcore.dotnethostresolver/2.1.0/microsoft.netcore.dotnethostresolver.2.1.0.nupkg.sha512",
+    "/Users/jacobcasina/.nuget/packages/microsoft.netcore.platforms/2.1.0/microsoft.netcore.platforms.2.1.0.nupkg.sha512",
+    "/Users/jacobcasina/.nuget/packages/microsoft.netcore.targets/2.1.0/microsoft.netcore.targets.2.1.0.nupkg.sha512",
+    "/Users/jacobcasina/.nuget/packages/netstandard.library/2.0.3/netstandard.library.2.0.3.nupkg.sha512"
   ],
   "logs": []
 }

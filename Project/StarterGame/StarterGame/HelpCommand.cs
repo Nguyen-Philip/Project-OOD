@@ -21,13 +21,12 @@ namespace StarterGame
         {
             if (this.HasSecondWord())
             {
-                player.ErrorMessage("\nHelp does not contain " + this.SecondWord);
-                player.LocationMessage("\n" + player.CurrentRoom.Description());
+                player.OutputMessage("\nHelp does not contain " + this.SecondWord);
             }
             else
             {
-                player.NotificationMessage("\nYou are lost. You are alone. You are not ready to face the dungeon. \n\nYour available commands are: " + _words.Description() + "\n");
-                player.LocationMessage(player.CurrentRoom.Description());
+                player.OutputMessage("\nYou are lost. You are alone. You are not ready to face the dungeon, \n\nYour available commands are: " + _words.Description() + "\n");
+                player.OutputMessage(player.CurrentRoom.Description());
             }
             return false;
         }

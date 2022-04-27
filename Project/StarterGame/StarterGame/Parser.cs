@@ -34,11 +34,16 @@ namespace StarterGame
                         command.SecondWord = null;
                     }
                 }
+                else
+                {
+                    // This is debug line of code, should remove for regular execution
+                    Console.WriteLine(">>>Did not find the command " + words[0]);
+                }
             }
             else
             {
                 // This is a debug line of code
-                Console.WriteLine("\nNo words parsed!");
+                Console.WriteLine("No words parsed!");
             }
             return command;
         }

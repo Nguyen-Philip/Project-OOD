@@ -19,8 +19,8 @@ namespace StarterGame
             }
             else
             {
-                player.ErrorMessage("\nOpen what?");
-                player.LocationMessage("\n" + player.CurrentRoom.Description());
+                player.OutputMessage("\nOpen what?");
+                player.OutputMessage("\n" + player.CurrentRoom.Description());
             }
             return false;
         }

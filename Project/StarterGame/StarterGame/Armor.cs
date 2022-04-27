@@ -63,6 +63,9 @@ namespace StarterGame
             Armor armor = new Armor(location, name, value, weight, av);
             location.SetItem(name, armor);
             return armor;
+
         }
+
+
     }
 }

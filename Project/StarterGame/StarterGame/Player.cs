@@ -8,12 +8,11 @@ namespace StarterGame
     {
         private Room _currentRoom = null;
         private List<string> _log = new List<string>();
-        private Stack<string> _movementlog = new Stack<string>();
+        private List<string> _movementlog = new List<string>();
         private BackPack _backPack = new BackPack();
-        private int _hp = 100;
-        private int _ar = 5;
-        private int _av = 0;
-        private int _priority = 1;
+        private int _hp = 50;
+        private Armor _armor;
+        private Weapon _weapon;
 
         public Room CurrentRoom
         {
@@ -27,6 +26,54 @@ namespace StarterGame
             }
         }
 
+        public int HP
+        {
+            get
+            {
+                return _hp;
+            }
+            set
+            {
+                _hp = value;
+            }
+        }
+
+        public bool EquipX(Item item)
+        {
+            bool success = false;
+            if (item.GetType() == typeof(Armor))
+            {
+                _armor = (Armor)item;
+                _backPack.RemoveItem(item.Name);
+                success = true;
+            }
+            else if (item.GetType() == typeof(Weapon))
+            {
+                _weapon = (Weapon)item;
+                _backPack.RemoveItem(item.Name);
+                success = true;
+            }
+            return success;
+        }
+
+        public bool UnequipX(Item item)
+        {
+            bool success = false;
+            if (item.GetType() == typeof(Armor))
+            {
+                _backPack.Add(item);
+                _armor = null;
+                success = true;
+            }
+            else if (item.GetType() == typeof(Weapon))
+            {
+                _backPack.Add(item);
+                _weapon = null;
+                success = true;
+            }
+            return success;
+        }
+
         public Player(Room room)
         {
             _currentRoom = room;
@@ -36,7 +83,7 @@ namespace StarterGame
         public void WaltTo(string direction)
         {
             Door door = this.CurrentRoom.GetExit(direction);
-            if (door != null)
+            if(door != null)
             {
                 if (door.IsOpen)
                 {
@@ -46,25 +93,25 @@ namespace StarterGame
                     this.CurrentRoom = nextRoom;
                     notification = new Notification("PlayerDidEnterRoom", this);
                     NotificationCenter.Instance.PostNotification(notification);
-                    this.LocationMessage("\n" + this.CurrentRoom.Description());
+                    this.OutputMessage("\n" + this.CurrentRoom.Description());
                 }
                 else
                 {
-                    this.ErrorMessage("\nThe door is closed");
-                    this.LocationMessage("\n" + this.CurrentRoom.Description());
+                    this.OutputMessage("\nThe door is closed");
+                    this.OutputMessage("\n" + this.CurrentRoom.Description());
                 }
             }
             else
             {
                 if (direction == "portal")
                 {
-                    this.ErrorMessage("\nThere is no " + direction);
-                    this.LocationMessage("\n" + this.CurrentRoom.Description());
+                    this.OutputMessage("\nThere is no " + direction);
+                    this.OutputMessage("\n" + this.CurrentRoom.Description());
                 }
                 else
                 {
-                    this.ErrorMessage("\nThere is no door on " + direction);
-                    this.LocationMessage("\n" + this.CurrentRoom.Description());
+                    this.OutputMessage("\nThere is no door on " + direction);
+                    this.OutputMessage("\n" + this.CurrentRoom.Description());
                 }
             }
         }
@@ -73,492 +120,380 @@ namespace StarterGame
         public void WaltBack()
         {
             Parser _parser = new Parser(new CommandWords());
-            if (_movementlog.Count != 0)
+            string movementLog = "";
+            if(_movementlog.Count > 0)
             {
-                Command command = _parser.ParseCommand(_movementlog.Pop());
+                movementLog = _movementlog[_movementlog.Count - 1];
+            }
+
+            if(_movementlog.Count != 0)
+            {
+                Command command = _parser.ParseCommand(movementLog);
                 switch (command.SecondWord)
                 {
                     case "north":
                         command.SecondWord = "south";
                         this.WaltTo(command.SecondWord);
+                        _movementlog.RemoveAt(_movementlog.Count - 1);
                         break;
                     case "south":
                         command.SecondWord = "north";
                         this.WaltTo(command.SecondWord);
+                        _movementlog.RemoveAt(_movementlog.Count - 1);
                         break;
                     case "west":
                         command.SecondWord = "east";
                         this.WaltTo(command.SecondWord);
+                        _movementlog.RemoveAt(_movementlog.Count - 1);
                         break;
                     case "east":
                         command.SecondWord = "west";
                         this.WaltTo(command.SecondWord);
-                        break;
-                    case "portal":
-                        _movementlog.Clear();
-                        this.ErrorMessage("There is no way to go back");
-                        this.LocationMessage("\n" + this.CurrentRoom.Description());
+                        _movementlog.RemoveAt(_movementlog.Count - 1);
                         break;
                     default:
-                        this.ErrorMessage("There is no way to go back");
-                        this.LocationMessage("\n" + this.CurrentRoom.Description());
+                        this.OutputMessage("There is no way to go back");
+                        this.OutputMessage("\n" + this.CurrentRoom.Description());
                         break;
                 }
             }
             else
             {
-                this.ErrorMessage("\nThere is no way to go back");
-                this.LocationMessage("\n" + this.CurrentRoom.Description());
+                this.OutputMessage("There is no way to go back");
+                this.OutputMessage("\n" + this.CurrentRoom.Description());
             }
         }
 
-        //used by PickupCommand, pick ups items
         public bool Pickup(string word)
         {
             bool success = false;
-            KeyItem keyitem = CurrentRoom.GetKeyItem(word);
             Item item = CurrentRoom.GetItem(word);
             if (item != null)
             {
-                if (item.CanBeHeld)
-                {
-                    success = _backPack.Add(item);
-                    if (success == true)
-                    {
-                        this.NotificationMessage("\nYou have picked up the " + item.Name);
-                        CurrentRoom.RemoveItem(item.Name);
-                        this.LocationMessage("\n" + this.CurrentRoom.Description());
-                    }
-                    else
-                    {
-                        this.NotificationMessage("\nYour backpack is full, you need to drop something to pick up the " + item.Name);
-                        this.LocationMessage("\n" + this.CurrentRoom.Description());
-                    }
-                }
-                else
-                {
-                    this.NotificationMessage("\nYou cannot pickup the " + item.Name);
-                    this.LocationMessage("\n" + this.CurrentRoom.Description());
-                }
+                this.OutputMessage("\n" + item.Name);
+                success = _backPack.Add(item);
+                CurrentRoom.RemoveItem(word);
+                this.OutputMessage("\n" + this._backPack.GetItems());
             }
-            else if (keyitem != null)
-            {
-                if (keyitem.CanBeHeld)
-                {
-                    this.NotificationMessage("\nYou have picked up the " + keyitem.Name);
-                    success = _backPack.AddKeyItems(keyitem);
-                    CurrentRoom.RemoveItem(word);
-                    this.LocationMessage("\n" + this.CurrentRoom.Description());
-                }
-                else
-                {
-                    this.NotificationMessage("\nYou cannot pickup the " + keyitem.Name);
-                    this.LocationMessage("\n" + this.CurrentRoom.Description());
-                }
-            }
-            else
-            {
-                this.ErrorMessage("\nThere is nothing named " + word + " to pick up");
-                this.LocationMessage("\n" + this.CurrentRoom.Description());
-            }
+
             return success;
         }
 
-        //used by DropCommand, drops items
+        public bool Equip(string word)
+        {
+            bool success = false;
+            Item item = _backPack.GetItem(word);
+
+                this.OutputMessage("\n" + this._backPack.GetItems());
+                success = EquipX(item);
+
+
+            return success;
+        }
+
         public bool Drop(string word)
         {
             bool success = false;
-            KeyItem keyitem = _backPack.GetKeyItem(word);
             Item item = _backPack.GetItem(word);
             if (item != null)
             {
-                this.NotificationMessage("\nYou have dropped the " + item.Name);
                 CurrentRoom.SetItem(item.Name, item);
-                success = _backPack.Remove(word);
-                this.LocationMessage("\n" + this.CurrentRoom.Description());
-            }
-            else if (keyitem != null)
-            {
-                if (keyitem.CanBeDropped)
-                {
-                    this.NotificationMessage("\nYou have dropped the " + keyitem.Name);
-                    this.LocationMessage("\n" + this.CurrentRoom.Description());
-                }
-                else
-                {
-                    this.NotificationMessage("\nYou cannot drop the " + keyitem.Name + " as it is a key item");
-                    this.LocationMessage("\n" + this.CurrentRoom.Description());
-                }
-
-            }
-            else
-            {
-                this.ErrorMessage("\nThere is nothing named " + word + " to drop");
-                this.LocationMessage("\n" + this.CurrentRoom.Description());
+                _backPack.RemoveItem(word);
+                success = true;
             }
 
             return success;
         }
 
-        public void Attack(string word)
+        public bool Unequip(string word)
         {
-            NPC npc = CurrentRoom.GetNPC(word);
-            Enemy enemy = CurrentRoom.GetEnemy(word);
-            if(enemy != null)
+            bool success = false;
+            Item item = _armor;
+            if (item.Name == word)
             {
-                NotificationMessage("\nYou attack " + enemy.Name);
-                this.LocationMessage("\n" + this.CurrentRoom.Description());
-                this.Battle(enemy);
+                this.OutputMessage("\n" + this._backPack.GetItems());
+                success = UnequipX(item);
+                
             }
-            else if (npc != null)
-            {
-                NotificationMessage("\nYou are unable to attack " + npc.Name);
-                this.LocationMessage("\n" + this.CurrentRoom.Description());
-            }
-            else
-            {
-                ErrorMessage("\nThere is no one named " + word + " in the current room to attack");
-                this.LocationMessage("\n" + this.CurrentRoom.Description());
-            }
+
+            return success;
         }
 
-        public void Battle(Enemy enemy)
-        {
-            Parser _parser = new Parser(new CommandWords());
-            NotificationMessage("\nEnemy Hp: " + enemy.Hp);
-            NotificationMessage("\nPlayer Hp: " + _hp);
-            if (enemy.Hp > 0 && _hp > 0)
-            {
-                NotificationMessage("\nYou have attack the " + enemy.Name + " and dealt " + _ar + " damage");
-                NotificationMessage("\nThe " + enemy.Name + " have attack you and dealt " + enemy.Ar + " damage");
-                Console.Write("\n>");
-                String temp = Console.ReadLine();
-                Command command = _parser.ParseCommand(temp);
-                if (command.Name == "attack")
-                {
-                    command.Execute(this);
-                }
-                else
-                {
-                    ErrorMessage("\nYou are unable to do anything but attack");
-                }
-            }
-            else if(enemy.Hp <= 0)
-            {
-                NotificationMessage("\nYou have won");
-                this.CurrentRoom.RemoveEnemy(enemy.Name);
-                this.LocationMessage("\n" + this.CurrentRoom.Description());
-            }
-            else if (_hp <= 0)
-            {
-                NotificationMessage("\nYou have died");
-            }
-        }
-
-        public void Inventory()
-        {
-            this.OutputMessage("\nItems:" + this._backPack.GetItems() + "\nKey Items:" + this._backPack.GetKeyItems() + "\nWeight: " + this._backPack.GetWeight() + "/50");
-            this.LocationMessage("\n" + this.CurrentRoom.Description());
-        }
-
-        //used by SayCommand, allows you to say a word
         public void Say(string word)
         {
-            SayMessage("\n" + word);
+            OutputMessage("\n" + word);
             Dictionary<string, object> userInfo = new Dictionary<string, object>();
             userInfo["word"] = word;
             Notification notification = new Notification("PlayerSaidWord", this, userInfo);
             NotificationCenter.Instance.PostNotification(notification);
-            this.LocationMessage("\n" + this.CurrentRoom.Description());
-
+            this.OutputMessage("\n" + this.CurrentRoom.Description());
         }
 
-        public void Speakto(string word)
-        {
-            NPC npc = CurrentRoom.GetNPC(word);
-            Enemy enemy = CurrentRoom.GetEnemy(word);
-            if (npc != null)
-            {
-                NotificationMessage("\n" + npc.Dialog);
-                this.LocationMessage("\n" + this.CurrentRoom.Description());
-            }
-            else if (enemy != null)
-            {
-                NotificationMessage("\nYou do not understand what the " + word + " is saying");
-                this.LocationMessage("\n" + this.CurrentRoom.Description());
-            }
-            else
-            {
-                ErrorMessage("\nThere is no one named " + word + " in the current room to speak to");
-                this.LocationMessage("\n" + this.CurrentRoom.Description());
-            }
-        }
-
-        //used by OpenCommand, opens doors and chests
         public void Open(string name)
         {
             Door door = this.CurrentRoom.GetExit(name);
             Chest chest = this.CurrentRoom.GetChest(name);
-            if (door != null)
+            if (name != "portal" && name != "chest")
             {
-                if (name != "portal")
+                if (door != null)
                 {
                     if (door.IsClosed)
                     {
                         if (door.IsLocked)
                         {
-                            this.ErrorMessage("\nThe door is closed and locked");
-                            this.LocationMessage("\n" + this.CurrentRoom.Description());
+                            this.OutputMessage("\nThe door is closed and locked");
+                            this.OutputMessage("\n" + this.CurrentRoom.Description());
                         }
                         else
                         {
                             door.Open();
-                            this.NotificationMessage("\nThe door has been opened");
-                            this.LocationMessage("\n" + this.CurrentRoom.Description());
+                            this.OutputMessage("\nThe door has been opened");
+                            this.OutputMessage("\n" + this.CurrentRoom.Description());
                         }
                     }
                     else
                     {
-                        this.ErrorMessage("\nThe door is open");
-                        this.LocationMessage("\n" + this.CurrentRoom.Description());
+                        this.OutputMessage("\nThe door is open");
+                        this.OutputMessage("\n" + this.CurrentRoom.Description());
                     }
                 }
                 else
                 {
-                    this.ErrorMessage("\nYou cannot open the " + name);
-                    this.LocationMessage("\n" + this.CurrentRoom.Description());
+                    this.OutputMessage("\nThere is no door " + name + " to close");
+                    this.OutputMessage("\n" + this.CurrentRoom.Description());
                 }
             }
-            else if (chest != null)
+            else if (name == "chest")
             {
-                if (chest.IsClosed)
+                if (chest != null)
                 {
-                    if (chest.IsLocked)
+                    if (chest.IsClosed)
                     {
-                        this.ErrorMessage("\nThe chest is closed and locked");
-                        this.LocationMessage("\n" + this.CurrentRoom.Description());
+                        if (chest.IsLocked)
+                        {
+                            this.OutputMessage("\nThe chest is closed and locked");
+                            this.OutputMessage("\n" + this.CurrentRoom.Description());
+                        }
+                        else
+                        {
+                            chest.Open();
+                            this.OutputMessage("\nThe chest has been opened");
+                            this.OutputMessage("\n" + this.CurrentRoom.Description());
+                        }
                     }
                     else
                     {
-                        chest.Open();
-                        this.NotificationMessage("\nThe chest has been opened");
-                        this.LocationMessage("\n" + this.CurrentRoom.Description());
+                        this.OutputMessage("\nThe chest is open");
+                        this.OutputMessage("\n" + this.CurrentRoom.Description());
                     }
                 }
                 else
                 {
-                    this.ErrorMessage("\nThe chest is open");
-                    this.LocationMessage("\n" + this.CurrentRoom.Description());
+                    this.OutputMessage("\nThere is no " + name + " to open");
+                    this.OutputMessage("\n" + this.CurrentRoom.Description());
                 }
             }
             else
             {
-                this.ErrorMessage("\nThere is no door or chest named " + name + " to open");
-                this.LocationMessage("\n" + this.CurrentRoom.Description());
+                this.OutputMessage("\nYou cannot open a portal");
+                this.OutputMessage("\n" + this.CurrentRoom.Description());
             }
         }
 
-        //used by CloseCommand, closes doors and chests
         public void Close(string name)
         {
             Door door = this.CurrentRoom.GetExit(name);
             Chest chest = this.CurrentRoom.GetChest(name);
-            if (door != null)
+            if (name != "portal" && name != "chest")
             {
-                if (name != "portal")
+                if (door != null)
                 {
                     if (door.IsOpen)
                     {
                         door.Close();
-                        this.NotificationMessage("\nThe door has been closed");
-                        this.LocationMessage("\n" + this.CurrentRoom.Description());
+                        this.OutputMessage("\nThe door has been closed");
+                        this.OutputMessage("\n" + this.CurrentRoom.Description());
                     }
                     else
                     {
-                        this.ErrorMessage("\nThe door is close");
-                        this.LocationMessage("\n" + this.CurrentRoom.Description());
+                        this.OutputMessage("\nThe door is close");
+                        this.OutputMessage("\n" + this.CurrentRoom.Description());
                     }
                 }
                 else
                 {
-                    this.ErrorMessage("\nYou cannot close the " + name);
-                    this.LocationMessage("\n" + this.CurrentRoom.Description());
+                    this.OutputMessage("\nThere is no door " + name + " to close");
+                    this.OutputMessage("\n" + this.CurrentRoom.Description());
                 }
             }
-            else if (chest != null)
+            else if (name == "chest")
             {
-
-                if (chest.IsOpen)
+                if (chest != null)
                 {
-                    chest.Close();
-                    this.NotificationMessage("\nThe chest has been closed");
-                    this.LocationMessage("\n" + this.CurrentRoom.Description());
+                    if (chest.IsOpen)
+                    {
+                        chest.Close();
+                        this.OutputMessage("\nThe chest has been closed");
+                        this.OutputMessage("\n" + this.CurrentRoom.Description());
+                    }
+                    else
+                    {
+                        this.OutputMessage("\nThe chest is close");
+                        this.OutputMessage("\n" + this.CurrentRoom.Description());
+                    }
                 }
                 else
                 {
-                    this.ErrorMessage("\nThe chest is close");
-                    this.LocationMessage("\n" + this.CurrentRoom.Description());
+                    this.OutputMessage("\nThere is no " + name + " to close");
+                    this.OutputMessage("\n" + this.CurrentRoom.Description());
                 }
             }
             else
             {
-                this.ErrorMessage("\nThere is no door or chest named " + name + " to close");
-                this.LocationMessage("\n" + this.CurrentRoom.Description());
+                this.OutputMessage("\nYou cannot close a portal");
+                this.OutputMessage("\n" + this.CurrentRoom.Description());
             }
         }
 
-        //used by UnlockCommand, unlocks doors and chests
         public void Unlock(string name)
         {
             Door door = this.CurrentRoom.GetExit(name);
             Chest chest = this.CurrentRoom.GetChest(name);
-            if (door != null)
+            if (name != "portal" && name != "chest")
             {
-                if (name != "portal")
+                if (door != null)
                 {
                     if (door.IsOpen)
                     {
-                        this.ErrorMessage("\nThe door is open");
-                        this.LocationMessage("\n" + this.CurrentRoom.Description());
+                        this.OutputMessage("\nThe door is open");
+                        this.OutputMessage("\n" + this.CurrentRoom.Description());
                     }
                     else
                     {
                         if (door.IsLocked)
                         {
                             door.Unlock();
-                            this.NotificationMessage("\nThe door has been unlocked");
-                            this.LocationMessage("\n" + this.CurrentRoom.Description());
+                            this.OutputMessage("\nThe door has been unlocked");
+                            this.OutputMessage("\n" + this.CurrentRoom.Description());
                         }
                         else
                         {
-                            this.ErrorMessage("\nThe door is not locked");
-                            this.LocationMessage("\n" + this.CurrentRoom.Description());
+                            this.OutputMessage("\nThe door is not locked");
+                            this.OutputMessage("\n" + this.CurrentRoom.Description());
                         }
                     }
                 }
                 else
                 {
-                    this.ErrorMessage("\nYou cannot unlock the " + name);
-                    this.LocationMessage("\n" + this.CurrentRoom.Description());
+                    this.OutputMessage("\nThere is no door " + name + " to unlock");
+                    this.OutputMessage("\n" + this.CurrentRoom.Description());
                 }
             }
-            else if (chest != null)
+            else if (name == "chest")
             {
-                if (chest.IsOpen)
+                if (chest != null)
                 {
-                    this.ErrorMessage("\nThe chest is open");
-                    this.LocationMessage("\n" + this.CurrentRoom.Description());
-                }
-                else
-                {
-                    if (chest.IsLocked)
+                    if (chest.IsOpen)
                     {
-                        chest.Unlock();
-                        this.NotificationMessage("\nThe chest has been unlocked");
-                        this.LocationMessage("\n" + this.CurrentRoom.Description());
+                        this.OutputMessage("\nThe chest is open");
+                        this.OutputMessage("\n" + this.CurrentRoom.Description());
                     }
                     else
                     {
-                        this.ErrorMessage("\nThe chest is not locked");
-                        this.LocationMessage("\n" + this.CurrentRoom.Description());
+                        if (chest.IsLocked)
+                        {
+                            chest.Unlock();
+                            this.OutputMessage("\nThe chest has been unlocked");
+                            this.OutputMessage("\n" + this.CurrentRoom.Description());
+                        }
+                        else
+                        {
+                            this.OutputMessage("\nThe chest is not locked");
+                            this.OutputMessage("\n" + this.CurrentRoom.Description());
+                        }
                     }
+                }
+                else
+                {
+                    this.OutputMessage("\nThere is no " + name + " to unlock");
+                    this.OutputMessage("\n" + this.CurrentRoom.Description());
                 }
             }
             else
             {
-                this.ErrorMessage("\nThere is no door or chest named " + name + " to unlock");
-                this.LocationMessage("\n" + this.CurrentRoom.Description());
+                this.OutputMessage("\nYou cannot unlock a portal");
+                this.OutputMessage("\n" + this.CurrentRoom.Description());
             }
         }
 
-        //used by LockCommand, used to lock doors and chests
         public void Lock(string name)
         {
             Door door = this.CurrentRoom.GetExit(name);
             Chest chest = this.CurrentRoom.GetChest(name);
-            if (door != null)
+            if (name != "portal" && name != "chest")
             {
-                if (name != "portal")
+                if (door != null)
                 {
                     if (door.IsOpen)
                     {
-                        this.ErrorMessage("\nThe door is open");
-                        this.LocationMessage("\n" + this.CurrentRoom.Description());
+                        this.OutputMessage("\nThe door is open");
+                        this.OutputMessage("\n" + this.CurrentRoom.Description());
                     }
                     else
                     {
                         Regularlock aLock = new Regularlock();
                         door.InstallLock(aLock);
                         door.Lock();
-                        this.NotificationMessage("\nThe door has been locked");
-                        this.LocationMessage("\n" + this.CurrentRoom.Description());
+                        this.OutputMessage("\nThe door has been locked");
+                        this.OutputMessage("\n" + this.CurrentRoom.Description());
                     }
                 }
                 else
                 {
-                    this.ErrorMessage("\nYou cannot lock the " + name);
-                    this.LocationMessage("\n" + this.CurrentRoom.Description());
+                    this.OutputMessage("\nThere is no door " + name + " to lock");
+                    this.OutputMessage("\n" + this.CurrentRoom.Description());
                 }
             }
-            else if (chest != null)
+            else if (name == "chest")
             {
-                if (chest.IsOpen)
+                if (chest != null)
                 {
-                    this.ErrorMessage("\nThe chest is open");
-                    this.LocationMessage("\n" + this.CurrentRoom.Description());
+                    if (chest.IsOpen)
+                    {
+                        this.OutputMessage("\nThe chest is open");
+                        this.OutputMessage("\n" + this.CurrentRoom.Description());
+                    }
+                    else
+                    {
+                        Regularlock aLock = new Regularlock();
+                        chest.InstallLock(aLock);
+                        chest.Lock();
+                        this.OutputMessage("\nThe chest has been locked");
+                        this.OutputMessage("\n" + this.CurrentRoom.Description());
+                    }
                 }
                 else
                 {
-                    Regularlock aLock = new Regularlock();
-                    chest.InstallLock(aLock);
-                    chest.Lock();
-                    this.NotificationMessage("\nThe chest has been locked");
-                    this.LocationMessage("\n" + this.CurrentRoom.Description());
+                    this.OutputMessage("\nThere is no " + name + " to lock");
+                    this.OutputMessage("\n" + this.CurrentRoom.Description());
                 }
             }
             else
             {
-                this.ErrorMessage("\nThere is no door or chest named " + name + " to lock");
-                this.LocationMessage("\n" + this.CurrentRoom.Description());
+                this.OutputMessage("\nYou cannot lock a portal");
+                this.OutputMessage("\n" + this.CurrentRoom.Description());
             }
         }
 
-        //used by SearchCommand, searches for items and chest
         public void Search()
         {
-            this.NotificationMessage(this.CurrentRoom.SearchRoom());
-            this.LocationMessage("\n" + this.CurrentRoom.Description());
+            this.OutputMessage("\n" + this.CurrentRoom.SearchRoom());
         }
 
         //prints a message
         public void OutputMessage(string message)
         {
             Console.WriteLine(message);
-        }
-        public void NotificationMessage(string message)
-        {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine(message);
-            Console.ForegroundColor = ConsoleColor.White;
-        }
-        public void ErrorMessage(string message)
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(message);
-            Console.ForegroundColor = ConsoleColor.White;
-        }
-        public void LocationMessage(string message)
-        {
-            Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine(message);
-            Console.ForegroundColor = ConsoleColor.White;
-        }
-
-        public void SayMessage(string message)
-        {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine(message);
-            Console.ForegroundColor = ConsoleColor.White;
         }
 
         //gets a string input to put into _log
@@ -574,54 +509,25 @@ namespace StarterGame
             {
                 Console.WriteLine(loggedCommand);
             }
-            this.LocationMessage("\n" + this.CurrentRoom.Description());
+            this.OutputMessage("\n" + this.CurrentRoom.Description());
         }
 
-        public void InputMovementLog(string movementCommand)
+        public void InputMovementLog(string command)
         {
-            Parser _parser = new Parser(new CommandWords());
-            Command command = _parser.ParseCommand(movementCommand);
-            if (command.SecondWord != null)
-            {
-                Door door = this.CurrentRoom.GetExit(command.SecondWord);
-                if (door != null)
-                {
-                    _movementlog.Push(movementCommand);
-                }
-            }
+            _movementlog.Add(command);
         }
 
         //used by ClearLog(), clears the log
         public void ClearLog()
         {
             _log.Clear();
-            this.LocationMessage(this.CurrentRoom.Description());
+            this.OutputMessage(this.CurrentRoom.Description());
         }
 
         //used by RestartCommand, restarts the program and clears the log
         public void RestartGame()
         {
             _log.Clear();
-            Game game = new Game();
-            game.Restart();
-        }
-
-        public void Map()
-        {
-            this.OutputMessage("\n                1_8               " + 
-                               "\n                 |                " + 
-                               "\n      2_7--2_8  1_7--1_5--1_6     " +
-                               "\n       |              |           " +
-                               "\n      2_5--2_4  1_2--1_3--1_4  3_9" +
-                               "\n       |    |    |              | " +
-                               "\n      2_6  2_3  1_1  3_2  3_4--3_5" +
-                               "\n            |    |    |    |    | " +
-                               "\n      2_2--2_1  1_0  3_1--3_3  3_6" +
-                               "\n            |    |    |         | " +
-                               "\n           2_0--ENT--3_0  3_8--3_7" +
-                               "\n                 |                " +
-                               "\n                TWN             \n");
-            this.LocationMessage(this.CurrentRoom.Description());
         }
     }
 }

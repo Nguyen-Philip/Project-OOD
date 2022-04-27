@@ -19,8 +19,7 @@ namespace StarterGame
             }
             else
             {
-                player.ErrorMessage("\nPick up what?");
-                player.LocationMessage("\n" + player.CurrentRoom.Description());
+                player.OutputMessage("\nPick up what?");
             }
             return false;
         }

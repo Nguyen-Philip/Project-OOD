@@ -30,27 +30,5 @@ namespace StarterGame
         void Close();
     }
 
-    public interface IEntity
-    {
-        string Name { set; get; }
-        Room Location { set; get; }
-
-    }
-
-    public interface Item : IEntity
-    {
-        int Value { set; get; }
-        int Weight { set; get; }
-        bool CanBeHeld { get; }
-        bool IsUsable { get; }
-
-    }
-
-    public interface KeyItem : IEntity
-    {
-        int Weight { set; get; }
-        bool CanBeHeld { get; }
-        bool IsUsable { get; }
-        bool CanBeDropped { get; }
-    }
+    
 }

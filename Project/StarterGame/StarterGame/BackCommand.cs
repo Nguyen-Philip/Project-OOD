@@ -15,8 +15,7 @@ namespace StarterGame
         {
             if (this.HasSecondWord())
             {
-                player.ErrorMessage("\nBack does not contain " + this.SecondWord);
-                player.LocationMessage("\n" + player.CurrentRoom.Description());
+                player.OutputMessage("\nBack does not contain " + this.SecondWord);
             }
             else
             {

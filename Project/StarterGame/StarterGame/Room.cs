@@ -5,6 +5,14 @@ using System;
 
 namespace StarterGame
 {
+    /*public interface IRoomDelegate
+    {
+        Door GetExit(string exitName);
+        string GetExits();
+        string Description();
+        Room ContainingRoom { set; get; }
+        Dictionary<string, Door> ContainingRoomExits { set; get; }
+    }*/
 
     public class TrapRoom : IRoomDelegate
     {
@@ -44,11 +52,11 @@ namespace StarterGame
                 if(word.Equals(unlockword))
                 {
                     ContainingRoom.Delegate = null;
-                    player.NotificationMessage("\nYou said the correct word.");
+                    player.OutputMessage("You said the correct word.");
                 }
                 else
                 {
-                    player.ErrorMessage("\nYou said the wrong word.");
+                    player.OutputMessage("You said the wrong word.");
                 }
             }
         }
@@ -95,7 +103,7 @@ namespace StarterGame
             {
                 Dictionary<string, object> userInfo = notification.UserInfo;
                 string word = (string)userInfo["word"];
-                player.SayMessage("\n" + word + "... " + word + "... " + word + "...\n");
+                player.OutputMessage("\n" + word + "... " + word + "... " + word + "...\n");
             }
         }
     } 
@@ -104,10 +112,14 @@ namespace StarterGame
     {
         private Dictionary<string, Door> _exits;
         private Dictionary<string, Chest> _chests;
-        private Dictionary<string, KeyItem> _keyitems;
+        /*private Dictionary<string, Gem> _gem;
+        private Dictionary<string, Armor> _armor;
+        private Dictionary<string, Enemy> _enemy;
+        private Dictionary<string, NPC> _npc;
+        private Dictionary<string, Potion> _potion;
+        private Dictionary<string, Weapon> _weapon;
+        */
         private Dictionary<string, Item> _items;
-        private Dictionary<string, NPC> _npcs;
-        private Dictionary<string, Enemy> _enemies;
 
         private string _tag;
 
@@ -149,11 +161,15 @@ namespace StarterGame
         {
             Delegate = null;
             _exits = new Dictionary<string, Door>();
-            _chests = new Dictionary<string, Chest>();;
-            _keyitems = new Dictionary<string, KeyItem>();
+            _chests = new Dictionary<string, Chest>();
+            /*_gem = new Dictionary<string, Gem>();
+            _armor = new Dictionary<string, Armor>();
+            _enemy = new Dictionary<string, Enemy>();
+            _npc = new Dictionary<string, NPC>();
+            _potion = new Dictionary<string, Potion>();
+            _weapon = new Dictionary<string, Weapon>();
+            */
             _items = new Dictionary<string, Item>();
-            _npcs = new Dictionary<string, NPC>();
-            _enemies = new Dictionary<string, Enemy>();
             this.Tag = tag;
         }
 
@@ -255,7 +271,7 @@ namespace StarterGame
             return item;
         }
 
-        public void RemoveItem(String name)
+        public void RemoveItem(string name)
         {
             _items.Remove(name);
         }
@@ -272,29 +288,29 @@ namespace StarterGame
             return names;
         }
 
-        public void SetNPC(string name, NPC npc)
+        /*public void SetArmor(string name, Armor armor)
         {
-            if (npc != null)
+            if (armor != null)
             {
-                _npcs[name] = npc;
+                _armor[name] = armor;
             }
             else
             {
-                _npcs.Remove(name);
+                _armor.Remove(name);
             }
         }
 
-        public NPC GetNPC(string name)
+        public Armor GetArmor(string name)
         {
-            NPC npc = null;
-            _npcs.TryGetValue(name, out npc);
-            return npc;
+            Armor armor = null;
+            _armor.TryGetValue(name, out armor);
+            return armor;
         }
 
-        public string GetNPCs()
+        public string GetArmors()
         {
             string names = "";
-            Dictionary<string, NPC>.KeyCollection keys = _npcs.Keys;
+            Dictionary<string, Armor>.KeyCollection keys = _armor.Keys;
             foreach (string name in keys)
             {
                 names += " " + name;
@@ -303,29 +319,29 @@ namespace StarterGame
             return names;
         }
 
-        public void SetEnemy(string name, Enemy enemy)
+        public void SetPotion(string name, Potion potion)
         {
-            if (enemy != null)
+            if (potion != null)
             {
-                _enemies[name] = enemy;
+                _potion[name] = potion;
             }
             else
             {
-                _enemies.Remove(name);
+                _potion.Remove(name);
             }
         }
 
-        public Enemy GetEnemy(string name)
+        public Potion GetPotion(string name)
         {
-            Enemy enemy = null;
-            _enemies.TryGetValue(name, out enemy);
-            return enemy;
+            Potion potion = null;
+            _potion.TryGetValue(name, out potion);
+            return potion;
         }
 
-        public string GetEnemies()
+        public string GetPotions()
         {
             string names = "";
-            Dictionary<string, Enemy>.KeyCollection keys = _enemies.Keys;
+            Dictionary<string, Potion>.KeyCollection keys = _potion.Keys;
             foreach (string name in keys)
             {
                 names += " " + name;
@@ -334,39 +350,29 @@ namespace StarterGame
             return names;
         }
 
-        public void RemoveEnemy(String name)
+        public void SetWeapon(string name, Weapon weapon)
         {
-            _enemies.Remove(name);
-        }
-
-        public void SetKeyItem(string name, KeyItem keyitem)
-        {
-            if (keyitem != null)
+            if (weapon != null)
             {
-                _keyitems[name] = keyitem;
+                _weapon[name] = weapon;
             }
             else
             {
-                _keyitems.Remove(name);
+                _weapon.Remove(name);
             }
         }
 
-        public KeyItem GetKeyItem(string name)
+        public Weapon GetWeapon(string name)
         {
-            KeyItem keyitem = null;
-            _keyitems.TryGetValue(name, out keyitem);
-            return keyitem;
+            Weapon weapon = null;
+            _weapon.TryGetValue(name, out weapon);
+            return weapon;
         }
 
-        public void RemoveKeyItems(string name)
-        {
-            _keyitems.Remove(name);
-        }
-
-        public string GetKeyItems()
+        public string GetWeapons()
         {
             string names = "";
-            Dictionary<string, KeyItem>.KeyCollection keys = _keyitems.Keys;
+            Dictionary<string, Weapon>.KeyCollection keys = _weapon.Keys;
             foreach (string name in keys)
             {
                 names += " " + name;
@@ -374,10 +380,10 @@ namespace StarterGame
 
             return names;
         }
-
+        */
         public string SearchRoom()
         {
-            return " *** Chests:" + this.GetChests() + "\n *** Items:" + this.GetItems() + "\n *** Key Items:" + this.GetKeyItems() + "\n *** NPCs:" + this.GetNPCs() + "\n *** Enemies:" + this.GetEnemies();
+            return "You are " + this.Tag + ".\n *** Findings:" + this.GetChests() + this.GetItems(); 
         }
 
         //Get Room Description

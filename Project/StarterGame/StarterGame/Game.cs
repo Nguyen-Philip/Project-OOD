@@ -34,7 +34,7 @@ namespace StarterGame
                 Command command = _parser.ParseCommand(temp);
                 if (command == null)
                 {
-                    Console.WriteLine("\nI don't understand...");
+                    Console.WriteLine("I don't understand...");
                 }
                 else
                 {
@@ -53,7 +53,6 @@ namespace StarterGame
         {
             _playing = true;
             _player.OutputMessage(Welcome());
-            _player.LocationMessage(_player.CurrentRoom.Description());
 
         }
 
@@ -61,11 +60,7 @@ namespace StarterGame
         public void Restart()
         {
             _playing = false;
-            _parser = new Parser(new CommandWords());
-            _player = new Player(GameWorld.Instance().Entrance);
             Start();
-            Play();
-            End();
         }
 
         //ends the program
@@ -78,7 +73,7 @@ namespace StarterGame
         //prints a welcome message when Start() is called
         public string Welcome()
         {
-            return "Welcome to ###.\n\nThe World of ### is an exciting adventure game.\n\nType 'help' if you need help.\n";
+            return "Welcome to ###.\n\nThe World of ### is an exciting adventure game.\n\nType 'help' if you need help. " + _player.CurrentRoom.Description();
         }
 
         //prints a goodbye message when End() is called
