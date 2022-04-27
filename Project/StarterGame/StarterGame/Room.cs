@@ -106,7 +106,8 @@ namespace StarterGame
         private Dictionary<string, Chest> _chests;
         private Dictionary<string, KeyItem> _keyitems;
         private Dictionary<string, Item> _items;
-        private Dictionary<string, IEntity> _entities;
+        private Dictionary<string, NPC> _npcs;
+        private Dictionary<string, Enemy> _enemies;
 
         private string _tag;
 
@@ -151,7 +152,8 @@ namespace StarterGame
             _chests = new Dictionary<string, Chest>();;
             _keyitems = new Dictionary<string, KeyItem>();
             _items = new Dictionary<string, Item>();
-            _entities = new Dictionary<string, IEntity>();
+            _npcs = new Dictionary<string, NPC>();
+            _enemies = new Dictionary<string, Enemy>();
             this.Tag = tag;
         }
 
@@ -270,29 +272,60 @@ namespace StarterGame
             return names;
         }
 
-        public void SetEntity(string name, IEntity entity)
+        public void SetNPC(string name, NPC npc)
         {
-            if (entity != null)
+            if (npc != null)
             {
-                _entities[name] = entity;
+                _npcs[name] = npc;
             }
             else
             {
-                _entities.Remove(name);
+                _npcs.Remove(name);
             }
         }
 
-        public IEntity GetEntity(string name)
+        public void SetEnemy(string name, Enemy enemy)
         {
-            IEntity entity = null;
-            _entities.TryGetValue(name, out entity);
-            return entity;
+            if (enemy != null)
+            {
+                _enemies[name] = enemy;
+            }
+            else
+            {
+                _enemies.Remove(name);
+            }
         }
 
-        public string GetEntities()
+        public NPC GetNPC(string name)
+        {
+            NPC npc = null;
+            _npcs.TryGetValue(name, out npc);
+            return npc;
+        }
+
+        public Enemy GetEnemy(string name)
+        {
+            Enemy enemy = null;
+            _enemies.TryGetValue(name, out enemy);
+            return enemy;
+        }
+
+        public string GetNPCs()
         {
             string names = "";
-            Dictionary<string, IEntity>.KeyCollection keys = _entities.Keys;
+            Dictionary<string, NPC>.KeyCollection keys = _npcs.Keys;
+            foreach (string name in keys)
+            {
+                names += " " + name;
+            }
+
+            return names;
+        }
+
+        public string GetEnemies()
+        {
+            string names = "";
+            Dictionary<string, Enemy>.KeyCollection keys = _enemies.Keys;
             foreach (string name in keys)
             {
                 names += " " + name;
@@ -339,7 +372,7 @@ namespace StarterGame
 
         public string SearchRoom()
         {
-            return " *** Chests:" + this.GetChests() + "\n *** Items:" + this.GetItems() + "\n *** Key Items:" + this.GetKeyItems() + "\n *** Entities:" + this.GetEntities();
+            return " *** Chests:" + this.GetChests() + "\n *** Items:" + this.GetItems() + "\n *** Key Items:" + this.GetKeyItems() + "\n *** NPCs:" + this.GetNPCs() + "\n *** Enemies:" + this.GetEnemies();
         }
 
         //Get Room Description

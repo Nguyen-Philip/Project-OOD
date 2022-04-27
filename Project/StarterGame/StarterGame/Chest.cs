@@ -72,5 +72,12 @@ namespace StarterGame
             room1.SetChest(label1, chest);
             return chest;
         }
+
+        public static Chest CreateLockedChest(Room room1, string label1)
+        {
+            Chest chest = new Chest(room1);
+            room1.SetChest(label1, chest);
+            return chest;
+        }
     }
 }

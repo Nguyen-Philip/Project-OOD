@@ -9,6 +9,7 @@ namespace StarterGame
         private Room _roomA;
         private Room _roomB;
         private bool _open;
+        private bool _close;
         private ILockable _lock;
 
         public bool IsOpen { get { return _open; } }

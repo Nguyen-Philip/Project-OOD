@@ -58,18 +58,6 @@ namespace StarterGame
         public int Priority { set { _Priority = value; } get { return _Priority; } }
         public List<Item> Dropped { get { return _Dropped; } }
 
-        /*public Enemy(string name) : this(name, "NO LOCATION") { }
-        public Enemy(string name, string location) : this(name, location, 1, 1, 2) { }
-        public Enemy(string name, string location, int hp) : this(name, location, hp, 1, 2) { }
-        public Enemy(string name, string location, int hp, int ar) : this(name, location, hp, ar, 2) { }
-        public Enemy(string name, string location, int hp, int ar, int priority)
-        {
-            _Name = name;
-            _Location = location;
-            _Hp = hp;
-            _Ar = ar;
-            _Priority = priority;
-        }*/
         public Enemy(Room location, string name)
         {
             _Location = location;
@@ -88,14 +76,14 @@ namespace StarterGame
         public static Enemy CreateEnemy(Room location, string name)
         {
             Enemy enemy = new Enemy(location, name);
-            location.SetEntity(name, enemy);
+            location.SetEnemy(name, enemy);
             return enemy;
         }
 
         public static Enemy CreateEnemy(Room location, string name, int hp, int ar, int priority)
         {
             Enemy enemy = new Enemy(location, name, hp, ar, priority);
-            location.SetEntity(name, enemy);
+            location.SetEnemy(name, enemy);
             return enemy;
         }
     }

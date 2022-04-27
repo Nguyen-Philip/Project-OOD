@@ -248,3 +248,14 @@ Displays map
 Time Spent: 30m 23s
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes
+Player.cs
+Improved open, close, lock, and unlock. Added speakto to be able to speak to npcs, but not understand what enemies say
+
+Added
+SpeaktoCommand
+speakto is used to speak to npcs. won't be able to understand enemies
+
+Time Spent: 10m 45s
+

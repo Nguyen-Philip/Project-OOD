@@ -32,14 +32,14 @@ namespace StarterGame
         public static NPC CreateNPC(Room location, string name)
         {
             NPC npc = new NPC(location, name);
-            location.SetEntity(name, npc);
+            location.SetNPC(name, npc);
             return npc;
         }
 
         public static NPC CreateNPC(Room location, string name, bool canTalk, string dialog)
         {
             NPC npc = new NPC(location, name, canTalk, dialog);
-            location.SetEntity(name, npc);
+            location.SetNPC(name, npc);
             return npc;
         }
     }
