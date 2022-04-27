@@ -10,6 +10,10 @@ namespace StarterGame
         private List<string> _log = new List<string>();
         private Stack<string> _movementlog = new Stack<string>();
         private BackPack _backPack = new BackPack();
+        private int _hp = 100;
+        private int _ar = 5;
+        private int _av = 0;
+        private int _priority = 1;
 
         public Room CurrentRoom
         {
@@ -196,6 +200,61 @@ namespace StarterGame
             return success;
         }
 
+        public void Attack(string word)
+        {
+            NPC npc = CurrentRoom.GetNPC(word);
+            Enemy enemy = CurrentRoom.GetEnemy(word);
+            if(enemy != null)
+            {
+                NotificationMessage("\nYou attack " + enemy.Name);
+                this.LocationMessage("\n" + this.CurrentRoom.Description());
+                this.Battle(enemy);
+            }
+            else if (npc != null)
+            {
+                NotificationMessage("\nYou are unable to attack " + npc.Name);
+                this.LocationMessage("\n" + this.CurrentRoom.Description());
+            }
+            else
+            {
+                ErrorMessage("\nThere is no one named " + word + " in the current room to attack");
+                this.LocationMessage("\n" + this.CurrentRoom.Description());
+            }
+        }
+
+        public void Battle(Enemy enemy)
+        {
+            Parser _parser = new Parser(new CommandWords());
+            NotificationMessage("\nEnemy Hp: " + enemy.Hp);
+            NotificationMessage("\nPlayer Hp: " + _hp);
+            if (enemy.Hp > 0 && _hp > 0)
+            {
+                NotificationMessage("\nYou have attack the " + enemy.Name + " and dealt " + _ar + " damage");
+                NotificationMessage("\nThe " + enemy.Name + " have attack you and dealt " + enemy.Ar + " damage");
+                Console.Write("\n>");
+                String temp = Console.ReadLine();
+                Command command = _parser.ParseCommand(temp);
+                if (command.Name == "attack")
+                {
+                    command.Execute(this);
+                }
+                else
+                {
+                    ErrorMessage("\nYou are unable to do anything but attack");
+                }
+            }
+            else if(enemy.Hp <= 0)
+            {
+                NotificationMessage("\nYou have won");
+                this.CurrentRoom.RemoveEnemy(enemy.Name);
+                this.LocationMessage("\n" + this.CurrentRoom.Description());
+            }
+            else if (_hp <= 0)
+            {
+                NotificationMessage("\nYou have died");
+            }
+        }
+
         public void Inventory()
         {
             this.OutputMessage("\nItems:" + this._backPack.GetItems() + "\nKey Items:" + this._backPack.GetKeyItems() + "\nWeight: " + this._backPack.GetWeight() + "/50");
@@ -230,7 +289,7 @@ namespace StarterGame
             }
             else
             {
-                ErrorMessage("\nThere is no one named " + word + " in the current room");
+                ErrorMessage("\nThere is no one named " + word + " in the current room to speak to");
                 this.LocationMessage("\n" + this.CurrentRoom.Description());
             }
         }

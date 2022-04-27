@@ -284,30 +284,11 @@ namespace StarterGame
             }
         }
 
-        public void SetEnemy(string name, Enemy enemy)
-        {
-            if (enemy != null)
-            {
-                _enemies[name] = enemy;
-            }
-            else
-            {
-                _enemies.Remove(name);
-            }
-        }
-
         public NPC GetNPC(string name)
         {
             NPC npc = null;
             _npcs.TryGetValue(name, out npc);
             return npc;
-        }
-
-        public Enemy GetEnemy(string name)
-        {
-            Enemy enemy = null;
-            _enemies.TryGetValue(name, out enemy);
-            return enemy;
         }
 
         public string GetNPCs()
@@ -322,6 +303,25 @@ namespace StarterGame
             return names;
         }
 
+        public void SetEnemy(string name, Enemy enemy)
+        {
+            if (enemy != null)
+            {
+                _enemies[name] = enemy;
+            }
+            else
+            {
+                _enemies.Remove(name);
+            }
+        }
+
+        public Enemy GetEnemy(string name)
+        {
+            Enemy enemy = null;
+            _enemies.TryGetValue(name, out enemy);
+            return enemy;
+        }
+
         public string GetEnemies()
         {
             string names = "";
@@ -332,6 +332,11 @@ namespace StarterGame
             }
 
             return names;
+        }
+
+        public void RemoveEnemy(String name)
+        {
+            _enemies.Remove(name);
         }
 
         public void SetKeyItem(string name, KeyItem keyitem)

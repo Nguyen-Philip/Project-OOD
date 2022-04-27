@@ -142,6 +142,7 @@ namespace StarterGame
             weapon = Weapon.CreateWeapon(town, "dagger", 10, 5, 10);
             key = Key.CreateKey(town, "key", 0);
             npc = NPC.CreateNPC(town, "Jerry", true, "Hello there, my name is Jerry");
+            enemy = Enemy.CreateEnemy(town, "Skeleton", 10, 2, 2);
 
             //entrance
             door = Door.CreateDoor(entrance, room1_0, "north", "south");
@@ -153,7 +154,7 @@ namespace StarterGame
             potion = Potion.CreatePotion(entrance, "strength_potion", 10, 2, 20, "AR");
             weapon = Weapon.CreateWeapon(entrance, "axe", 10, 5, 20);
             key = Key.CreateKey(entrance, "key", 0);
-            enemy = Enemy.CreateEnemy(entrance, "Skeleton", 10, 2, 10);
+            enemy = Enemy.CreateEnemy(entrance, "Skeleton", 10, 2, 2);
 
             //room1_0
             door = Door.CreateDoor(room1_0, room1_1, "north", "south");
