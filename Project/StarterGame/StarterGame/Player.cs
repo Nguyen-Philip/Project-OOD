@@ -16,6 +16,7 @@ namespace StarterGame
         private int _priority = 1;
         private Armor _armor;
         private Weapon _weapon;
+        private CombatLoop _combatLoop;
 
         public Room CurrentRoom
         {
@@ -28,6 +29,11 @@ namespace StarterGame
                 _currentRoom = value;
             }
         }
+
+        public int Hp { set { _hp = value; } get { return _hp; } }
+        public int Ar { set { _ar = value; } get { return _ar; } }
+        public int Av { set { _av = value; } get { return _av; } }
+        public int Priority { set { _priority = value; } get { return _priority; } }
 
         public Player(Room room)
         {
@@ -280,99 +286,71 @@ namespace StarterGame
             else if (npc != null)
             {
                 NotificationMessage("\nYou are unable to attack " + npc.Name);
+                this.LocationMessage("\n" + this.CurrentRoom.Description());
             }
             else
             {
                 ErrorMessage("\nThere is no one named " + word + " in the current room to attack");
+                this.LocationMessage("\n" + this.CurrentRoom.Description());
             }
         }
 
         public void Battle(Enemy enemy)
         {
             Parser _parser = new Parser(new CommandWords());
-            if (_priority == enemy.Priority)
+            _combatLoop = new CombatLoop(this, enemy);
+            bool speed = _combatLoop.comparePriority();
+            if (speed == true)
             {
-                Random random = new Random();
-                while (_priority == 1)
-                {
-                    _priority = random.Next(0, 3);
-                }
-            }
-            if(_priority < enemy.Priority)
-            {
-                _priority = 1;
                 NotificationMessage("\nThe enemy is slower, allowing you to strike before it");
-                enemy.Hp -= _ar;
-                NotificationMessage("\nYou have attack the " + enemy.Name + " and dealt " + _ar + " damage");
-                NotificationMessage("\nEnemy Hp: " + enemy.Hp);
+                _combatLoop.eDamage(_ar);
                 if (enemy.Hp <= 0)
                 {
                     NotificationMessage("\n" + enemy.Name + " has died");
                     NotificationMessage("\nYou have won");
                     this.CurrentRoom.RemoveEnemy(enemy.Name);
+                    this.LocationMessage("\n" + this.CurrentRoom.Description());
                 }   
                 else
                 {
-                    _hp -= enemy.Ar;
-                    NotificationMessage("\nThe " + enemy.Name + " have attack you and dealt " + enemy.Ar + " damage");
-                    NotificationMessage("\nPlayer Hp: " + _hp);
+                    _combatLoop.pDamage(enemy.Ar);
                     if (_hp <= 0)
                     {
                         NotificationMessage("\nYou have died");
                     }
                     else
                     {
-                        Console.Write("\n>");
-                        String temp = Console.ReadLine();
-                        Command command = _parser.ParseCommand(temp);
-                        if (command.Name == "attack")
-                        {
-                            command.Execute(this);
-                        }
-                        else
-                        {
-                            ErrorMessage("\nYou are unable to do anything but attack, use items, or run");
-                        }
+                        _combatLoop.Loop();
                     }
                 }
             }
-            else if (_priority > enemy.Priority)
+            else if (speed == false)
             {
-                _priority = 1;
                 NotificationMessage("\nThe enemy is faster, allowing it to strike before you");
-                _hp -= enemy.Ar;
-                NotificationMessage("\nThe " + enemy.Name + " have attack you and dealt " + enemy.Ar + " damage");
-                NotificationMessage("\nPlayer Hp: " + _hp);
+                _combatLoop.pDamage(enemy.Ar);
                 if (_hp <= 0)
                 {
                     NotificationMessage("\nYou have died");
                 }
                 else
                 {
-                    enemy.Hp -= _ar;
-                    NotificationMessage("\nYou have attack the " + enemy.Name + " and dealt " + _ar + " damage");
-                    NotificationMessage("\nEnemy Hp: " + enemy.Hp);
+                    _combatLoop.eDamage(_ar);
                     if (enemy.Hp <= 0)
                     {
                         NotificationMessage("\n" + enemy.Name + " has died");
                         NotificationMessage("\nYou have won");
                         this.CurrentRoom.RemoveEnemy(enemy.Name);
+                        this.LocationMessage("\n" + this.CurrentRoom.Description());
                     }
                     else
                     {
-                        Console.Write("\n>");
-                        String temp = Console.ReadLine();
-                        Command command = _parser.ParseCommand(temp);
-                        if (command.Name == "attack")
-                        {
-                            command.Execute(this);
-                        }
-                        else
-                        {
-                            ErrorMessage("\nYou are unable to do anything but attack, use items, or run");
-                        }
+                        _combatLoop.Loop();
                     }
                 }
+            }
+            else
+            {
+                NotificationMessage("\nSomething Broke");
             }
         }
 
