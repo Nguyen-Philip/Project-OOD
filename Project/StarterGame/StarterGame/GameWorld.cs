@@ -142,13 +142,12 @@ namespace StarterGame
             weapon = Weapon.CreateWeapon(town, "dagger", 10, 5, 10);
             key = Key.CreateKey(town, "key", 0);
             npc = NPC.CreateNPC(town, "Jerry", true, "Hello there, my name is Jerry");
-            enemy = Enemy.CreateEnemy(town, "Skeleton", 10, 2, 2);
+            enemy = Enemy.CreateEnemy(town, "Skeleton", 10, 2, 1);
 
             //entrance
             door = Door.CreateDoor(entrance, room1_0, "north", "south");
             door = Door.CreateDoor(entrance, room2_0, "west", "east");
             door = Door.CreateDoor(entrance, room3_0, "east", "west");
-            chest = Chest.CreateLockedChest(entrance, "chest");
             gem = Gem.CreateGem(entrance, "oynx", 20, 1);
             armor = Armor.CreateArmor(entrance, "boots", 10, 5, 20);
             potion = Potion.CreatePotion(entrance, "strength_potion", 10, 2, 20, "AR");

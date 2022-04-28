@@ -20,8 +20,8 @@ namespace StarterGame
             else
             {
                 player.ErrorMessage("\nDrop what?");
-                player.LocationMessage("\n" + player.CurrentRoom.Description());
             }
+            player.LocationMessage("\n" + player.CurrentRoom.Description());
             return false;
         }
 

@@ -22,6 +22,7 @@ namespace StarterGame
                 player.ErrorMessage("\nGo Where?");
                 player.LocationMessage("\n" + player.CurrentRoom.Description());
             }
+            player.LocationMessage("\n" + player.CurrentRoom.Description());
             return false;
         }
 

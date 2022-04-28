@@ -18,13 +18,13 @@ namespace StarterGame
             if (this.HasSecondWord())
             {
                 player.ErrorMessage("\nInventory does not contain " + this.SecondWord);
-                player.LocationMessage("\n" + player.CurrentRoom.Description());
             }
             else
             {
                 player.NotificationMessage("\nYou look in your backpack");
                 player.Inventory();
             }
+            player.LocationMessage("\n" + player.CurrentRoom.Description());
             return false;
         }
     }

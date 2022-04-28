@@ -18,13 +18,13 @@ namespace StarterGame
             if (this.HasSecondWord())
             {
                 player.ErrorMessage("\nRestart does not contain " + this.SecondWord);
-                player.LocationMessage("\n" + player.CurrentRoom.Description());
             }
             else
             {
                 player.NotificationMessage("\nSpace and time starts warping around you.\n");
                 player.RestartGame();
             }
+            player.LocationMessage("\n" + player.CurrentRoom.Description());
             return false;
         }
     }

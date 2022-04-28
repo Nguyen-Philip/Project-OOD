@@ -18,13 +18,13 @@ namespace StarterGame
             if (this.HasSecondWord())
             {
                 player.ErrorMessage("\nSearch does not contain " + this.SecondWord);
-                player.LocationMessage("\n" + player.CurrentRoom.Description());
             }
             else
             {
                 player.NotificationMessage("\nYou look around the room\n");
                 player.Search();
             }
+            player.LocationMessage("\n" + player.CurrentRoom.Description());
             return false;
         }
     }

@@ -16,12 +16,12 @@ namespace StarterGame
             if (this.HasSecondWord())
             {
                 player.ErrorMessage("\nBack does not contain " + this.SecondWord);
-                player.LocationMessage("\n" + player.CurrentRoom.Description());
             }
             else
             {
                 player.WaltBack();
             }
+            player.LocationMessage("\n" + player.CurrentRoom.Description());
             return false;
         }
 

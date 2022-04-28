@@ -18,13 +18,13 @@ namespace StarterGame
             if (this.HasSecondWord())
             {
                 player.ErrorMessage("\nClear does not contain " + this.SecondWord);
-                player.LocationMessage("\n" + player.CurrentRoom.Description());
             }
             else
             {
                 player.NotificationMessage("\nYou suddenly forget forgot everything you have done:\n");
                 player.ClearLog();
             }
+            player.LocationMessage("\n" + player.CurrentRoom.Description());
             return false;
         }
     }
