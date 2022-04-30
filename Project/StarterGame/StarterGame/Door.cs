@@ -11,6 +11,7 @@ namespace StarterGame
         private bool _open;
         private bool _close;
         private ILockable _lock;
+        private string _keyname;
 
         public bool IsOpen { get { return _open; } }
 
@@ -22,10 +23,20 @@ namespace StarterGame
 
         public bool IsUnlocked { get { return _lock == null ? true : _lock.IsUnlocked; } }
 
+        public string KeyName { set { _keyname = value; } get { return _keyname; } }
         public Door(Room roomA, Room roomB)
         {
             _roomA = roomA;
             _roomB = roomB;
+            _open = true;
+            _lock = null;
+        }
+
+        public Door(Room roomA, Room roomB, string keyname)
+        {
+            _roomA = roomA;
+            _roomB = roomB;
+            _keyname = keyname;
             _open = true;
             _lock = null;
         }
@@ -84,6 +95,19 @@ namespace StarterGame
         public static Door CreateDoor(Room room1, Room room2, string label1, string label2)
         {
             Door door = new Door(room1, room2);
+            door.Close();
+            room1.SetExit(label1, door);
+            room2.SetExit(label2, door);
+            return door;
+        }
+
+        public static Door CreateLockedDoor(Room room1, Room room2, string label1, string label2, string keyname)
+        {
+            Door door = new Door(room1, room2, keyname);
+            door.Close();
+            Regularlock aLock = new Regularlock();
+            door.InstallLock(aLock);
+            door.Lock();
             room1.SetExit(label1, door);
             room2.SetExit(label2, door);
             return door;

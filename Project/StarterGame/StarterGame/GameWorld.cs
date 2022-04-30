@@ -133,27 +133,30 @@ namespace StarterGame
             Room room3_9 = new Room("in room 3_9");
 
             //town
-            door = Door.CreateDoor(town, entrance, "north", "south");
-            //door = Door.CreatePortal(town, , "portal");
-            chest = Chest.CreateChest(town, "chest");
+            door = Door.CreateLockedDoor(town, entrance, "north", "south", "masterdoorkey");
+            chest = Chest.CreateLockedChest(town, "chest", "masterchestkey");
             gem = Gem.CreateGem(town, "ruby", 20, 1);
-            armor = Armor.CreateArmor(town, "chestplate", 10, 5, 30);           
+            armor = Armor.CreateArmor(town, "chestplate", 10, 5, 30);
             potion = Potion.CreatePotion(town, "healing_potion", 10, 2, 20, "HP");
             weapon = Weapon.CreateWeapon(town, "dagger", 10, 5, 10);
-            key = Key.CreateKey(town, "key", 0);
             npc = NPC.CreateNPC(town, "Jerry", true, "Hello there, my name is Jerry");
-            enemy = Enemy.CreateEnemy(town, "Skeleton", 10, 2, 1);
+            enemy = Enemy.CreateEnemy(town, "Skeleton", 10, 2, 1, 10, 10);
+            chest.Add(armor);
+            chest.Add(weapon);
+            enemy.Add(gem);
+            enemy.Add(potion);
+            key = Key.CreateKey(town, "masterchestkey");
 
             //entrance
             door = Door.CreateDoor(entrance, room1_0, "north", "south");
             door = Door.CreateDoor(entrance, room2_0, "west", "east");
             door = Door.CreateDoor(entrance, room3_0, "east", "west");
             gem = Gem.CreateGem(entrance, "oynx", 20, 1);
+            chest = Chest.CreateLockedChest(entrance, "treasure_chest", "masterchestkey");
             armor = Armor.CreateArmor(entrance, "boots", 10, 5, 20);
             potion = Potion.CreatePotion(entrance, "strength_potion", 10, 2, 20, "AR");
             weapon = Weapon.CreateWeapon(entrance, "axe", 10, 5, 20);
-            key = Key.CreateKey(entrance, "key", 0);
-            enemy = Enemy.CreateEnemy(entrance, "Skeleton", 10, 2, 2);
+            enemy = Enemy.CreateEnemy(entrance, "Skeleton", 10, 2, 2, 10, 10);
 
             //room1_0
             door = Door.CreateDoor(room1_0, room1_1, "north", "south");
@@ -226,6 +229,7 @@ namespace StarterGame
             //set the Delegate Rooms
             room1_4.Delegate = new TrapRoom("help");
             room1_6.Delegate = new EchoRoom();
+            town.Delegate = new TownRoom("ready", town);
 
             return town;
         }

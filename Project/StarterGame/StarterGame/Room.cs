@@ -54,6 +54,58 @@ namespace StarterGame
         }
     }
 
+    public class TownRoom : IRoomDelegate
+    {
+        private string unlockword;
+        public Room ContainingRoom { set; get; }
+        public Dictionary<string, Door> ContainingRoomExits { set; get; }
+
+        private Room _room;
+        public Key _key;
+
+        public TownRoom(string theword, Room room)
+        {
+            unlockword = theword;
+            _room = room;
+            NotificationCenter.Instance.AddObserver("PlayerSaidWord", PlayerSaidWord);
+        }
+
+        public Door GetExit(string exitName)
+        {
+            return null;
+        }
+        public string GetExits()
+        {
+            return "You are in town, the door of the dungeon is locked. Say ready then pickup the key";
+        }
+
+        public string Description()
+        {
+            return "You are in " + ContainingRoom.Tag + ".\nThe door to the dungeon is locked." + "\n" + GetExits();
+        }
+
+        public void PlayerSaidWord(Notification notification)
+        {
+            Player player = (Player)notification.Object;
+            if (player.CurrentRoom == ContainingRoom)
+            {
+                Dictionary<string, Object> userInfo = notification.UserInfo;
+                string word = (string)userInfo["word"];
+                if (word.Equals(unlockword))
+                {
+                    ContainingRoom.Delegate = null;
+                    player.NotificationMessage("\nYou are ready, the guard dropped the key.");
+                    Key.CreateKey(_room, "masterdoorkey");
+
+                }
+                else
+                {
+                    player.ErrorMessage("\nSay ready when you are ready");
+                }
+            }
+        }
+    }
+
     public class EchoRoom : IRoomDelegate
     {
         public Room ContainingRoom { set; get; }
@@ -103,7 +155,7 @@ namespace StarterGame
     public class Room
     {
         private Dictionary<string, Door> _exits;
-        private Dictionary<string, Chest> _chests;
+        private Dictionary<string, Item> _chests;
         private Dictionary<string, KeyItem> _keyitems;
         private Dictionary<string, Item> _items;
         private Dictionary<string, NPC> _npcs;
@@ -149,7 +201,7 @@ namespace StarterGame
         {
             Delegate = null;
             _exits = new Dictionary<string, Door>();
-            _chests = new Dictionary<string, Chest>();;
+            _chests = new Dictionary<string, Item>();;
             _keyitems = new Dictionary<string, KeyItem>();
             _items = new Dictionary<string, Item>();
             _npcs = new Dictionary<string, NPC>();
@@ -217,17 +269,22 @@ namespace StarterGame
             }
         }
 
-        public Chest GetChest(string name)
+        public Item GetChest(string name)
         {
-            Chest chest = null;
+            Item chest = null;
             _chests.TryGetValue(name, out chest);
             return chest;
+        }
+
+        public void RemoveChest(String name)
+        {
+            _chests.Remove(name);
         }
 
         public string GetChests()
         {
             string names = "";
-            Dictionary<string, Chest>.KeyCollection keys = _chests.Keys;
+            Dictionary<string, Item>.KeyCollection keys = _chests.Keys;
             foreach (string name in keys)
             {
                 names += " " + name;

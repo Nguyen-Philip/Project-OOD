@@ -10,10 +10,14 @@ namespace StarterGame
         private List<string> _log = new List<string>();
         private Stack<string> _movementlog = new Stack<string>();
         private BackPack _backPack = new BackPack();
+        private int _maxhp = 100;
         private int _hp = 100;
         private int _ar = 5;
         private int _av = 0;
         private int _priority = 1;
+        private int _xp = 0;
+        private int _level = 1;
+        private int _gold = 0;
         private Armor _armor;
         private Weapon _weapon;
         private CombatLoop _combatLoop;
@@ -30,10 +34,14 @@ namespace StarterGame
             }
         }
 
+        public int MaxHp { set { _maxhp = value; } get { return _maxhp; } }
         public int Hp { set { _hp = value; } get { return _hp; } }
         public int Ar { set { _ar = value; } get { return _ar; } }
         public int Av { set { _av = value; } get { return _av; } }
         public int Priority { set { _priority = value; } get { return _priority; } }
+        public int Xp { set { _xp = value; } get { return _xp; } }
+        public int Level { set { _level = value; } get { return _level; } }
+        public int Gold { set { _gold = value; } get { return _gold; } }
 
         public Player(Room room)
         {
@@ -43,7 +51,7 @@ namespace StarterGame
         public bool EquipX(Item item)
         {
             bool success = false;
-            if (item.GetType() == typeof(Armor))
+            if (item.GetType() == typeof(Armor) && _armor == null)
             {
                 this.NotificationMessage("\nYou have equipped the " + item.Name);
                 _armor = (Armor)item;
@@ -52,7 +60,7 @@ namespace StarterGame
                 _backPack.Remove(item.Name);
                 success = true;
             }
-            else if (item.GetType() == typeof(Weapon))
+            else if (item.GetType() == typeof(Weapon) && _weapon == null)
             {
                 this.NotificationMessage("\nYou have equipped the " + item.Name);
                 _weapon = (Weapon)item;
@@ -165,6 +173,8 @@ namespace StarterGame
             bool success = false;
             KeyItem keyitem = CurrentRoom.GetKeyItem(word);
             Item item = CurrentRoom.GetItem(word);
+            Item chestsub = CurrentRoom.GetChest(word);
+            Chest chest = (Chest)chestsub;
             if (item != null)
             {
                 if (item.CanBeHeld)
@@ -191,12 +201,16 @@ namespace StarterGame
                 {
                     this.NotificationMessage("\nYou have picked up the " + keyitem.Name);
                     success = _backPack.AddKeyItems(keyitem);
-                    CurrentRoom.RemoveItem(word);
+                    CurrentRoom.RemoveKeyItems(word);
                 }
                 else
                 {
                     this.NotificationMessage("\nYou cannot pickup the " + keyitem.Name);
                 }
+            }
+            else if (chest != null)
+            {
+                this.ErrorMessage("\nYou cannot pickup the " + chest.Name);
             }
             else
             {
@@ -244,6 +258,10 @@ namespace StarterGame
             if (item != null)
             {
                 success = EquipX(item);
+                if(success == false)
+                {
+                    this.ErrorMessage("\nTYou already have an item equipped in this slot. Unequip what you current have to equip the " + word);
+                }
             }
             else
             {
@@ -306,10 +324,7 @@ namespace StarterGame
                 _combatLoop.eDamage(_ar);
                 if (enemy.Hp <= 0)
                 {
-                    NotificationMessage("\n" + enemy.Name + " has died");
-                    NotificationMessage("\nYou have won");
-                    this.CurrentRoom.RemoveEnemy(enemy.Name);
-                    this.LocationMessage("\n" + this.CurrentRoom.Description());
+                    _combatLoop.Victory();
                 }   
                 else
                 {
@@ -337,10 +352,7 @@ namespace StarterGame
                     _combatLoop.eDamage(_ar);
                     if (enemy.Hp <= 0)
                     {
-                        NotificationMessage("\n" + enemy.Name + " has died");
-                        NotificationMessage("\nYou have won");
-                        this.CurrentRoom.RemoveEnemy(enemy.Name);
-                        this.LocationMessage("\n" + this.CurrentRoom.Description());
+                        _combatLoop.Victory();
                     }
                     else
                     {
@@ -357,7 +369,7 @@ namespace StarterGame
         //used by InventoryCommand, display inventory
         public void Inventory()
         {
-            this.OutputMessage("\nItems:" + this._backPack.GetItems() + "\nKey Items:" + this._backPack.GetKeyItems() + "\nWeight: " + this._backPack.GetWeight() + "/50");
+            this.OutputMessage("\nItems:" + this._backPack.GetItems() + "\nKey Items:" + this._backPack.GetKeyItems() + "\nWeight: " + this._backPack.GetWeight() + "/50" + "\nGold: " + _gold);
         }
 
         //used by SayCommand, allows you to say a word
@@ -393,7 +405,8 @@ namespace StarterGame
         public void Open(string name)
         {
             Door door = this.CurrentRoom.GetExit(name);
-            Chest chest = this.CurrentRoom.GetChest(name);
+            Item item = this.CurrentRoom.GetChest(name);
+            Chest chest = (Chest)item;
             if (door != null)
             {
                 if (name != "portal")
@@ -431,7 +444,10 @@ namespace StarterGame
                     else
                     {
                         chest.Open();
+                        chest.RemoveItems();
                         this.NotificationMessage("\nThe chest has been opened");
+                        this.NotificationMessage("\nThe items has spilled out onto the ground and the chest disappears");
+                        CurrentRoom.RemoveChest(chest.Name);
                     }
                 }
                 else
@@ -441,7 +457,7 @@ namespace StarterGame
             }
             else
             {
-                this.ErrorMessage("\nThere is no door or chest named " + name + " to open");
+                this.ErrorMessage("\nThere is nothing named " + name + " to open");
             }
         }
 
@@ -449,7 +465,8 @@ namespace StarterGame
         public void Close(string name)
         {
             Door door = this.CurrentRoom.GetExit(name);
-            Chest chest = this.CurrentRoom.GetChest(name);
+            Item item = this.CurrentRoom.GetChest(name);
+            Chest chest = (Chest)item;
             if (door != null)
             {
                 if (name != "portal")
@@ -484,7 +501,7 @@ namespace StarterGame
             }
             else
             {
-                this.ErrorMessage("\nThere is no door or chest named " + name + " to close");
+                this.ErrorMessage("\nThere is nothing named " + name + " to close");
             }
         }
 
@@ -492,7 +509,9 @@ namespace StarterGame
         public void Unlock(string name)
         {
             Door door = this.CurrentRoom.GetExit(name);
-            Chest chest = this.CurrentRoom.GetChest(name);
+            Item item = this.CurrentRoom.GetChest(name);
+            Chest chest = (Chest)item;
+            KeyItem keyitem;
             if (door != null)
             {
                 if (name != "portal")
@@ -505,8 +524,16 @@ namespace StarterGame
                     {
                         if (door.IsLocked)
                         {
-                            door.Unlock();
-                            this.NotificationMessage("\nThe door has been unlocked");
+                            keyitem = _backPack.GetKeyItem(door.KeyName);
+                            if (keyitem != null)
+                            {
+                                door.Unlock();
+                                this.NotificationMessage("\nThe door has been unlocked");
+                            }
+                            else
+                            {
+                                this.ErrorMessage("\nYou do not have the item required to open this door");
+                            }
                         }
                         else
                         {
@@ -529,8 +556,16 @@ namespace StarterGame
                 {
                     if (chest.IsLocked)
                     {
-                        chest.Unlock();
-                        this.NotificationMessage("\nThe chest has been unlocked");
+                        keyitem = _backPack.GetKeyItem(chest.KeyName);
+                        if (keyitem != null)
+                        {
+                            chest.Unlock();
+                            this.NotificationMessage("\nThe chest has been unlocked");
+                        }
+                        else
+                        {
+                            this.ErrorMessage("\nYou do not have the item required to open this chest");
+                        }
                     }
                     else
                     {
@@ -540,7 +575,7 @@ namespace StarterGame
             }
             else
             {
-                this.ErrorMessage("\nThere is no door or chest named " + name + " to unlock");
+                this.ErrorMessage("\nThere is no nothing named " + name + " to unlock");
             }
         }
 
@@ -548,7 +583,8 @@ namespace StarterGame
         public void Lock(string name)
         {
             Door door = this.CurrentRoom.GetExit(name);
-            Chest chest = this.CurrentRoom.GetChest(name);
+            Item item = this.CurrentRoom.GetChest(name);
+            Chest chest = (Chest)item;
             if (door != null)
             {
                 if (name != "portal")
@@ -586,7 +622,7 @@ namespace StarterGame
             }
             else
             {
-                this.ErrorMessage("\nThere is no door or chest named " + name + " to lock");
+                this.ErrorMessage("\nThere is nothing named " + name + " to lock");
             }
         }
 

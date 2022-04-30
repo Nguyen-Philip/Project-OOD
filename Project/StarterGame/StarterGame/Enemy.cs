@@ -13,41 +13,33 @@ namespace StarterGame
         private int _Hp;
         private int _Ar;
         private int _Priority;
+        private int _Xp;
+        private int _Gold;
         private Dictionary<string, Item> _Drops;
-        private List<Item> _Dropped;
 
-        public bool Add(Item item)
+        public void Add(Item item)
         {
-            bool success = false;
-            {
-                _Drops.Add(item.Name, item);
-                success = true;
-            }
-
-            return success;
+            _Drops.Add(item.Name, item);
+            _Location.RemoveItem(item.Name);
         }
 
-        public bool Drop(Item item)
+        public void RemoveItems()
         {
-            foreach (Item Drop in _Drops.Values)
+            Dictionary<string, Item>.KeyCollection keys = _Drops.Keys;
+            foreach (string item in keys)
             {
-                _Dropped.Add(Drop);
+                _Location.SetItem(item, _Drops[item]);
             }
-            return true;
         }
 
-        public string Drops
+        public Item GetItem(string name)
         {
-            get
+            Item item = null;
+            if (name != null)
             {
-                string Drops = "";
-                foreach (Item item in _Drops.Values)
-                {
-                    Drops += item + "\n";
-                }
-
-                return Drops;
+                _Drops?.TryGetValue(name, out item);
             }
+            return item;
         }
 
         public string Name { set { _Name = value; } get { return _Name; } }
@@ -56,12 +48,14 @@ namespace StarterGame
         public int Hp { set { _Hp = value; } get { return _Hp; } }
         public int Ar { set { _Ar = value; } get { return _Ar; } }
         public int Priority { set { _Priority = value; } get { return _Priority; } }
-        public List<Item> Dropped { get { return _Dropped; } }
+        public int XP { set { _Xp = value; } get { return _Xp; } }
+        public int Gold { set { _Gold = value; } get { return _Gold; } }
 
         public Enemy(Room location, string name)
         {
             _Location = location;
             _Name = name;
+            _Drops = new Dictionary<string, Item>();
         }
 
         public Enemy(Room location, string name, int hp, int ar, int priority)
@@ -71,6 +65,19 @@ namespace StarterGame
             _Hp = hp;
             _Ar = ar;
             _Priority = priority;
+            _Drops = new Dictionary<string, Item>();
+        }
+
+        public Enemy(Room location, string name, int hp, int ar, int priority, int xp, int gold)
+        {
+            _Location = location;
+            _Name = name;
+            _Hp = hp;
+            _Ar = ar;
+            _Xp = xp;
+            _Gold = gold;
+            _Priority = priority;
+            _Drops = new Dictionary<string, Item>();
         }
 
         public static Enemy CreateEnemy(Room location, string name)
@@ -83,6 +90,13 @@ namespace StarterGame
         public static Enemy CreateEnemy(Room location, string name, int hp, int ar, int priority)
         {
             Enemy enemy = new Enemy(location, name, hp, ar, priority);
+            location.SetEnemy(name, enemy);
+            return enemy;
+        }
+
+        public static Enemy CreateEnemy(Room location, string name, int hp, int ar, int priority, int xp, int gold)
+        {
+            Enemy enemy = new Enemy(location, name, hp, ar, priority, xp, gold);
             location.SetEnemy(name, enemy);
             return enemy;
         }

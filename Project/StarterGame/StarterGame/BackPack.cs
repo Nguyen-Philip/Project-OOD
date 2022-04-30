@@ -23,18 +23,6 @@ namespace StarterGame
             return success;
         }
 
-        public bool AddKeyItems(KeyItem keyitems)
-        {
-            bool success = false;
-            if (keyitems.CanBeHeld && keyitems.Weight <= Limit)
-            {
-                _keyItems.Add(keyitems.Name, keyitems);
-                Limit -= keyitems.Weight;
-                success = true;
-            }
-            return success;
-        }
-
         public bool Remove(string name)
         {
             Item item = this.GetItem(name);
@@ -53,16 +41,6 @@ namespace StarterGame
             return item;
         }
 
-        public KeyItem GetKeyItem(string name)
-        {
-            KeyItem keyitem = null;
-            if (name != null)
-            {
-                _keyItems?.TryGetValue(name, out keyitem);
-            }
-            return keyitem;
-        }
-
         public string GetItems()
         {
             string names = "";
@@ -73,6 +51,28 @@ namespace StarterGame
             }
 
             return names;
+        }
+
+        public bool AddKeyItems(KeyItem keyitems)
+        {
+            bool success = false;
+            if (keyitems.CanBeHeld && keyitems.Weight <= Limit)
+            {
+                _keyItems.Add(keyitems.Name, keyitems);
+                Limit -= keyitems.Weight;
+                success = true;
+            }
+            return success;
+        }
+
+        public KeyItem GetKeyItem(string name)
+        {
+            KeyItem keyitem = null;
+            if (name != null)
+            {
+                _keyItems?.TryGetValue(name, out keyitem);
+            }
+            return keyitem;
         }
 
         public string GetKeyItems()
