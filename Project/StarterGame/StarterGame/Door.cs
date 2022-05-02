@@ -14,16 +14,12 @@ namespace StarterGame
         private string _keyname;
 
         public bool IsOpen { get { return _open; } }
-
         public bool IsClosed { get { return !_open; } }
-
         public bool CanClose { get { return _lock == null ? true : _lock.CanClose; } }
-
         public bool IsLocked { get { return _lock == null ? false : _lock.IsLocked; } }
-
         public bool IsUnlocked { get { return _lock == null ? true : _lock.IsUnlocked; } }
-
         public string KeyName { set { _keyname = value; } get { return _keyname; } }
+
         public Door(Room roomA, Room roomB)
         {
             _roomA = roomA;
@@ -93,6 +89,14 @@ namespace StarterGame
         }
 
         public static Door CreateDoor(Room room1, Room room2, string label1, string label2)
+        {
+            Door door = new Door(room1, room2);
+            room1.SetExit(label1, door);
+            room2.SetExit(label2, door);
+            return door;
+        }
+
+        public static Door CreateClosedDoor(Room room1, Room room2, string label1, string label2)
         {
             Door door = new Door(room1, room2);
             door.Close();

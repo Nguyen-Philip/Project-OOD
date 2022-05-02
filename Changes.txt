@@ -262,3 +262,28 @@ speakto is used to speak to npcs. won't be able to understand enemies
 
 Time Spent: 25m 35s
 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes
+Enemy.cs
+Added gold, xp and the ability to store items
+
+CombatLoop.cs
+Added the ability to level up after a victory
+
+Chest.cs
+Added ability to store items, to lock the door and open with a key
+
+Door.cs
+Added ability to lock the door and open with a key
+
+Player.cs
+Added heal and inspect
+Need to fix inventory after restarting.
+
+Added
+InspectCommand.cs
+Ability to inspect items on the ground and in your inventory
+
+
+Time Spent: 3h 20m 56s

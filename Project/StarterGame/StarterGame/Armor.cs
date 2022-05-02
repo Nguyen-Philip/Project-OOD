@@ -25,7 +25,7 @@ namespace StarterGame
         }
 
         public bool IsUsable
-        {
+        { 
             get
             {
                 return _IsUsable;

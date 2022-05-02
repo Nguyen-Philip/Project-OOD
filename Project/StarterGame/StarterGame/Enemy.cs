@@ -16,31 +16,7 @@ namespace StarterGame
         private int _Xp;
         private int _Gold;
         private Dictionary<string, Item> _Drops;
-
-        public void Add(Item item)
-        {
-            _Drops.Add(item.Name, item);
-            _Location.RemoveItem(item.Name);
-        }
-
-        public void RemoveItems()
-        {
-            Dictionary<string, Item>.KeyCollection keys = _Drops.Keys;
-            foreach (string item in keys)
-            {
-                _Location.SetItem(item, _Drops[item]);
-            }
-        }
-
-        public Item GetItem(string name)
-        {
-            Item item = null;
-            if (name != null)
-            {
-                _Drops?.TryGetValue(name, out item);
-            }
-            return item;
-        }
+        private Dictionary<string, KeyItem> _KeyItems;
 
         public string Name { set { _Name = value; } get { return _Name; } }
         public Room Location { set { _Location = value; } get { return _Location; } }
@@ -66,6 +42,7 @@ namespace StarterGame
             _Ar = ar;
             _Priority = priority;
             _Drops = new Dictionary<string, Item>();
+            _KeyItems = new Dictionary<string, KeyItem>();
         }
 
         public Enemy(Room location, string name, int hp, int ar, int priority, int xp, int gold)
@@ -78,6 +55,7 @@ namespace StarterGame
             _Gold = gold;
             _Priority = priority;
             _Drops = new Dictionary<string, Item>();
+            _KeyItems = new Dictionary<string, KeyItem>();
         }
 
         public static Enemy CreateEnemy(Room location, string name)
@@ -99,6 +77,46 @@ namespace StarterGame
             Enemy enemy = new Enemy(location, name, hp, ar, priority, xp, gold);
             location.SetEnemy(name, enemy);
             return enemy;
+        }
+
+        public void Add(Item item)
+        {
+            _Drops.Add(item.Name, item);
+            _Location.RemoveItem(item.Name);
+        }
+
+        public void RemoveItems()
+        {
+            Dictionary<string, Item>.KeyCollection keys = _Drops.Keys;
+            foreach (string item in keys)
+            {
+                _Location.SetItem(item, _Drops[item]);
+            }
+        }
+
+        public void AddKeyItems(KeyItem keyitems)
+        {
+            _KeyItems.Add(keyitems.Name, keyitems);
+            _Location.RemoveKeyItems(keyitems.Name);
+        }
+
+        public void RemoveKeyItems()
+        {
+            Dictionary<string, KeyItem>.KeyCollection keys = _KeyItems.Keys;
+            foreach (string item in keys)
+            {
+                _Location.SetKeyItem(item, _KeyItems[item]);
+            }
+        }
+
+        public Item GetItem(string name)
+        {
+            Item item = null;
+            if (name != null)
+            {
+                _Drops?.TryGetValue(name, out item);
+            }
+            return item;
         }
     }
 }

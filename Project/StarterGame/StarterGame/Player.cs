@@ -11,7 +11,7 @@ namespace StarterGame
         private Stack<string> _movementlog = new Stack<string>();
         private BackPack _backPack = new BackPack();
         private int _maxhp = 100;
-        private int _hp = 100;
+        private int _hp = 50;
         private int _ar = 5;
         private int _av = 0;
         private int _priority = 1;
@@ -56,7 +56,7 @@ namespace StarterGame
                 this.NotificationMessage("\nYou have equipped the " + item.Name);
                 _armor = (Armor)item;
                 _av += _armor.AV;
-                this.NotificationMessage("" + _av);
+                this.NotificationMessage("Armor Value: " + _av);
                 _backPack.Remove(item.Name);
                 success = true;
             }
@@ -65,6 +65,7 @@ namespace StarterGame
                 this.NotificationMessage("\nYou have equipped the " + item.Name);
                 _weapon = (Weapon)item;
                 _ar += _weapon.AR;
+                this.NotificationMessage("Attack Rating: " + _ar);
                 _backPack.Remove(item.Name);
                 success = true;
             }
@@ -260,7 +261,7 @@ namespace StarterGame
                 success = EquipX(item);
                 if(success == false)
                 {
-                    this.ErrorMessage("\nTYou already have an item equipped in this slot. Unequip what you current have to equip the " + word);
+                    this.ErrorMessage("\nYou are unable to equip the " + word);
                 }
             }
             else
@@ -275,15 +276,23 @@ namespace StarterGame
         {
             bool success = false;
             
-            if (_armor != null)
+            if (_armor != null && word == _armor.Name)
             {
-                Item armor = _armor;
-                success = UnequipX(armor);
+                Item item = _armor;
+                success = UnequipX(item);
+                if (success == false)
+                {
+                    this.ErrorMessage("\nYou are unable to unequip the " + word);
+                }
             }
-            else if (_weapon != null)
+            else if (_weapon != null && word == _weapon.Name)
             {
-                Item weapon = _weapon;
-                success = UnequipX(weapon);
+                Item item = _weapon;
+                success = UnequipX(item);
+                if (success == false)
+                {
+                    this.ErrorMessage("\nYou are unable to unequip the " + word);
+                }
             }
             else
             {
@@ -313,6 +322,58 @@ namespace StarterGame
             }
         }
 
+        public void Heal(string word)
+        {
+            Item item = _backPack.GetItem(word);
+            Potion p;
+            if (item != null)
+            {
+                if(item.GetType() == typeof(Potion))
+                {
+                    p = (Potion)item;
+                    if(p.GetHealing(p.Type))
+                    {
+                        this.NotificationMessage("\nYou can use the " + word + " to heal with");
+                        if (MaxHp == Hp)
+                        {
+                            this.ErrorMessage("\nYou have full hp");
+                        }
+                        else
+                        {
+                            Hp += p.Modifier;
+                            if (MaxHp < Hp)
+                            {
+                                int dif = (Hp - MaxHp);
+                                dif = p.Modifier - dif;
+                                Hp = MaxHp;
+                                this.NotificationMessage("\nThe potion healed for " + dif);
+                                this.NotificationMessage("\nHP: " + Hp);
+                                _backPack.Remove(item.Name);
+                            }
+                            else
+                            {
+                                this.NotificationMessage("\nThe potion healed for " + p.Modifier);
+                                this.NotificationMessage("\nHP: " + Hp);
+                                _backPack.Remove(item.Name);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        this.ErrorMessage("\nYou cannot use the " + word + " to heal with");
+                    }
+                }
+                else
+                {
+                    this.ErrorMessage("\nYou cannot use the " + word + " to heal with");
+                }
+            }
+            else
+            {
+                this.ErrorMessage("\nThere is potion named " + word + " to use");
+            }
+        }
+
         public void Battle(Enemy enemy)
         {
             Parser _parser = new Parser(new CommandWords());
@@ -335,7 +396,7 @@ namespace StarterGame
                     }
                     else
                     {
-                        _combatLoop.Loop();
+                        _combatLoop.Loop(enemy);
                     }
                 }
             }
@@ -356,7 +417,7 @@ namespace StarterGame
                     }
                     else
                     {
-                        _combatLoop.Loop();
+                        _combatLoop.Loop(enemy);
                     }
                 }
             }
@@ -389,7 +450,7 @@ namespace StarterGame
             Enemy enemy = CurrentRoom.GetEnemy(word);
             if (npc != null)
             {
-                NotificationMessage("\n" + npc.Dialog);
+                NotificationMessage("\n" + npc.Name + ": " + npc.Dialog);
             }
             else if (enemy != null)
             {
@@ -632,6 +693,79 @@ namespace StarterGame
             this.NotificationMessage(this.CurrentRoom.SearchRoom());
         }
 
+        public bool Inspect(string word)
+        {
+            bool success = false;
+            Armor a;
+            Weapon w;
+            Potion p;
+            Item grndItem = CurrentRoom.GetItem(word);
+            Item invItem = _backPack.GetItem(word);
+            KeyItem grndKeyitem = CurrentRoom.GetKeyItem(word);
+            KeyItem invKeyitem = _backPack.GetKeyItem(word);
+            if (invItem != null || grndItem != null)
+            {
+                if (invItem != null)
+                {
+                    this.NotificationMessage("\nValue: " + invItem.Value);
+                    this.NotificationMessage("\nWeight: " + invItem.Weight);
+                    if (invItem.GetType() == typeof(Armor))
+                    {
+                        a = (Armor)invItem;
+                        this.NotificationMessage("\nArmor Value: " + a.AV);
+                    }
+                    else if (invItem.GetType() == typeof(Weapon))
+                    {
+                        w = (Weapon)invItem;
+                        this.NotificationMessage("\nAttack Rating: " + w.AR);
+                    }
+                    else if (invItem.GetType() == typeof(Potion))
+                    {
+                        p = (Potion)invItem;
+                        this.NotificationMessage("\nPotion Type: " + p.Type);
+                        this.NotificationMessage("\nModifier: " + p.Modifier);
+                    }
+                }
+                else if (grndItem != null)
+                { 
+                    this.NotificationMessage("\nValue: " + grndItem.Value);
+                    this.NotificationMessage("\nWeight: " + grndItem.Weight);
+                    if (grndItem.GetType() == typeof(Armor))
+                    {
+                        a = (Armor)grndItem;
+                        this.NotificationMessage("\nArmor Value: " + a.AV);
+                    }
+                    else if (grndItem.GetType() == typeof(Weapon))
+                    {
+                        w = (Weapon)grndItem;
+                        this.NotificationMessage("\nAttack Rating: " + w.AR);
+                    }
+                    else if (grndItem.GetType() == typeof(Potion))
+                    {
+                        p = (Potion)grndItem;
+                        this.NotificationMessage("\nPotion Type: " + p.Type);
+                        this.NotificationMessage("\nModifier: " + p.Modifier);
+                    }
+                }
+            }
+            else if (invKeyitem != null || grndKeyitem != null)
+            {
+                if (invKeyitem != null)
+                {
+                    this.NotificationMessage("\nDiscription: " + invKeyitem.Discription);
+                }
+                else if (grndKeyitem != null)
+                {
+                    this.NotificationMessage("\nDiscription: " + grndKeyitem.Discription);
+                }
+            }
+            else
+            {
+                this.ErrorMessage("\nThere is no item named " + word + " to inspect");
+            }
+            return success;
+        }
+
         //prints a message
         public void OutputMessage(string message)
         {
@@ -706,12 +840,17 @@ namespace StarterGame
             game.Restart();
         }
 
+        public void Stats()
+        {
+            this.NotificationMessage(" *** HP: " + Hp + "/" + MaxHp + "\n *** Attack Rating: " + Ar + "\n *** Armor Value: " + Av);
+        }
+
         public void Map()
         {
             this.OutputMessage("\n                1_8               " + 
                                "\n                 |                " + 
-                               "\n      2_7--2_8  1_7--1_5--1_6     " +
-                               "\n       |              |           " +
+                               "\n      2_7--2_8  1_7--1_5--1_6  OBJ" +
+                               "\n       |              |         | " +
                                "\n      2_5--2_4  1_2--1_3--1_4  3_9" +
                                "\n       |    |    |              | " +
                                "\n      2_6  2_3  1_1  3_2  3_4--3_5" +

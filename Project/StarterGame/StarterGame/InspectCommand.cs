@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace StarterGame
 {
-    public class EquipCommand : Command
+    public class InspectCommand : Command
     {
-        public EquipCommand() : base()
+        public InspectCommand() : base()
         {
-            this.Name = "equip";
+            this.Name = "inspect";
         }
 
         override
@@ -15,11 +15,11 @@ namespace StarterGame
         {
             if (this.HasSecondWord())
             {
-                player.Equip(this.SecondWord);
+                player.Inspect(this.SecondWord);
             }
             else
             {
-                player.ErrorMessage("\nEquip what?");
+                player.ErrorMessage("\nInspect what?");
             }
             player.LocationMessage("\n" + player.CurrentRoom.Description());
             return false;

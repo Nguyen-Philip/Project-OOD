@@ -12,27 +12,22 @@ namespace StarterGame
         private string _Name;
         private int _Value = 0;
         private int _Weight = 999;
+        private string _keyname;
         private bool _CanBeHeld = false;
         private bool _IsUsable = false;
         private bool _open;
         private ILockable _lock;
-        private string _keyname;
 
         public bool IsOpen { get { return _open; } }
-
         public bool IsClosed { get { return !_open; } }
-
         public bool CanClose { get { return _lock == null ? true : _lock.CanClose; } }
-
         public bool IsLocked { get { return _lock == null ? false : _lock.IsLocked; } }
-
         public bool IsUnlocked { get { return _lock == null ? true : _lock.IsUnlocked; } }
-        public string KeyName { set { _keyname = value; } get { return _keyname; } }
-
         public string Name { set { _Name = value; } get { return _Name; } }
         public Room Location { set { _Location = value; } get { return _Location; } }
         public int Value { set { _Value = value; } get { return _Value; } }
         public int Weight { set { _Weight = value; } get { return _Weight; } }
+        public string KeyName { set { _keyname = value; } get { return _keyname; } }
 
         public bool CanBeHeld
         {
@@ -54,18 +49,18 @@ namespace StarterGame
         {
             Location = roomA;
             Name = name;
-            _items = new Dictionary<string, Item>();
             _open = true;
             _lock = null;
+            _items = new Dictionary<string, Item>();
         }
         public Chest(Room roomA, string name, string keyname)
         {
             Location = roomA;
             Name = name;
             _keyname = keyname;
-            _items = new Dictionary<string, Item>();
             _open = true;
             _lock = null;
+            _items = new Dictionary<string, Item>();
         }
 
         public void Open()

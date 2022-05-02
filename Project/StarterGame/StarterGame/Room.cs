@@ -61,7 +61,8 @@ namespace StarterGame
         public Dictionary<string, Door> ContainingRoomExits { set; get; }
 
         private Room _room;
-        public Key _key;
+        private Key _key;
+        private NPC _npc;
 
         public TownRoom(string theword, Room room)
         {
@@ -76,7 +77,7 @@ namespace StarterGame
         }
         public string GetExits()
         {
-            return "You are in town, the door of the dungeon is locked. Say ready then pickup the key";
+            return "You are in town, the door of the dungeon is locked. Say ready then pickup the keys.";
         }
 
         public string Description()
@@ -95,8 +96,9 @@ namespace StarterGame
                 {
                     ContainingRoom.Delegate = null;
                     player.NotificationMessage("\nYou are ready, the guard dropped the key.");
-                    Key.CreateKey(_room, "masterdoorkey");
-
+                    Key.CreateKey(_room, "dungeonkey", 0, "Key that the entrance to the dungeon");
+                    Key.CreateKey(_room, "townchestkey", 0, "Key that unlocks the chest in town");
+                    NPC.CreateNPC(_room, "Guard", true, "Goodluck in the dungeon");
                 }
                 else
                 {

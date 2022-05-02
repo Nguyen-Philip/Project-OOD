@@ -82,5 +82,15 @@ namespace StarterGame
             location.SetItem(name, potion);
             return potion;
         }
+
+        public bool GetHealing(TYPE type)
+        {
+            bool success = false;
+            if(type == TYPE.HP)
+            {
+                success = true;
+            }
+            return success;
+        }
     }
 }
