@@ -109,6 +109,14 @@ namespace StarterGame
             return chest;
         }
 
+        public static Chest CreateClosedChest(Room room1, string label1)
+        {
+            Chest chest = new Chest(room1, label1);
+            chest.Close();
+            room1.SetChest(label1, chest);
+            return chest;
+        }
+
         public static Chest CreateLockedChest(Room room1, string label1, string keyname)
         {
             Chest chest = new Chest(room1, label1, keyname);

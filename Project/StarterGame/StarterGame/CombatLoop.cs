@@ -56,6 +56,11 @@ namespace StarterGame
             _Player.LocationMessage("\n" + _Player.CurrentRoom.Description());
         }
 
+        public void Defeat()
+        {
+            System.Environment.Exit(0);
+        }
+
         public bool comparePriority()
         {
             bool isPlayerFaster = false;

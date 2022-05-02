@@ -11,7 +11,7 @@ namespace StarterGame
         private Stack<string> _movementlog = new Stack<string>();
         private BackPack _backPack = new BackPack();
         private int _maxhp = 100;
-        private int _hp = 50;
+        private int _hp = 100;
         private int _ar = 5;
         private int _av = 0;
         private int _priority = 1;
@@ -393,6 +393,7 @@ namespace StarterGame
                     if (_hp <= 0)
                     {
                         NotificationMessage("\nYou have died");
+                        _combatLoop.Defeat();
                     }
                     else
                     {
@@ -407,6 +408,7 @@ namespace StarterGame
                 if (_hp <= 0)
                 {
                     NotificationMessage("\nYou have died");
+                    _combatLoop.Defeat();
                 }
                 else
                 {
