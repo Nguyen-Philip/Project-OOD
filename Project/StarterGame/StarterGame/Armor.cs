@@ -57,14 +57,14 @@ namespace StarterGame
         public static Armor CreateArmor(Room location, string name)
         {
             Armor armor = new Armor(location, name);
-            location.SetItem(name, armor);
+            location.AddItem(armor);
             return armor;
         }
 
         public static Armor CreateArmor(Room location, string name, int value, int weight, int av, int num)
         {
             Armor armor = new Armor(location, name, value, weight, av, num);
-            location.SetItem(name, armor);
+            location.AddItem(armor);
             return armor;
         }
 

@@ -6,7 +6,7 @@ namespace StarterGame
 {
     public class Chest : ICloseable, Item
     {
-        private Dictionary<string, Item> _items;
+        private Dictionary<string, List<Item>> _items;
 
         private Room _Location;
         private string _Name;
@@ -53,7 +53,7 @@ namespace StarterGame
             Name = name;
             _open = true;
             _lock = null;
-            _items = new Dictionary<string, Item>();
+            _items = new Dictionary<string, List<Item>>();
         }
         public Chest(Room roomA, string name, string keyname)
         {
@@ -62,7 +62,7 @@ namespace StarterGame
             _keyname = keyname;
             _open = true;
             _lock = null;
-            _items = new Dictionary<string, Item>();
+            _items = new Dictionary<string, List<Item>>();
         }
 
         public void Open()
@@ -132,27 +132,40 @@ namespace StarterGame
 
         public void Add(Item item)
         {
-            _items.Add(item.Name, item);
-            _Location.RemoveItem(item.Name);
+            bool isIn = _items.ContainsKey(item.Name);
+            if (isIn)
+            {
+                _items[item.Name].Add(item);
+            }
+            else
+            {
+                //Item newItem = item.Clone();
+                List<Item> itemlist = new List<Item>();
+                itemlist.Add(item);
+                _items.Add(item.Name, itemlist);
+                //Item newItem = (Item)item.Clone();
+                //_items.Add(item.Name, newItem);
+            }
         }
 
         public void RemoveItems()
         {
-            Dictionary<string, Item>.KeyCollection keys = _items.Keys;
+            Dictionary<string, List<Item>>.KeyCollection keys = _items.Keys;
             foreach (string item in keys)
             {
-                _Location.SetItem(item, _items[item]);
+                for (int i = 0; i < _items[item].Count; i++)
+                {
+                    _Location.AddItem(_items[item][i]);
+                }
             }
+
         }
 
-        public Item GetItem(string name)
+        public List<Item> GetItem(string name)
         {
-            Item item = null;
-            if (name != null)
-            {
-                _items?.TryGetValue(name, out item);
-            }
-            return item;
+            List<Item> items = null;
+            _items.TryGetValue(name, out items);
+            return items;
         }
 
         public Item Clone()
