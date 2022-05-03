@@ -53,7 +53,6 @@ namespace StarterGame
         {
             _playing = true;
             _player.OutputMessage(Welcome());
-            _player.NotificationMessage(Goal());
             _player.LocationMessage(_player.CurrentRoom.Description());
 
         }
@@ -80,11 +79,6 @@ namespace StarterGame
         public string Welcome()
         {
             return "Welcome to ###.\n\nThe World of ### is an exciting adventure game.\n\nType 'help' if you need help.\n";
-        }
-
-        public string Goal()
-        {
-            return "Your goal is to defeat the dragon and enter it's treasure room\n";
         }
 
         //prints a goodbye message when End() is called

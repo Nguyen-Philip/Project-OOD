@@ -33,12 +33,9 @@ namespace StarterGame
         {
             _Player.NotificationMessage("\n" + _Enemy.Name + " has died");
             _Enemy.RemoveItems();
-            _Enemy.RemoveKeyItems();
             _Player.NotificationMessage("\nThe " + _Enemy.Name + " has dropped everything it was carrying");
-            _Player.NotificationMessage("\nYou have picked up " + _Enemy.Gold + " gold");
             _Player.NotificationMessage("\nYou have won");
             _Player.Gold += _Enemy.Gold;
-
             _Player.Xp += _Enemy.XP;
             while(_Player.Xp >= limit)
             {
@@ -54,11 +51,6 @@ namespace StarterGame
             }
             _Player.CurrentRoom.RemoveEnemy(_Enemy.Name);
             _Player.LocationMessage("\n" + _Player.CurrentRoom.Description());
-        }
-
-        public void Defeat()
-        {
-            System.Environment.Exit(0);
         }
 
         public bool comparePriority()
@@ -82,7 +74,7 @@ namespace StarterGame
             return isPlayerFaster;
         }
 
-        public void Loop(Enemy enemy)
+        public void Loop()
         {
             Parser _parser = new Parser(new CommandWords());
             bool finished = false;
@@ -91,36 +83,10 @@ namespace StarterGame
                 Console.Write("\n>");
                 String temp = Console.ReadLine();
                 Command command = _parser.ParseCommand(temp);
-                if (command != null)
+                if (command != null && command.Name == "attack")
                 {
-                    if (command.Name == "attack" || command.Name == "heal" || command.Name == "inventory" || command.Name == "inspect")
-                    {
-                        if (command.Name == "attack" && command.SecondWord == enemy.Name)
-                        {
-                            command.Execute(_Player);
-                            finished = true;
-                        }
-                        else if (command.Name == "heal")
-                        {
-                            command.Execute(_Player);
-                            _Player.NotificationMessage("\nThe " + _Enemy.Name + " begins to stare at you");
-                        }
-                        else if (command.Name == "inventory" || command.Name == "inspect" || command.Name == "stats")
-                        {
-                            command.Execute(_Player);
-                            _Player.NotificationMessage("\nThe " + _Enemy.Name + " begins to stare at you");
-                        }
-                        else
-                        {
-                            _Player.ErrorMessage("\nYou need to type the enemy's name correctly");
-                            _Player.NotificationMessage("\nThe " + _Enemy.Name + " begins to stare at you");
-                        }
-                    }
-                    else
-                    {
-                        _Player.ErrorMessage("\nYou are unable to do anything but attack, heal, inspect your items, look at your stats, and look in your inventory");
-                        finished = false;
-                    }
+                    command.Execute(_Player);
+                    finished = true;
                 }
                 else
                 {

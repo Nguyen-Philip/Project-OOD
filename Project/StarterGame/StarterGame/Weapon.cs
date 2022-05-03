@@ -10,12 +10,15 @@ namespace StarterGame
         private int _AR;
         private bool _CanBeHeld = true;
         private bool _IsUsable = true;
+        private int _Num;
 
+        public int Num { set { _Num = value; } get { return _Num; } }
         public string Name { set { _Name = value; } get { return _Name; } }
         public Room Location { set { _Location = value; } get { return _Location; } }
         public int Value { set { _Value = value; } get { return _Value; } }
         public int Weight { set { _Weight = value; } get { return _Weight; } }
         public int AR { set { _AR = value; } get { return _AR; } }
+
 
         public bool CanBeHeld {
             get
@@ -39,7 +42,7 @@ namespace StarterGame
             _IsUsable = false;
         }
 
-        public Weapon(Room location, string name, int value, int weight, int ar)
+        public Weapon(Room location, string name, int value, int weight, int ar, int num)
         {
             _Location = location;
             _Name = name;
@@ -48,6 +51,7 @@ namespace StarterGame
             _AR = ar;
             _CanBeHeld = true;
             _IsUsable = false;
+            _Num = num;
         }
 
         public static Weapon CreateWeapon(Room location, string name)
@@ -57,11 +61,16 @@ namespace StarterGame
             return weapon;
         }
 
-        public static Weapon CreateWeapon(Room location, string name, int value, int weight, int ar)
+        public static Weapon CreateWeapon(Room location, string name, int value, int weight, int ar, int num)
         {
-            Weapon weapon = new Weapon(location, name, value, weight, ar);
+            Weapon weapon = new Weapon(location, name, value, weight, ar, num);
             location.SetItem(name, weapon);
             return weapon;
+        }
+
+        public Item Clone()
+        {
+            return null;  // TODO: Fix This!!
         }
     }
 }

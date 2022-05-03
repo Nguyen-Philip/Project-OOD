@@ -34,6 +34,7 @@ namespace StarterGame
             }
         }
 
+
         public int MaxHp { set { _maxhp = value; } get { return _maxhp; } }
         public int Hp { set { _hp = value; } get { return _hp; } }
         public int Ar { set { _ar = value; } get { return _ar; } }
@@ -56,7 +57,7 @@ namespace StarterGame
                 this.NotificationMessage("\nYou have equipped the " + item.Name);
                 _armor = (Armor)item;
                 _av += _armor.AV;
-                this.NotificationMessage("Armor Value: " + _av);
+                this.NotificationMessage("" + _av);
                 _backPack.Remove(item.Name);
                 success = true;
             }
@@ -65,7 +66,6 @@ namespace StarterGame
                 this.NotificationMessage("\nYou have equipped the " + item.Name);
                 _weapon = (Weapon)item;
                 _ar += _weapon.AR;
-                this.NotificationMessage("Attack Rating: " + _ar);
                 _backPack.Remove(item.Name);
                 success = true;
             }
@@ -220,6 +220,93 @@ namespace StarterGame
             return success;
         }
 
+        public bool Buy(string word)
+        {
+            bool success = false;
+            Item item = CurrentRoom.Shop.GetItem(word);
+            if(CurrentRoom.GetNPC("merchant") != null) {
+                if (item != null)
+                {
+                    if (item.CanBeHeld && item.Value <= Gold)
+                    {
+                        Gold -= item.Value;
+                        success = _backPack.Add(item);
+                        if (success == true)
+                        {
+                            this.NotificationMessage("\nYou have bought the " + item.Name + " for " + item.Value + " gold");
+                            CurrentRoom.RemoveItem(item.Name);
+                        }
+                        else
+                        {
+                            this.NotificationMessage("\nYour backpack is full, you need to drop something to buy the " + item.Name);
+                        }
+                    }
+                    else
+                    {
+                        this.NotificationMessage("\nYou cannot afford the " + item.Name);
+                    }
+                }
+                else
+                {
+                    this.ErrorMessage("\nThere is nothing named " + word + " to buy");
+                }
+            }
+            else
+            {
+
+                this.NotificationMessage("\nThere is no merchant to buy from");
+            }
+            return success;
+        }
+
+        public void Browse()
+        {
+            if (CurrentRoom.GetNPC("merchant") != null)
+            {
+                this.NotificationMessage(this.CurrentRoom.Shop.GetItems());
+            }
+            else
+            {
+
+                this.NotificationMessage("\nThere is no merchant to with goods to browse");
+            }
+        }
+
+        public bool Sell(string word)
+        {
+            bool success = false;
+            KeyItem keyitem = _backPack.GetKeyItem(word);
+            Item item = _backPack.GetItem(word);
+            if (CurrentRoom.GetNPC("merchant") != null) 
+                {
+                    if (item != null)
+                    {
+                    int sValue = item.Value / 2;
+                        this.NotificationMessage("\nYou have sold the " + item.Name + " for " + sValue);
+                        _gold += sValue;
+                        CurrentRoom.Shop.Add(item);
+                        success = _backPack.Remove(word);
+                    }
+                    else if (keyitem != null)
+                    {
+                        if (keyitem.CanBeDropped)
+                        {
+                            this.NotificationMessage("\nYou have sold the " + keyitem.Name);
+                        }
+                        else
+                        {
+                            this.NotificationMessage("\nYou cannot sell the " + keyitem.Name + " as it is a key item");
+                        }
+
+                    }
+                    else
+                    {
+                        this.ErrorMessage("\nThere is nothing named " + word + " to sell");
+                    }
+                }
+            return success;
+        }
+
         //used by DropCommand, drops items
         public bool Drop(string word)
         {
@@ -261,7 +348,7 @@ namespace StarterGame
                 success = EquipX(item);
                 if(success == false)
                 {
-                    this.ErrorMessage("\nYou are unable to equip the " + word);
+                    this.ErrorMessage("\nTYou already have an item equipped in this slot. Unequip what you current have to equip the " + word);
                 }
             }
             else
@@ -276,23 +363,15 @@ namespace StarterGame
         {
             bool success = false;
             
-            if (_armor != null && word == _armor.Name)
+            if (_armor != null)
             {
-                Item item = _armor;
-                success = UnequipX(item);
-                if (success == false)
-                {
-                    this.ErrorMessage("\nYou are unable to unequip the " + word);
-                }
+                Item armor = _armor;
+                success = UnequipX(armor);
             }
-            else if (_weapon != null && word == _weapon.Name)
+            else if (_weapon != null)
             {
-                Item item = _weapon;
-                success = UnequipX(item);
-                if (success == false)
-                {
-                    this.ErrorMessage("\nYou are unable to unequip the " + word);
-                }
+                Item weapon = _weapon;
+                success = UnequipX(weapon);
             }
             else
             {
@@ -322,58 +401,6 @@ namespace StarterGame
             }
         }
 
-        public void Heal(string word)
-        {
-            Item item = _backPack.GetItem(word);
-            Potion p;
-            if (item != null)
-            {
-                if(item.GetType() == typeof(Potion))
-                {
-                    p = (Potion)item;
-                    if(p.GetHealing(p.Type))
-                    {
-                        this.NotificationMessage("\nYou can use the " + word + " to heal with");
-                        if (MaxHp == Hp)
-                        {
-                            this.ErrorMessage("\nYou have full hp");
-                        }
-                        else
-                        {
-                            Hp += p.Modifier;
-                            if (MaxHp < Hp)
-                            {
-                                int dif = (Hp - MaxHp);
-                                dif = p.Modifier - dif;
-                                Hp = MaxHp;
-                                this.NotificationMessage("\nThe potion healed for " + dif);
-                                this.NotificationMessage("\nHP: " + Hp);
-                                _backPack.Remove(item.Name);
-                            }
-                            else
-                            {
-                                this.NotificationMessage("\nThe potion healed for " + p.Modifier);
-                                this.NotificationMessage("\nHP: " + Hp);
-                                _backPack.Remove(item.Name);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        this.ErrorMessage("\nYou cannot use the " + word + " to heal with");
-                    }
-                }
-                else
-                {
-                    this.ErrorMessage("\nYou cannot use the " + word + " to heal with");
-                }
-            }
-            else
-            {
-                this.ErrorMessage("\nThere is potion named " + word + " to use");
-            }
-        }
-
         public void Battle(Enemy enemy)
         {
             Parser _parser = new Parser(new CommandWords());
@@ -393,11 +420,10 @@ namespace StarterGame
                     if (_hp <= 0)
                     {
                         NotificationMessage("\nYou have died");
-                        _combatLoop.Defeat();
                     }
                     else
                     {
-                        _combatLoop.Loop(enemy);
+                        _combatLoop.Loop();
                     }
                 }
             }
@@ -408,7 +434,6 @@ namespace StarterGame
                 if (_hp <= 0)
                 {
                     NotificationMessage("\nYou have died");
-                    _combatLoop.Defeat();
                 }
                 else
                 {
@@ -419,7 +444,7 @@ namespace StarterGame
                     }
                     else
                     {
-                        _combatLoop.Loop(enemy);
+                        _combatLoop.Loop();
                     }
                 }
             }
@@ -452,7 +477,7 @@ namespace StarterGame
             Enemy enemy = CurrentRoom.GetEnemy(word);
             if (npc != null)
             {
-                NotificationMessage("\n" + npc.Name + ": " + npc.Dialog);
+                NotificationMessage("\n" + npc.Dialog);
             }
             else if (enemy != null)
             {
@@ -695,79 +720,6 @@ namespace StarterGame
             this.NotificationMessage(this.CurrentRoom.SearchRoom());
         }
 
-        public bool Inspect(string word)
-        {
-            bool success = false;
-            Armor a;
-            Weapon w;
-            Potion p;
-            Item grndItem = CurrentRoom.GetItem(word);
-            Item invItem = _backPack.GetItem(word);
-            KeyItem grndKeyitem = CurrentRoom.GetKeyItem(word);
-            KeyItem invKeyitem = _backPack.GetKeyItem(word);
-            if (invItem != null || grndItem != null)
-            {
-                if (invItem != null)
-                {
-                    this.NotificationMessage("\nValue: " + invItem.Value);
-                    this.NotificationMessage("\nWeight: " + invItem.Weight);
-                    if (invItem.GetType() == typeof(Armor))
-                    {
-                        a = (Armor)invItem;
-                        this.NotificationMessage("\nArmor Value: " + a.AV);
-                    }
-                    else if (invItem.GetType() == typeof(Weapon))
-                    {
-                        w = (Weapon)invItem;
-                        this.NotificationMessage("\nAttack Rating: " + w.AR);
-                    }
-                    else if (invItem.GetType() == typeof(Potion))
-                    {
-                        p = (Potion)invItem;
-                        this.NotificationMessage("\nPotion Type: " + p.Type);
-                        this.NotificationMessage("\nModifier: " + p.Modifier);
-                    }
-                }
-                else if (grndItem != null)
-                { 
-                    this.NotificationMessage("\nValue: " + grndItem.Value);
-                    this.NotificationMessage("\nWeight: " + grndItem.Weight);
-                    if (grndItem.GetType() == typeof(Armor))
-                    {
-                        a = (Armor)grndItem;
-                        this.NotificationMessage("\nArmor Value: " + a.AV);
-                    }
-                    else if (grndItem.GetType() == typeof(Weapon))
-                    {
-                        w = (Weapon)grndItem;
-                        this.NotificationMessage("\nAttack Rating: " + w.AR);
-                    }
-                    else if (grndItem.GetType() == typeof(Potion))
-                    {
-                        p = (Potion)grndItem;
-                        this.NotificationMessage("\nPotion Type: " + p.Type);
-                        this.NotificationMessage("\nModifier: " + p.Modifier);
-                    }
-                }
-            }
-            else if (invKeyitem != null || grndKeyitem != null)
-            {
-                if (invKeyitem != null)
-                {
-                    this.NotificationMessage("\nDiscription: " + invKeyitem.Discription);
-                }
-                else if (grndKeyitem != null)
-                {
-                    this.NotificationMessage("\nDiscription: " + grndKeyitem.Discription);
-                }
-            }
-            else
-            {
-                this.ErrorMessage("\nThere is no item named " + word + " to inspect");
-            }
-            return success;
-        }
-
         //prints a message
         public void OutputMessage(string message)
         {
@@ -842,17 +794,12 @@ namespace StarterGame
             game.Restart();
         }
 
-        public void Stats()
-        {
-            this.NotificationMessage(" *** HP: " + Hp + "/" + MaxHp + "\n *** Attack Rating: " + Ar + "\n *** Armor Value: " + Av);
-        }
-
         public void Map()
         {
             this.OutputMessage("\n                1_8               " + 
                                "\n                 |                " + 
-                               "\n      2_7--2_8  1_7--1_5--1_6  OBJ" +
-                               "\n       |              |         | " +
+                               "\n      2_7--2_8  1_7--1_5--1_6     " +
+                               "\n       |              |           " +
                                "\n      2_5--2_4  1_2--1_3--1_4  3_9" +
                                "\n       |    |    |              | " +
                                "\n      2_6  2_3  1_1  3_2  3_4--3_5" +

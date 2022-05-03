@@ -19,7 +19,7 @@ namespace StarterGame
             }
             else
             {
-                player.ErrorMessage("\nEquip what?");
+                player.OutputMessage("\nEquip what?");
             }
             player.LocationMessage("\n" + player.CurrentRoom.Description());
             return false;

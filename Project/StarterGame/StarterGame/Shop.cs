@@ -6,10 +6,9 @@ using System;
 
 namespace StarterGame
 { 
-    public class BackPack
+    public class Shop
     {
 
-        private int Limit = 50;
         private Dictionary<string, Item> _items;
         private Dictionary<string, KeyItem> _keyItems;
 
@@ -17,18 +16,18 @@ namespace StarterGame
         {
             bool success = false;
             bool isIn = _items.ContainsKey(item.Name);
-            if (item.CanBeHeld && item.Weight <= Limit)
+            if (item.CanBeHeld)
             {
                 if (isIn)
                 {
                     _items[item.Name].Num += 1;
                 }
-                else{
+                else
+                {
                     Item newItem = item.Clone();
                     newItem.Num = 1;
                     _items.Add(item.Name, newItem);
                 }
-                Limit -= item.Weight;
                 success = true;
             }
             return success;
@@ -43,7 +42,6 @@ namespace StarterGame
             {
                 success = _items.Remove(name);
             }
-            Limit += item.Weight;
             return success;
         }
 
@@ -72,10 +70,9 @@ namespace StarterGame
         public bool AddKeyItems(KeyItem keyitems)
         {
             bool success = false;
-            if (keyitems.CanBeHeld && keyitems.Weight <= Limit)
+            if (keyitems.CanBeHeld)
             {
                 _keyItems.Add(keyitems.Name, keyitems);
-                Limit -= keyitems.Weight;
                 success = true;
             }
             return success;
@@ -97,18 +94,14 @@ namespace StarterGame
             Dictionary<string, KeyItem>.KeyCollection keys = _keyItems.Keys;
             foreach (string name in keys)
             {
-                names += " " + name;
+                names += " " + name + " for " + _items[name].Value;
             }
 
             return names;
         }
 
-        public int GetWeight()
-        {
-            return Limit;
-        }
 
-        public BackPack()
+        public Shop()
         {
             _items = new Dictionary<string, Item>();
             _keyItems = new Dictionary<string, KeyItem>();

@@ -12,22 +12,29 @@ namespace StarterGame
         private string _Name;
         private int _Value = 0;
         private int _Weight = 999;
-        private string _keyname;
         private bool _CanBeHeld = false;
         private bool _IsUsable = false;
         private bool _open;
         private ILockable _lock;
+        private string _keyname;
+        private int _Num = 1;
 
         public bool IsOpen { get { return _open; } }
+
         public bool IsClosed { get { return !_open; } }
+
         public bool CanClose { get { return _lock == null ? true : _lock.CanClose; } }
+
         public bool IsLocked { get { return _lock == null ? false : _lock.IsLocked; } }
+
         public bool IsUnlocked { get { return _lock == null ? true : _lock.IsUnlocked; } }
+        public string KeyName { set { _keyname = value; } get { return _keyname; } }
+
         public string Name { set { _Name = value; } get { return _Name; } }
         public Room Location { set { _Location = value; } get { return _Location; } }
         public int Value { set { _Value = value; } get { return _Value; } }
         public int Weight { set { _Weight = value; } get { return _Weight; } }
-        public string KeyName { set { _keyname = value; } get { return _keyname; } }
+        public int Num { set { _Num = value; } get { return _Num; } }
 
         public bool CanBeHeld
         {
@@ -49,18 +56,18 @@ namespace StarterGame
         {
             Location = roomA;
             Name = name;
+            _items = new Dictionary<string, Item>();
             _open = true;
             _lock = null;
-            _items = new Dictionary<string, Item>();
         }
         public Chest(Room roomA, string name, string keyname)
         {
             Location = roomA;
             Name = name;
             _keyname = keyname;
+            _items = new Dictionary<string, Item>();
             _open = true;
             _lock = null;
-            _items = new Dictionary<string, Item>();
         }
 
         public void Open()
@@ -109,14 +116,6 @@ namespace StarterGame
             return chest;
         }
 
-        public static Chest CreateClosedChest(Room room1, string label1)
-        {
-            Chest chest = new Chest(room1, label1);
-            chest.Close();
-            room1.SetChest(label1, chest);
-            return chest;
-        }
-
         public static Chest CreateLockedChest(Room room1, string label1, string keyname)
         {
             Chest chest = new Chest(room1, label1, keyname);
@@ -151,6 +150,10 @@ namespace StarterGame
                 _items?.TryGetValue(name, out item);
             }
             return item;
+        }
+        public Item Clone()
+        {
+            return null;  // TODO: Fix This!!
         }
     }
 }

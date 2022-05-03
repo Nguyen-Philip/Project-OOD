@@ -12,7 +12,6 @@ namespace StarterGame
         private Room _exit;
         private Room _trigger;
         private Room _portalExit;
-        private Room _treasureRoom;
         private Door door;
         private Chest chest;
         private Gem gem;
@@ -20,10 +19,11 @@ namespace StarterGame
         private Enemy enemy;
         private NPC npc;
         private Potion potion;
+        private Potion potion2;
         private Weapon weapon;
+        private Weapon weapon2;
         private Key key;
-
-
+        public Shop shop = new Shop();
         public static GameWorld Instance()
         {
             if(_instance == null)
@@ -71,14 +71,6 @@ namespace StarterGame
             }
         }
 
-        public Room TreasureRoom
-        {
-            get
-            {
-                return _treasureRoom;
-            }
-        }
-
         public void PlayerWillEnterRoom(Notification notification)
         {
             Player player = (Player)notification.Object;
@@ -103,20 +95,12 @@ namespace StarterGame
                 door = Door.CreatePortal(_exit, _portalExit, "portal");
                 player.NotificationMessage("\n*** You hear a loud noise. A portal has been created nearby. ***");
             }
-            else if (player.CurrentRoom == _treasureRoom)
-            {
-                player.NotificationMessage("\n*** You have reached the treasure room, and won the game! ***");
-                player.NotificationMessage("\nFinal Stats ");
-                player.Stats();
-                System.Environment.Exit(0);
-            }
             player.NotificationMessage("\n*** The player is " + player.CurrentRoom.Tag + " ***");
         }
 
         private Room CreateWorld()
         {
             Room room = new Room();
-            Room itemRoom = new Room("Purpose of creating items");
             Room town = new Room("in the town");
             Room entrance = new Room("in the entrance of the dungeon");
 
@@ -150,244 +134,115 @@ namespace StarterGame
             Room room3_7 = new Room("in room 3_7");
             Room room3_8 = new Room("in room 3_8");
             Room room3_9 = new Room("in room 3_9");
-            Room treasureRoom = new Room("in the treasure room");
 
             //town
-            door = Door.CreateLockedDoor(town, entrance, "north", "south", "dungeonkey");
-            npc = NPC.CreateNPC(town, "merchant", true, "Hello, would you like to look at my wares");
-            npc = NPC.CreateNPC(town, "guard", true, "Hello, there! Spend some time in town!");
-            chest = Chest.CreateLockedChest(town, "chest", "townchestkey");
-            potion = Potion.CreatePotion(itemRoom, "shealingpotion", 10, 1, 10, "HP");
-            chest.Add(potion);
-            potion = Potion.CreatePotion(itemRoom, "mhealingpotion", 25, 1, 35, "HP");
-            chest.Add(potion);
-            potion = Potion.CreatePotion(itemRoom, "lhealingpotion", 50, 1, 80, "HP");
-            chest.Add(potion);
 
-            //entrance
-            door = Door.CreateLockedDoor(entrance, room1_0, "north", "south", "northkey");
-            door = Door.CreateLockedDoor(entrance, room2_0, "west", "east", "westkey");
-            door = Door.CreateLockedDoor(entrance, room3_0, "east", "west", "eastkey");
-            enemy = Enemy.CreateEnemy(entrance, "Skeleton", 10, 2, 2, 10, 10);
-            key = Key.CreateKey(itemRoom, "northkey", 0, "Key that opens the room north of the entrance");
-            enemy.AddKeyItems(key);
-            armor = Armor.CreateArmor(itemRoom, "bronzearmor", 10, 5, 5);
-            weapon = Weapon.CreateWeapon(itemRoom, "bronzesword", 10, 5, 5);
+
+            door = Door.CreateLockedDoor(town, entrance, "north", "south", "masterdoorkey");
+            chest = Chest.CreateLockedChest(town, "chest", "masterchestkey");
+            gem = Gem.CreateGem(town, "ruby", 20, 1, 3);
+            armor = Armor.CreateArmor(town, "chestplate", 10, 5, 30, 1);
+            potion = Potion.CreatePotion(town, "healing_potion", 10, 2, 20, 1, Potion.TYPE.HP);
+
+            //===
+            potion2 = (Potion)potion.Clone();
+            potion2.Name = potion2.Name + "_zzz";
+            Console.WriteLine("\n*** " + potion.Name + " " + potion2.Name + " ***");
+            Console.WriteLine(potion.Location.Tag);
+            potion2.Location.Tag = "Mike was here";
+            Console.WriteLine(potion.Location.Tag + " " + potion2.Location.Tag);
+            //===
+
+            weapon = Weapon.CreateWeapon(town, "dagger", 10, 5, 10, 1);
+            weapon2 = Weapon.CreateWeapon(town, "gooddagger", 1, 5, 20, 20);
+            npc = NPC.CreateNPC(town, "merchant", true, "Hello there, my name is Jerry");
+            enemy = Enemy.CreateEnemy(town, "Skeleton", 10, 2, 1, 10, 10);
+            town.Shop.Add(weapon2);
+            town.Shop.Add(weapon2);
             chest.Add(armor);
             chest.Add(weapon);
+            enemy.Add(gem);
+            enemy.Add(potion);
+            key = Key.CreateKey(town, "masterchestkey");
+
+            //entrance
+            door = Door.CreateDoor(entrance, room1_0, "north", "south");
+            door = Door.CreateDoor(entrance, room2_0, "west", "east");
+            door = Door.CreateDoor(entrance, room3_0, "east", "west");
+            gem = Gem.CreateGem(entrance, "oynx", 20, 1, 1);
+            chest = Chest.CreateLockedChest(entrance, "treasure_chest", "masterchestkey");
+            armor = Armor.CreateArmor(entrance, "boots", 10, 5, 20, 1);
+            potion = Potion.CreatePotion(entrance, "strength_potion", 10, 2, 20, 1, Potion.TYPE.AR);
+            weapon = Weapon.CreateWeapon(entrance, "axe", 10, 5, 20, 1);
+            enemy = Enemy.CreateEnemy(entrance, "Skeleton", 10, 2, 2, 10, 10);
 
             //room1_0
             door = Door.CreateDoor(room1_0, room1_1, "north", "south");
 
-
-
-
-
-
-
             //room1_1
             door = Door.CreateDoor(room1_1, room1_2, "north", "south");
 
-
-
-
-
-
-
             //room1_2
             door = Door.CreateDoor(room1_2, room1_3, "east", "west");
-
-
-
-
-
-
 
             //room1_3 - room1_4
             door = Door.CreateDoor(room1_3, room1_4, "east", "west");
             door = Door.CreateDoor(room1_3, room1_5, "north", "south");
 
-
-
-
-
-
-
-
             //room1_5 - room1_6
             door = Door.CreateDoor(room1_5, room1_6, "east", "west");
             door = Door.CreateDoor(room1_5, room1_7, "west", "east");
-            enemy = Enemy.CreateEnemy(room1_5, "Ghoul", 20, 4, 2, 20, 20);
-            key = Key.CreateKey(itemRoom, "chestkey1", 0, "Key that open a chest");
-            enemy.AddKeyItems(key);
-            chest = Chest.CreateLockedChest(room1_6, "chest", "chestkey1");
-            gem = Gem.CreateGem(itemRoom, "ruby", 5, 1);
-            chest.Add(gem);
-            potion = Potion.CreatePotion(itemRoom, "shealingpotion", 10, 1, 10, "HP");
-            chest.Add(potion);
-            potion = Potion.CreatePotion(itemRoom, "mhealingpotion", 25, 1, 35, "HP");
-            chest.Add(potion);
-            potion = Potion.CreatePotion(itemRoom, "lhealingpotion", 50, 1, 80, "HP");
-            chest.Add(potion);
 
             //room1_7 - room1_8
             door = Door.CreateDoor(room1_7, room1_8, "north", "south");
-            enemy = Enemy.CreateEnemy(room1_8, "Wizard", 250, 5, 1, 100, 100);
-            key = Key.CreateKey(itemRoom, "westkey", 0, "Key that opens the room west of the entrance");
-            enemy.AddKeyItems(key);
-            armor = Armor.CreateArmor(itemRoom, "ironarmor", 20, 8, 7);
-            weapon = Weapon.CreateWeapon(itemRoom, "ironsword", 20, 8, 10);
-            enemy.Add(armor);
-            enemy.Add(weapon);
 
             //room2_0
             door = Door.CreateDoor(room2_0, room2_1, "north", "south");
 
-
-
-
-
-
-
-
             //room2_1 - room2_2
             door = Door.CreateDoor(room2_1, room2_2, "west", "east");
             door = Door.CreateDoor(room2_1, room2_3, "north", "south");
-            enemy = Enemy.CreateEnemy(room2_1, "Wolf", 40, 6, 2, 40, 40);
-            key = Key.CreateKey(itemRoom, "chestkey2", 0, "Key that open a chest");
-            enemy.AddKeyItems(key);
-            chest = Chest.CreateLockedChest(room2_2, "chest", "chestkey2");
-            gem = Gem.CreateGem(itemRoom, "ruby", 5, 1);
-            chest.Add(gem);
-            potion = Potion.CreatePotion(itemRoom, "shealingpotion", 10, 1, 10, "HP");
-            chest.Add(potion);
-            potion = Potion.CreatePotion(itemRoom, "mhealingpotion", 25, 1, 35, "HP");
-            chest.Add(potion);
-            potion = Potion.CreatePotion(itemRoom, "lhealingpotion", 50, 1, 80, "HP");
-            chest.Add(potion);
 
             //room2_3
             door = Door.CreateDoor(room2_3, room2_4, "north", "south");
 
-
-
-
-
-
-
             //room2_4
             door = Door.CreateDoor(room2_4, room2_5, "west", "east");
-
-
-
-
-
-
 
             //room2_5 - room2_6
             door = Door.CreateDoor(room2_5, room2_6, "south", "north");
             door = Door.CreateDoor(room2_5, room2_7, "north", "south");
-            enemy = Enemy.CreateEnemy(room2_5, "Bear", 80, 8, 2, 80, 80);
-            key = Key.CreateKey(itemRoom, "chestkey3", 0, "Key that open a chest");
-            enemy.AddKeyItems(key);
-            chest = Chest.CreateLockedChest(room2_6, "chest", "chestkey3");
-            gem = Gem.CreateGem(itemRoom, "ruby", 5, 1);
-            chest.Add(gem);
-            potion = Potion.CreatePotion(itemRoom, "shealingpotion", 10, 1, 10, "HP");
-            chest.Add(potion);
-            potion = Potion.CreatePotion(itemRoom, "mhealingpotion", 25, 1, 35, "HP");
-            chest.Add(potion);
-            potion = Potion.CreatePotion(itemRoom, "lhealingpotion", 50, 1, 80, "HP");
-            chest.Add(potion);
 
             //room2_7 - room2_8
             door = Door.CreateDoor(room2_7, room2_8, "east", "west");
-            enemy = Enemy.CreateEnemy(room2_8, "Werewolf", 500, 10, 1, 150, 150);
-            key = Key.CreateKey(room2_8, "eastkey", 0, "Key that opens the room east of the entrance");
-            enemy.AddKeyItems(key);
-            armor = Armor.CreateArmor(itemRoom, "steelarmor", 40, 11, 9);
-            weapon = Weapon.CreateWeapon(itemRoom, "steelsword", 40, 11, 15);
-            enemy.Add(armor);
-            enemy.Add(weapon);
 
             //room3_0
             door = Door.CreateDoor(room3_0, room3_1, "north", "south");
 
-
-
-
-
-
             //room3_1 - room3_2
             door = Door.CreateDoor(room3_1, room3_2, "north", "south");
             door = Door.CreateDoor(room3_1, room3_3, "east", "west");
-            enemy = Enemy.CreateEnemy(room3_1, "Knight", 160, 10, 2, 160, 160);
-            key = Key.CreateKey(itemRoom, "chestkey3", 0, "Key that open a chest");
-            enemy.AddKeyItems(key);
-            chest = Chest.CreateClosedChest(room3_2, "chest");
-            gem = Gem.CreateGem(itemRoom, "ruby", 5, 1);
-            chest.Add(gem);
-            potion = Potion.CreatePotion(itemRoom, "shealingpotion", 10, 1, 10, "HP");
-            chest.Add(potion);
-            potion = Potion.CreatePotion(itemRoom, "mhealingpotion", 25, 1, 35, "HP");
-            chest.Add(potion);
-            potion = Potion.CreatePotion(itemRoom, "lhealingpotion", 50, 1, 80, "HP");
-            chest.Add(potion);
 
             //room3_3
             door = Door.CreateDoor(room3_3, room3_4, "north", "south");
 
-
-
-
-
-
             //room3_4
             door = Door.CreateDoor(room3_4, room3_5, "east", "west");
 
-
-
-
-
-
-
-            //room3_5 - room3_9 - treasureRoom
+            //room3_5 - room3_9
             door = Door.CreateDoor(room3_5, room3_6, "south", "north");
-            door = Door.CreateLockedDoor(room3_5, room3_9, "north", "south", "bosskey");
-            door = Door.CreateLockedDoor(room3_9, treasureRoom, "north", "south", "treasurekey");
-            door = Door.CreateDoor(room2_7, room2_8, "east", "west");
-            enemy = Enemy.CreateEnemy(room3_9, "Dragon", 1000, 20, 0, 450, 450);
-            key = Key.CreateKey(itemRoom, "treasurekey", 0, "Key that opens the room north of room3_9");
-            enemy.AddKeyItems(key);
+            door = Door.CreateDoor(room3_5, room3_9, "north", "south");
 
             //room3_6
             door = Door.CreateDoor(room3_6, room3_7, "south", "north");
 
-
-
-
-
-
-
             //room3_7 - room3_8
             door = Door.CreateDoor(room3_7, room3_8, "west", "east");
-            enemy = Enemy.CreateEnemy(room3_8, "Wyvern", 750, 15, 1, 350, 350);
-            key = Key.CreateKey(room3_8, "bosskey", 0, "Key that opens the room north of room3_5");
-            enemy.AddKeyItems(key);
-            armor = Armor.CreateArmor(itemRoom, "scalearmor", 60, 14, 11);
-            weapon = Weapon.CreateWeapon(itemRoom, "dragonbonesword", 60, 14, 20);
-            enemy.Add(armor);
-            enemy.Add(weapon);
-
-
-
 
             _exit = entrance;
             _trigger = entrance;
             _portalExit = room1_4;
             _entrance = town;
-            _treasureRoom = room1_1;
-
 
             //set the Delegate Rooms
             room1_4.Delegate = new TrapRoom("help");

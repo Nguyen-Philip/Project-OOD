@@ -43,13 +43,14 @@ namespace StarterGame
         int Weight { set; get; }
         bool CanBeHeld { get; }
         bool IsUsable { get; }
-
+        int Num { set; get; }
+        Item Clone();
     }
+
 
     public interface KeyItem : IEntity
     {
         int Weight { set; get; }
-        string Discription { set; get; }
         bool CanBeHeld { get; }
         bool IsUsable { get; }
         bool CanBeDropped { get; }

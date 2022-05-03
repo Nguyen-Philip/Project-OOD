@@ -61,8 +61,7 @@ namespace StarterGame
         public Dictionary<string, Door> ContainingRoomExits { set; get; }
 
         private Room _room;
-        private Key _key;
-        private NPC _npc;
+        public Key _key;
 
         public TownRoom(string theword, Room room)
         {
@@ -77,7 +76,7 @@ namespace StarterGame
         }
         public string GetExits()
         {
-            return "You are in town, the door of the dungeon is locked. Say ready then pickup the keys.";
+            return "You are in town, the door of the dungeon is locked. Say ready then pickup the key";
         }
 
         public string Description()
@@ -96,9 +95,8 @@ namespace StarterGame
                 {
                     ContainingRoom.Delegate = null;
                     player.NotificationMessage("\nYou are ready, the guard dropped the key.");
-                    Key.CreateKey(_room, "dungeonkey", 0, "Key that the entrance to the dungeon");
-                    Key.CreateKey(_room, "townchestkey", 0, "Key that unlocks the chest in town");
-                    NPC.CreateNPC(_room, "Guard", true, "Goodluck in the dungeon");
+                    Key.CreateKey(_room, "masterdoorkey");
+
                 }
                 else
                 {
@@ -162,6 +160,7 @@ namespace StarterGame
         private Dictionary<string, Item> _items;
         private Dictionary<string, NPC> _npcs;
         private Dictionary<string, Enemy> _enemies;
+        public Shop _shop = new Shop();
 
         private string _tag;
 
@@ -174,6 +173,18 @@ namespace StarterGame
             set
             {
                 _tag = value;
+            }
+        }
+
+        public Shop Shop
+        {
+            get
+            {
+                return _shop;
+            }
+            set
+            {
+                _shop = value;
             }
         }
 
@@ -316,7 +327,12 @@ namespace StarterGame
 
         public void RemoveItem(String name)
         {
-            _items.Remove(name);
+            Item item = this.GetItem(name);
+            item.Num -= 1;
+            if (item.Num <= 0)
+            {
+                _items.Remove(name);
+            }
         }
 
         public string GetItems()
@@ -325,7 +341,7 @@ namespace StarterGame
             Dictionary<string, Item>.KeyCollection keys = _items.Keys;
             foreach (string name in keys)
             {
-                names += " " + name;
+                names += " " + name + "[" + _items[name].Num + "]";
             }
 
             return names;

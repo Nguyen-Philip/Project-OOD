@@ -7,7 +7,7 @@ namespace StarterGame
     public class CommandWords
     {
         private Dictionary<string, Command> commands;
-        private static Command[] commandArray = { new GoCommand(), new BackCommand(), new QuitCommand(), new SayCommand(), new PickupCommand(), new DropCommand(), new CloseCommand(), new OpenCommand(), new LockCommand(), new UnlockCommand(), new SpeaktoCommand(), new AttackCommand(), new EquipCommand(), new UnequipCommand(), new InspectCommand(), new HealCommand() };
+        private static Command[] commandArray = { new GoCommand(), new BackCommand(), new QuitCommand(), new SayCommand(), new PickupCommand(), new DropCommand(), new CloseCommand(), new OpenCommand(), new LockCommand(), new UnlockCommand(), new SpeaktoCommand(), new AttackCommand(), new EquipCommand(), new UnequipCommand(), new BuyCommand(), new SellCommand() };
         public CommandWords() : this(commandArray) {}
 
         // Designated Constructor
@@ -32,8 +32,8 @@ namespace StarterGame
             commands[inventory.Name] = inventory;
             Command map = new MapCommand(this);
             commands[map.Name] = map;
-            Command stats = new StatsCommand(this);
-            commands[stats.Name] = stats;
+            Command browse = new BrowseCommand(this);
+            commands[browse.Name] = browse;
         }
 
         public Command Get(string word)
