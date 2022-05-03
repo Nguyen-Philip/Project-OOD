@@ -9,11 +9,13 @@ namespace StarterGame
         private int _Weight;
         private bool _CanBeHeld = true;
         private bool _IsUsable = false;
+        private int _Num;
 
         public string Name { set { _Name = value; } get { return _Name; } }
         public Room Location { set { _Location = value; } get { return _Location; } }
         public int Value { set { _Value = value; } get { return _Value; } }
         public int Weight { set { _Weight = value; } get { return _Weight; } }
+        public int Num { set { _Num = value; } get { return _Num; } }
 
         public bool CanBeHeld {
             get
@@ -38,7 +40,7 @@ namespace StarterGame
             _IsUsable = false;
         }
 
-        public Gem(Room location, string name, int value, int weight)
+        public Gem(Room location, string name, int value, int weight, int num)
         {
             _Location = location;
             _Name = name;
@@ -46,6 +48,7 @@ namespace StarterGame
             _Weight = weight;
             _CanBeHeld = true;
             _IsUsable = false;
+            _Num = num;
         }
 
         public static Gem CreateGem(Room location, string name)
@@ -55,11 +58,15 @@ namespace StarterGame
             return gem;
         }
 
-        public static Gem CreateGem(Room location, string name, int value, int weight)
+        public static Gem CreateGem(Room location, string name, int value, int weight, int num)
         {
-            Gem gem = new Gem(location, name, value, weight);
+            Gem gem = new Gem(location, name, value, weight, num);
             location.SetItem(name, gem);
             return gem;
+        }
+        public Item Clone()
+        {
+            return null;  // TODO: Fix This!!
         }
     }
 }

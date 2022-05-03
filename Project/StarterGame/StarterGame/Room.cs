@@ -97,8 +97,8 @@ namespace StarterGame
                     ContainingRoom.Delegate = null;
                     player.NotificationMessage("\nYou are ready, the guard dropped the key.");
                     Key.CreateKey(_room, "dungeonkey", 0, "Key that the entrance to the dungeon");
-                    Key.CreateKey(_room, "townchestkey", 0, "Key that unlocks the chest in town");
-                    NPC.CreateNPC(_room, "Guard", true, "Goodluck in the dungeon");
+                    Key.CreateKey(_room, "chestkey", 0, "Key that unlocks the chest in town");
+                    NPC.CreateNPC(_room, "guard", true, "Goodluck in the dungeon");
                 }
                 else
                 {
@@ -162,6 +162,7 @@ namespace StarterGame
         private Dictionary<string, Item> _items;
         private Dictionary<string, NPC> _npcs;
         private Dictionary<string, Enemy> _enemies;
+        public Shop _shop = new Shop();
 
         private string _tag;
 
@@ -174,6 +175,18 @@ namespace StarterGame
             set
             {
                 _tag = value;
+            }
+        }
+
+        public Shop Shop
+        {
+            get
+            {
+                return _shop;
+            }
+            set
+            {
+                _shop = value;
             }
         }
 
@@ -316,7 +329,15 @@ namespace StarterGame
 
         public void RemoveItem(String name)
         {
-            _items.Remove(name);
+            Item item = this.GetItem(name);
+            if (item != null)
+            {
+                item.Num -= 1;
+                if (item.Num <= 0)
+                {
+                    _items.Remove(name);
+                }
+            }
         }
 
         public string GetItems()
@@ -325,9 +346,8 @@ namespace StarterGame
             Dictionary<string, Item>.KeyCollection keys = _items.Keys;
             foreach (string name in keys)
             {
-                names += " " + name;
+                names += " " + name + "[" + _items[name].Num + "]";
             }
-
             return names;
         }
 

@@ -51,47 +51,56 @@ namespace StarterGame
         public bool EquipX(Item item)
         {
             bool success = false;
-            if (item.GetType() == typeof(Armor) && _armor == null)
-            {
-                this.NotificationMessage("\nYou have equipped the " + item.Name);
-                _armor = (Armor)item;
-                _av += _armor.AV;
-                this.NotificationMessage("Armor Value: " + _av);
-                _backPack.Remove(item.Name);
-                success = true;
-            }
-            else if (item.GetType() == typeof(Weapon) && _weapon == null)
-            {
-                this.NotificationMessage("\nYou have equipped the " + item.Name);
-                _weapon = (Weapon)item;
-                _ar += _weapon.AR;
-                this.NotificationMessage("Attack Rating: " + _ar);
-                _backPack.Remove(item.Name);
-                success = true;
-            }
+            
+                if (item.GetType() == typeof(Armor) && _armor == null)
+                {
+                    this.NotificationMessage("\nYou have equipped the " + item.Name);
+                    _armor = (Armor)item;
+                    _av += _armor.AV;
+                    this.NotificationMessage("Armor Value: " + _av);
+                    _backPack.Remove(item.Name);
+                    success = true;
+                }
+                else if (item.GetType() == typeof(Weapon) && _weapon == null)
+                {
+                    this.NotificationMessage("\nYou have equipped the " + item.Name);
+                    _weapon = (Weapon)item;
+                    _ar += _weapon.AR;
+                    this.NotificationMessage("Attack Rating: " + _ar);
+                    _backPack.Remove(item.Name);
+                    success = true;
+                }
             return success;
         }
 
         public bool UnequipX(Item item)
         {
             bool success = false;
-            if (item.GetType() == typeof(Armor))
+            int temp = _backPack.LIMIT - item.Weight;
+            if (temp > 0)
             {
-                this.NotificationMessage("\nYou have unequipped the " + item.Name);
-                _armor = (Armor)item;
-                _av -= _armor.AV;
-                _backPack.Add(item);
-                _armor = null;
-                success = true;
+                if (item.GetType() == typeof(Armor))
+                {
+                    this.NotificationMessage("\nYou have unequipped the " + item.Name);
+                    _armor = (Armor)item;
+                    _av -= _armor.AV;
+                    _backPack.Add(item);
+                    _armor = null;
+                    success = true;
+                }
+                else if (item.GetType() == typeof(Weapon))
+                {
+                    this.NotificationMessage("\nYou have unequipped the " + item.Name);
+                    _weapon = (Weapon)item;
+                    _ar -= _weapon.AR;
+                    _backPack.Add(item);
+                    _weapon = null;
+                    success = true;
+                }
             }
-            else if (item.GetType() == typeof(Weapon))
+            else
             {
-                this.NotificationMessage("\nYou have unequipped the " + item.Name);
-                _weapon = (Weapon)item;
-                _ar -= _weapon.AR;
-                _backPack.Add(item);
-                _weapon = null;
-                success = true;
+                this.ErrorMessage("\nYour backpack is full");
             }
             return success;
         }
@@ -188,7 +197,7 @@ namespace StarterGame
                     }
                     else
                     {
-                        this.NotificationMessage("\nYour backpack is full, you need to drop something to pick up the " + item.Name);
+                        this.ErrorMessage("\nYour backpack is full, you need to drop something to pick up the " + item.Name);
                     }
                 }
                 else
@@ -224,8 +233,8 @@ namespace StarterGame
         public bool Drop(string word)
         {
             bool success = false;
-            KeyItem keyitem = _backPack.GetKeyItem(word);
             Item item = _backPack.GetItem(word);
+            KeyItem keyitem = _backPack.GetKeyItem(word);
             if (item != null)
             {
                 this.NotificationMessage("\nYou have dropped the " + item.Name);
@@ -247,6 +256,94 @@ namespace StarterGame
             else
             {
                 this.ErrorMessage("\nThere is nothing named " + word + " to drop");
+            }
+            return success;
+        }
+
+        public bool Buy(string word)
+        {
+            bool success = false;
+            Item item = CurrentRoom.Shop.GetItem(word);
+            if (CurrentRoom.GetNPC("merchant") != null)
+            {
+                if (item != null)
+                {
+                    if (item.CanBeHeld && item.Value <= Gold)
+                    {
+                        Gold -= item.Value;
+                        success = _backPack.Add(item);
+                        if (success == true)
+                        {
+                            this.NotificationMessage("\nYou have bought the " + item.Name + " for " + item.Value + " gold");
+                            CurrentRoom.RemoveItem(item.Name);
+                        }
+                        else
+                        {
+                            this.NotificationMessage("\nYour backpack is full, you need to drop something to buy the " + item.Name);
+                        }
+                    }
+                    else
+                    {
+                        this.NotificationMessage("\nYou cannot afford the " + item.Name);
+                    }
+                }
+                else
+                {
+                    this.ErrorMessage("\nThere is nothing named " + word + " to buy");
+                }
+            }
+            else
+            {
+
+                this.NotificationMessage("\nThere is no merchant to buy from");
+            }
+            return success;
+        }
+
+        public void Browse()
+        {
+            if (CurrentRoom.GetNPC("merchant") != null)
+            {
+                this.NotificationMessage(this.CurrentRoom.Shop.GetItems());
+            }
+            else
+            {
+
+                this.NotificationMessage("\nThere is no merchant to with goods to browse");
+            }
+        }
+
+        public bool Sell(string word)
+        {
+            bool success = false;
+            KeyItem keyitem = _backPack.GetKeyItem(word);
+            Item item = _backPack.GetItem(word);
+            if (CurrentRoom.GetNPC("merchant") != null)
+            {
+                if (item != null)
+                {
+                    int sValue = item.Value / 2;
+                    this.NotificationMessage("\nYou have sold the " + item.Name + " for " + sValue);
+                    _gold += sValue;
+                    CurrentRoom.Shop.Add(item);
+                    success = _backPack.Remove(word);
+                }
+                else if (keyitem != null)
+                {
+                    if (keyitem.CanBeDropped)
+                    {
+                        this.NotificationMessage("\nYou have sold the " + keyitem.Name);
+                    }
+                    else
+                    {
+                        this.NotificationMessage("\nYou cannot sell the " + keyitem.Name + " as it is a key item");
+                    }
+
+                }
+                else
+                {
+                    this.ErrorMessage("\nThere is nothing named " + word + " to sell");
+                }
             }
             return success;
         }
@@ -432,7 +529,7 @@ namespace StarterGame
         //used by InventoryCommand, display inventory
         public void Inventory()
         {
-            this.OutputMessage("\nItems:" + this._backPack.GetItems() + "\nKey Items:" + this._backPack.GetKeyItems() + "\nWeight: " + this._backPack.GetWeight() + "/50" + "\nGold: " + _gold);
+            this.NotificationMessage("\nItems:" + this._backPack.GetItems() + "\nKey Items:" + this._backPack.GetKeyItems() + "\nWeight: " + this._backPack.GetWeight() + "/50" + "\nGold: " + _gold);
         }
 
         //used by SayCommand, allows you to say a word
@@ -754,11 +851,11 @@ namespace StarterGame
             {
                 if (invKeyitem != null)
                 {
-                    this.NotificationMessage("\nDiscription: " + invKeyitem.Discription);
+                    this.NotificationMessage("\nDiscription: " + invKeyitem.Description);
                 }
                 else if (grndKeyitem != null)
                 {
-                    this.NotificationMessage("\nDiscription: " + grndKeyitem.Discription);
+                    this.NotificationMessage("\nDiscription: " + grndKeyitem.Description);
                 }
             }
             else
@@ -766,6 +863,10 @@ namespace StarterGame
                 this.ErrorMessage("\nThere is no item named " + word + " to inspect");
             }
             return success;
+        }
+        public void Stats()
+        {
+            this.NotificationMessage(" *** HP: " + Hp + "/" + MaxHp + "\n *** Attack Rating: " + Ar + "\n *** Armor Value: " + Av);
         }
 
         //prints a message
@@ -840,11 +941,6 @@ namespace StarterGame
             _log.Clear();
             Game game = new Game();
             game.Restart();
-        }
-
-        public void Stats()
-        {
-            this.NotificationMessage(" *** HP: " + Hp + "/" + MaxHp + "\n *** Attack Rating: " + Ar + "\n *** Armor Value: " + Av);
         }
 
         public void Map()

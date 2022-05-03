@@ -11,12 +11,25 @@ namespace StarterGame
         private Dictionary<string, Item> _items;
         private Dictionary<string, KeyItem> _keyItems;
 
+        public int LIMIT { set { Limit = value; } get { return Limit; } }
+
         public bool Add(Item item)
         {
             bool success = false;
+            bool isIn = _items.ContainsKey(item.Name);
             if (item.CanBeHeld && item.Weight <= Limit)
             {
-                _items.Add(item.Name, item);
+                if (isIn)
+                {
+                    _items[item.Name].Num += 1;
+                }
+                else
+                {
+                    //Item newItem = item.Clone();
+                    _items.Add(item.Name, item);
+                    //Item newItem = (Item)item.Clone();
+                    //_items.Add(item.Name, newItem);
+                }
                 Limit -= item.Weight;
                 success = true;
             }
@@ -25,8 +38,16 @@ namespace StarterGame
 
         public bool Remove(string name)
         {
+            bool success = false;
             Item item = this.GetItem(name);
-            bool success = _items.Remove(name);
+            if (item != null)
+            {
+                item.Num += 1;
+                if (item.Num >= 0)
+                {
+                    success = _items.Remove(name);
+                }
+            }
             Limit += item.Weight;
             return success;
         }

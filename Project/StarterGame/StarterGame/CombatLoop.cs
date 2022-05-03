@@ -38,7 +38,6 @@ namespace StarterGame
             _Player.NotificationMessage("\nYou have picked up " + _Enemy.Gold + " gold");
             _Player.NotificationMessage("\nYou have won");
             _Player.Gold += _Enemy.Gold;
-
             _Player.Xp += _Enemy.XP;
             while(_Player.Xp >= limit)
             {
@@ -93,7 +92,7 @@ namespace StarterGame
                 Command command = _parser.ParseCommand(temp);
                 if (command != null)
                 {
-                    if (command.Name == "attack" || command.Name == "heal" || command.Name == "inventory" || command.Name == "inspect")
+                    if (command.Name == "attack" || command.Name == "heal" || command.Name == "inventory" || command.Name == "inspect" || command.Name == "stats")
                     {
                         if (command.Name == "attack" && command.SecondWord == enemy.Name)
                         {

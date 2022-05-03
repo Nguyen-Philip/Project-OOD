@@ -12,8 +12,7 @@ namespace StarterGame
         public TYPE _Type;
         private bool _CanBeHeld = true;
         private bool _IsUsable = true;
-
-
+        private int _Num;
 
         public string Name { set { _Name = value; } get { return _Name; } }
         public Room Location { set { _Location = value; } get { return _Location; } }
@@ -21,6 +20,7 @@ namespace StarterGame
         public int Weight { set { _Weight = value; } get { return _Weight; } }
         public int Modifier { set { _Modifier = value; } get { return _Modifier; } }
         public TYPE Type { set { _Type = value; } get { return _Type; } }
+        public int Num { set { _Num = value; } get { return _Num; } }
 
         public bool CanBeHeld {
             get
@@ -56,7 +56,7 @@ namespace StarterGame
             _IsUsable = false;
         }
 
-        public Potion(Room location, string name, int value, int weight, int modifier, string type)
+        public Potion(Room location, string name, int value, int weight, int modifier, string type, int num)
         {
             _Location = location;
             _Name = name;
@@ -64,6 +64,7 @@ namespace StarterGame
             _Weight = weight;
             _Modifier = modifier;
             _Type = (TYPE) Enum.Parse(typeof(TYPE), type, true);
+            _Num = num;
             _CanBeHeld = true;
             _IsUsable = false;
         }
@@ -75,10 +76,10 @@ namespace StarterGame
             return potion;
         }
 
-        public static Potion CreatePotion(Room location, string name, int value, int weight, int modifier, string type)
+        public static Potion CreatePotion(Room location, string name, int value, int weight, int modifier, string type, int num)
         {
 
-            Potion potion = new Potion(location, name, value, weight, modifier, type);
+            Potion potion = new Potion(location, name, value, weight, modifier, type, num);
             location.SetItem(name, potion);
             return potion;
         }
@@ -91,6 +92,12 @@ namespace StarterGame
                 success = true;
             }
             return success;
+        }
+        public Item Clone()
+        {
+            //Potion potion = new Potion(this.Location, this.Name, this.Value, this.Weight, this.Modifier, this.Num, this.Type);
+            //return potion;
+            return null;
         }
     }
 }

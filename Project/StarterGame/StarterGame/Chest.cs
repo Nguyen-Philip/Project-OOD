@@ -12,6 +12,7 @@ namespace StarterGame
         private string _Name;
         private int _Value = 0;
         private int _Weight = 999;
+        private int _Num = 1;
         private string _keyname;
         private bool _CanBeHeld = false;
         private bool _IsUsable = false;
@@ -28,6 +29,7 @@ namespace StarterGame
         public int Value { set { _Value = value; } get { return _Value; } }
         public int Weight { set { _Weight = value; } get { return _Weight; } }
         public string KeyName { set { _keyname = value; } get { return _keyname; } }
+        public int Num { set { _Num = value; } get { return _Num; } }
 
         public bool CanBeHeld
         {
@@ -151,6 +153,11 @@ namespace StarterGame
                 _items?.TryGetValue(name, out item);
             }
             return item;
+        }
+
+        public Item Clone()
+        {
+            return null;  // TODO: Fix This!!
         }
     }
 }

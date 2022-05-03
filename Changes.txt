@@ -287,3 +287,25 @@ Ability to inspect items on the ground and in your inventory
 
 
 Time Spent: 3h 20m 56s
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes
+Gem, Armor, Weapon, Potion.cs
+Added Clone, ability to make multiple items
+
+Backpack
+Clone items
+
+Added
+SellCommand.cs
+Sell items to shop
+
+BuyCommand.cs
+Buy items from shop
+
+Shop.cs
+Setup shops
+
+
+Time Spent: 2h 05m 32s
