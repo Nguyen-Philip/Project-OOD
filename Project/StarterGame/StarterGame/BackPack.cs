@@ -8,7 +8,7 @@ namespace StarterGame
     {
 
         private int Limit = 50;
-        private Dictionary<string, Item> _items;
+        private Dictionary<string, List<Item>> _items;
         private Dictionary<string, KeyItem> _keyItems;
 
         public int LIMIT { set { Limit = value; } get { return Limit; } }
@@ -21,12 +21,14 @@ namespace StarterGame
             {
                 if (isIn)
                 {
-                    _items[item.Name].Num += 1;
+                    _items[item.Name].Add(item);
                 }
                 else
                 {
                     //Item newItem = item.Clone();
-                    _items.Add(item.Name, item);
+                    List<Item> itemlist = new List<Item>();
+                    itemlist.Add(item);
+                    _items.Add(item.Name, itemlist);
                     //Item newItem = (Item)item.Clone();
                     //_items.Add(item.Name, newItem);
                 }
@@ -39,36 +41,42 @@ namespace StarterGame
         public bool Remove(string name)
         {
             bool success = false;
-            Item item = this.GetItem(name);
-            if (item != null)
+            List<Item> items = this.GetItem(name);
+            if (items != null)
             {
-                item.Num += 1;
-                if (item.Num >= 0)
+                if (items.Count <= 1)
                 {
+                    Limit += items[0].Weight;
                     success = _items.Remove(name);
                 }
+                else
+                {
+                    Limit += items[0].Weight;
+                    items.RemoveAt(0);
+                    success = true;
+                }
             }
-            Limit += item.Weight;
+            
             return success;
         }
 
-        public Item GetItem(string name)
+        public List<Item> GetItem(string name)
         {
-            Item item = null;
+            List<Item> items = null;
             if (name != null)
             {
-                _items?.TryGetValue(name, out item);
+                _items?.TryGetValue(name, out items);
             }
-            return item;
+            return items;
         }
 
         public string GetItems()
         {
             string names = "";
-            Dictionary<string, Item>.KeyCollection keys = _items.Keys;
+            Dictionary<string, List<Item>>.KeyCollection keys = _items.Keys;
             foreach (string name in keys)
             {
-                names += " " + name;
+                names += " " + name + "[" + _items[name].Count + "]";
             }
 
             return names;
@@ -115,7 +123,7 @@ namespace StarterGame
 
         public BackPack()
         {
-            _items = new Dictionary<string, Item>();
+            _items = new Dictionary<string, List<Item>>();
             _keyItems = new Dictionary<string, KeyItem>();
         }
     }

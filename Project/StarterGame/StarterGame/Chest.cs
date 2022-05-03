@@ -141,8 +141,9 @@ namespace StarterGame
             Dictionary<string, Item>.KeyCollection keys = _items.Keys;
             foreach (string item in keys)
             {
-                _Location.SetItem(item, _items[item]);
+                _Location.AddItem(_items[item]);
             }
+
         }
 
         public Item GetItem(string name)

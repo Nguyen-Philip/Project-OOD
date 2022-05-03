@@ -159,7 +159,7 @@ namespace StarterGame
         private Dictionary<string, Door> _exits;
         private Dictionary<string, Item> _chests;
         private Dictionary<string, KeyItem> _keyitems;
-        private Dictionary<string, Item> _items;
+        private Dictionary<string, List<Item>> _items;
         private Dictionary<string, NPC> _npcs;
         private Dictionary<string, Enemy> _enemies;
         public Shop _shop = new Shop();
@@ -218,7 +218,7 @@ namespace StarterGame
             _exits = new Dictionary<string, Door>();
             _chests = new Dictionary<string, Item>();;
             _keyitems = new Dictionary<string, KeyItem>();
-            _items = new Dictionary<string, Item>();
+            _items = new Dictionary<string, List<Item>>();
             _npcs = new Dictionary<string, NPC>();
             _enemies = new Dictionary<string, Enemy>();
             this.Tag = tag;
@@ -308,34 +308,48 @@ namespace StarterGame
             return names;
         }
 
-        public void SetItem(string name, Item item)
+        public bool AddItem(Item item)
         {
-            if (item != null)
-            {
-                _items[name] = item;
-            }
-            else
-            {
-                _items.Remove(name);
-            }
+            bool success = false;
+            bool isIn = _items.ContainsKey(item.Name);
+                if (isIn)
+                {
+                    _items[item.Name].Add(item);
+                }
+                else
+                {
+                    //Item newItem = item.Clone();
+                    List<Item> itemlist = new List<Item>();
+                    itemlist.Add(item);
+                    _items.Add(item.Name, itemlist);
+                    //Item newItem = (Item)item.Clone();
+                    //_items.Add(item.Name, newItem);
+                }
+                success = true;
+            return success;
         }
 
-        public Item GetItem(string name)
+
+        public List<Item> GetItem(string name)
         {
-            Item item = null;
-            _items.TryGetValue(name, out item);
-            return item;
+            List<Item> items = null;
+            _items.TryGetValue(name, out items);
+            return items;
         }
 
         public void RemoveItem(String name)
         {
-            Item item = this.GetItem(name);
-            if (item != null)
+            List<Item> items = this.GetItem(name);
+            if (items != null)
             {
-                item.Num -= 1;
-                if (item.Num <= 0)
+                if (items.Count <= 1)
                 {
                     _items.Remove(name);
+                }
+                else
+                {
+                    items.RemoveAt(0);
+
                 }
             }
         }
@@ -343,10 +357,10 @@ namespace StarterGame
         public string GetItems()
         {
             string names = "";
-            Dictionary<string, Item>.KeyCollection keys = _items.Keys;
+            Dictionary<string, List<Item>>.KeyCollection keys = _items.Keys;
             foreach (string name in keys)
             {
-                names += " " + name + "[" + _items[name].Num + "]";
+                names += " " + name + "[" + _items[name].Count + "]";
             }
             return names;
         }

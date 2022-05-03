@@ -90,7 +90,7 @@ namespace StarterGame
             Dictionary<string, Item>.KeyCollection keys = _Drops.Keys;
             foreach (string item in keys)
             {
-                _Location.SetItem(item, _Drops[item]);
+                _Location.AddItem( _Drops[item]);
             }
         }
 
