@@ -24,6 +24,7 @@ namespace StarterGame
         {
             _roomA = roomA;
             _roomB = roomB;
+            _keyname = null;
             _open = true;
             _lock = null;
         }

@@ -92,14 +92,14 @@ namespace StarterGame
                 Command command = _parser.ParseCommand(temp);
                 if (command != null)
                 {
-                    if (command.Name == "attack" || command.Name == "heal" || command.Name == "inventory" || command.Name == "inspect" || command.Name == "stats")
+                    if (command.Name == "attack" || command.Name == "use" || command.Name == "inventory" || command.Name == "inspect" || command.Name == "stats")
                     {
                         if (command.Name == "attack" && command.SecondWord == enemy.Name)
                         {
                             command.Execute(_Player);
                             finished = true;
                         }
-                        else if (command.Name == "heal")
+                        else if (command.Name == "use")
                         {
                             command.Execute(_Player);
                             _Player.NotificationMessage("\nThe " + _Enemy.Name + " begins to stare at you");

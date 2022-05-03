@@ -6,13 +6,12 @@ namespace StarterGame
 {
     public class Chest : ICloseable, Item
     {
-        private Dictionary<string, Item> _items;
+        private Dictionary<string, List<Item>> _items;
 
         private Room _Location;
         private string _Name;
         private int _Value = 0;
         private int _Weight = 999;
-        private int _Num = 1;
         private string _keyname;
         private bool _CanBeHeld = false;
         private bool _IsUsable = false;
@@ -29,7 +28,6 @@ namespace StarterGame
         public int Value { set { _Value = value; } get { return _Value; } }
         public int Weight { set { _Weight = value; } get { return _Weight; } }
         public string KeyName { set { _keyname = value; } get { return _keyname; } }
-        public int Num { set { _Num = value; } get { return _Num; } }
 
         public bool CanBeHeld
         {
@@ -53,7 +51,7 @@ namespace StarterGame
             Name = name;
             _open = true;
             _lock = null;
-            _items = new Dictionary<string, Item>();
+            _items = new Dictionary<string, List<Item>>();
         }
         public Chest(Room roomA, string name, string keyname)
         {
@@ -62,7 +60,7 @@ namespace StarterGame
             _keyname = keyname;
             _open = true;
             _lock = null;
-            _items = new Dictionary<string, Item>();
+            _items = new Dictionary<string, List<Item>>();
         }
 
         public void Open()
@@ -132,32 +130,40 @@ namespace StarterGame
 
         public void Add(Item item)
         {
-            _items.Add(item.Name, item);
-            _Location.RemoveItem(item.Name);
+            bool isIn = _items.ContainsKey(item.Name);
+            if (isIn)
+            {
+                _items[item.Name].Add(item);
+            }
+            else
+            {
+                //Item newItem = item.Clone();
+                List<Item> itemlist = new List<Item>();
+                itemlist.Add(item);
+                _items.Add(item.Name, itemlist);
+                //Item newItem = (Item)item.Clone();
+                //_items.Add(item.Name, newItem);
+            }
         }
 
         public void RemoveItems()
         {
-            Dictionary<string, Item>.KeyCollection keys = _items.Keys;
+            Dictionary<string, List<Item>>.KeyCollection keys = _items.Keys;
             foreach (string item in keys)
             {
-                _Location.SetItem(item, _items[item]);
+                for (int i = 0; i < _items[item].Count; i++)
+                {
+                    _Location.AddItem(_items[item][i]);
+                }
             }
+
         }
 
-        public Item GetItem(string name)
+        public List<Item> GetItem(string name)
         {
-            Item item = null;
-            if (name != null)
-            {
-                _items?.TryGetValue(name, out item);
-            }
-            return item;
-        }
-
-        public Item Clone()
-        {
-            return null;  // TODO: Fix This!!
+            List<Item> items = null;
+            _items.TryGetValue(name, out items);
+            return items;
         }
     }
 }

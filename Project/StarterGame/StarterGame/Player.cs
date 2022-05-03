@@ -17,7 +17,7 @@ namespace StarterGame
         private int _priority = 1;
         private int _xp = 0;
         private int _level = 1;
-        private int _gold = 0;
+        private int _gold = 100;
         private Armor _armor;
         private Weapon _weapon;
         private CombatLoop _combatLoop;
@@ -122,7 +122,8 @@ namespace StarterGame
                 }
                 else
                 {
-                    this.ErrorMessage("\nThe door is closed");                }
+                    this.ErrorMessage("\nThe door is closed");                
+                }
             }
             else
             {
@@ -182,7 +183,7 @@ namespace StarterGame
         {
             bool success = false;
             KeyItem keyitem = CurrentRoom.GetKeyItem(word);
-            Item item = CurrentRoom.GetItem(word);
+            Item item = CurrentRoom.GetItem(word)?[0];
             Item chestsub = CurrentRoom.GetChest(word);
             Chest chest = (Chest)chestsub;
             if (item != null)
@@ -233,12 +234,12 @@ namespace StarterGame
         public bool Drop(string word)
         {
             bool success = false;
-            Item item = _backPack.GetItem(word);
+            Item item = _backPack.GetItem(word)?[0];
             KeyItem keyitem = _backPack.GetKeyItem(word);
             if (item != null)
             {
                 this.NotificationMessage("\nYou have dropped the " + item.Name);
-                CurrentRoom.SetItem(item.Name, item);
+                CurrentRoom.AddItem(item);
                 success = _backPack.Remove(word);
             }
             else if (keyitem != null)
@@ -263,7 +264,7 @@ namespace StarterGame
         public bool Buy(string word)
         {
             bool success = false;
-            Item item = CurrentRoom.Shop.GetItem(word);
+            Item item = CurrentRoom.Shop.GetItem(word)?[0];
             if (CurrentRoom.GetNPC("merchant") != null)
             {
                 if (item != null)
@@ -275,16 +276,16 @@ namespace StarterGame
                         if (success == true)
                         {
                             this.NotificationMessage("\nYou have bought the " + item.Name + " for " + item.Value + " gold");
-                            CurrentRoom.RemoveItem(item.Name);
+                            CurrentRoom.Shop.Remove(item.Name);
                         }
                         else
                         {
-                            this.NotificationMessage("\nYour backpack is full, you need to drop something to buy the " + item.Name);
+                            this.ErrorMessage("\nYour backpack is full, you need to drop something to buy the " + item.Name);
                         }
                     }
                     else
                     {
-                        this.NotificationMessage("\nYou cannot afford the " + item.Name);
+                        this.ErrorMessage("\nYou cannot afford the " + item.Name);
                     }
                 }
                 else
@@ -295,7 +296,7 @@ namespace StarterGame
             else
             {
 
-                this.NotificationMessage("\nThere is no merchant to buy from");
+                this.ErrorMessage("\nThere is no merchant to buy from");
             }
             return success;
         }
@@ -304,12 +305,12 @@ namespace StarterGame
         {
             if (CurrentRoom.GetNPC("merchant") != null)
             {
-                this.NotificationMessage(this.CurrentRoom.Shop.GetItems());
+                this.NotificationMessage("Items:" + this.CurrentRoom.Shop.GetItems());
             }
             else
             {
 
-                this.NotificationMessage("\nThere is no merchant to with goods to browse");
+                this.ErrorMessage("\nThere is no merchant to with goods to browse");
             }
         }
 
@@ -317,7 +318,7 @@ namespace StarterGame
         {
             bool success = false;
             KeyItem keyitem = _backPack.GetKeyItem(word);
-            Item item = _backPack.GetItem(word);
+            Item item = _backPack.GetItem(word)?[0];
             if (CurrentRoom.GetNPC("merchant") != null)
             {
                 if (item != null)
@@ -336,7 +337,7 @@ namespace StarterGame
                     }
                     else
                     {
-                        this.NotificationMessage("\nYou cannot sell the " + keyitem.Name + " as it is a key item");
+                        this.ErrorMessage("\nYou cannot sell the " + keyitem.Name + " as it is a key item");
                     }
 
                 }
@@ -345,6 +346,11 @@ namespace StarterGame
                     this.ErrorMessage("\nThere is nothing named " + word + " to sell");
                 }
             }
+            else
+            {
+
+                this.ErrorMessage("\nThere is no merchant to sell to");
+            }
             return success;
         }
 
@@ -352,7 +358,7 @@ namespace StarterGame
         public bool Equip(string word)
         {
             bool success = false;
-            Item item = _backPack.GetItem(word);
+            Item item = _backPack.GetItem(word)?[0];
             if (item != null)
             {
                 success = EquipX(item);
@@ -419,9 +425,9 @@ namespace StarterGame
             }
         }
 
-        public void Heal(string word)
+        public void Use(string word)
         {
-            Item item = _backPack.GetItem(word);
+            Item item = _backPack.GetItem(word)?[0];
             Potion p;
             if (item != null)
             {
@@ -457,7 +463,10 @@ namespace StarterGame
                     }
                     else
                     {
-                        this.ErrorMessage("\nYou cannot use the " + word + " to heal with");
+                        Ar += p.Modifier;
+                        this.NotificationMessage("\nYou can use the " + word + " to pernamently gain AR with");
+                        this.NotificationMessage("\nAR: " + Ar);
+                        _backPack.Remove(item.Name);
                     }
                 }
                 else
@@ -690,6 +699,11 @@ namespace StarterGame
                                 door.Unlock();
                                 this.NotificationMessage("\nThe door has been unlocked");
                             }
+                            else if (door.KeyName == null)
+                            {
+                                door.Unlock();
+                                this.NotificationMessage("\nThe door has been unlocked");
+                            }
                             else
                             {
                                 this.ErrorMessage("\nYou do not have the item required to open this door");
@@ -798,8 +812,8 @@ namespace StarterGame
             Armor a;
             Weapon w;
             Potion p;
-            Item grndItem = CurrentRoom.GetItem(word);
-            Item invItem = _backPack.GetItem(word);
+            Item grndItem = CurrentRoom.GetItem(word)?[0];
+            Item invItem = _backPack.GetItem(word)?[0];
             KeyItem grndKeyitem = CurrentRoom.GetKeyItem(word);
             KeyItem invKeyitem = _backPack.GetKeyItem(word);
             if (invItem != null || grndItem != null)
@@ -851,11 +865,11 @@ namespace StarterGame
             {
                 if (invKeyitem != null)
                 {
-                    this.NotificationMessage("\nDiscription: " + invKeyitem.Description);
+                    this.NotificationMessage("\nDescription: " + invKeyitem.Description);
                 }
                 else if (grndKeyitem != null)
                 {
-                    this.NotificationMessage("\nDiscription: " + grndKeyitem.Description);
+                    this.NotificationMessage("\nDescription: " + grndKeyitem.Description);
                 }
             }
             else
