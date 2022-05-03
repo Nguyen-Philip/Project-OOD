@@ -182,7 +182,7 @@ namespace StarterGame
         {
             bool success = false;
             KeyItem keyitem = CurrentRoom.GetKeyItem(word);
-            Item item = CurrentRoom.GetItem(word);
+            Item item = CurrentRoom.GetItem(word)?[0];
             Item chestsub = CurrentRoom.GetChest(word);
             Chest chest = (Chest)chestsub;
             if (item != null)
@@ -233,12 +233,12 @@ namespace StarterGame
         public bool Drop(string word)
         {
             bool success = false;
-            Item item = _backPack.GetItem(word);
+            Item item = _backPack.GetItem(word)?[0];
             KeyItem keyitem = _backPack.GetKeyItem(word);
             if (item != null)
             {
                 this.NotificationMessage("\nYou have dropped the " + item.Name);
-                CurrentRoom.SetItem(item.Name, item);
+                CurrentRoom.AddItem(item);
                 success = _backPack.Remove(word);
             }
             else if (keyitem != null)
@@ -317,7 +317,7 @@ namespace StarterGame
         {
             bool success = false;
             KeyItem keyitem = _backPack.GetKeyItem(word);
-            Item item = _backPack.GetItem(word);
+            Item item = _backPack.GetItem(word)?[0];
             if (CurrentRoom.GetNPC("merchant") != null)
             {
                 if (item != null)
@@ -352,7 +352,7 @@ namespace StarterGame
         public bool Equip(string word)
         {
             bool success = false;
-            Item item = _backPack.GetItem(word);
+            Item item = _backPack.GetItem(word)?[0];
             if (item != null)
             {
                 success = EquipX(item);
@@ -421,7 +421,7 @@ namespace StarterGame
 
         public void Heal(string word)
         {
-            Item item = _backPack.GetItem(word);
+            Item item = _backPack.GetItem(word)?[0];
             Potion p;
             if (item != null)
             {
@@ -798,8 +798,8 @@ namespace StarterGame
             Armor a;
             Weapon w;
             Potion p;
-            Item grndItem = CurrentRoom.GetItem(word);
-            Item invItem = _backPack.GetItem(word);
+            Item grndItem = CurrentRoom.GetItem(word)?[0];
+            Item invItem = _backPack.GetItem(word)?[0];
             KeyItem grndKeyitem = CurrentRoom.GetKeyItem(word);
             KeyItem invKeyitem = _backPack.GetKeyItem(word);
             if (invItem != null || grndItem != null)

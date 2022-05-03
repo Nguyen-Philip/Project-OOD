@@ -72,7 +72,7 @@ namespace StarterGame
         public static Potion CreatePotion(Room location, string name)
         {
             Potion potion = new Potion(location, name);
-            location.SetItem(name, potion);
+            location.AddItem(potion);
             return potion;
         }
 
@@ -80,7 +80,7 @@ namespace StarterGame
         {
 
             Potion potion = new Potion(location, name, value, weight, modifier, type, num);
-            location.SetItem(name, potion);
+            location.AddItem(potion);
             return potion;
         }
 

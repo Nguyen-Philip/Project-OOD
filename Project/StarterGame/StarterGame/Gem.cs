@@ -54,14 +54,14 @@ namespace StarterGame
         public static Gem CreateGem(Room location, string name)
         {
             Gem gem = new Gem(location, name);
-            location.SetItem(name, gem);
+            location.AddItem(gem);
             return gem;
         }
 
         public static Gem CreateGem(Room location, string name, int value, int weight, int num)
         {
             Gem gem = new Gem(location, name, value, weight, num);
-            location.SetItem(name, gem);
+            location.AddItem(gem);
             return gem;
         }
         public Item Clone()

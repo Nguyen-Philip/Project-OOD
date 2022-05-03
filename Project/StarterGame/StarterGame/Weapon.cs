@@ -56,14 +56,14 @@ namespace StarterGame
         public static Weapon CreateWeapon(Room location, string name)
         {
             Weapon weapon = new Weapon(location, name);
-            location.SetItem(name, weapon);
+            location.AddItem(weapon);
             return weapon;
         }
 
         public static Weapon CreateWeapon(Room location, string name, int value, int weight, int ar, int num)
         {
             Weapon weapon = new Weapon(location, name, value, weight, ar, num);
-            location.SetItem(name, weapon);
+            location.AddItem(weapon);
             return weapon;
         }
         public Item Clone()

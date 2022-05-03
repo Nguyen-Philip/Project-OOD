@@ -157,7 +157,11 @@ namespace StarterGame
             door = Door.CreateDoor(town, entrance, "north", "south");
             npc = NPC.CreateNPC(town, "merchant", true, "Hello, would you like to look at my wares");
             npc = NPC.CreateNPC(town, "guard", true, "Hello, there! Spend some time in town!");
-            gem = Gem.CreateGem(town, "ruby", 5, 50, 5);
+            gem = Gem.CreateGem(town, "ruby", 5, 1, 5);
+            Gem gem2 = Gem.CreateGem(town, "ruby", 5, 1, 5);
+            Gem gem3 = Gem.CreateGem(town, "ruby", 5, 1, 5);
+            Gem gem4 = Gem.CreateGem(town, "onyx", 5, 1, 5);
+            Gem gem5 = Gem.CreateGem(town, "onyx", 5, 1, 5);
             chest = Chest.CreateLockedChest(town, "chest", "chestkey");
             potion = Potion.CreatePotion(itemRoom, "shealingpotion", 10, 1, 10, "HP", 2);
             chest.Add(potion);
