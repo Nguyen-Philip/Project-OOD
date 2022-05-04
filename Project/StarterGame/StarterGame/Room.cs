@@ -5,7 +5,7 @@ using System;
 
 namespace StarterGame
 {
-
+    //say a certain word to unlock traproom
     public class TrapRoom : IRoomDelegate
     {
         private string unlockword;
@@ -31,7 +31,7 @@ namespace StarterGame
 
         public string Description()
         {
-            return "You are in " + ContainingRoom.Tag + ".\nYou have entered a trap room. " + "\n" + GetExits();
+            return "You are in " + ContainingRoom.Tag + ".\nYou have entered a trap room. " + "\n" + GetExits() + "\nSay the correct word to escape: yes no help open magic dragon unlock";
         }
 
         public void PlayerSaidWord(Notification notification)
@@ -49,11 +49,14 @@ namespace StarterGame
                 else
                 {
                     player.ErrorMessage("\nYou said the wrong word.");
+                    player.NotificationMessage("\nYou took " + 5 + " damage");
+                    player.Hp -= 5;
+                    player.NotificationMessage("\nHP: " + player.Hp);
                 }
             }
         }
     }
-
+    //whenever the player is ready, drop items
     public class TownRoom : IRoomDelegate
     {
         private string unlockword;
@@ -61,8 +64,6 @@ namespace StarterGame
         public Dictionary<string, Door> ContainingRoomExits { set; get; }
 
         private Room _room;
-        private Key _key;
-        private NPC _npc;
 
         public TownRoom(string theword, Room room)
         {
@@ -77,7 +78,7 @@ namespace StarterGame
         }
         public string GetExits()
         {
-            return "You are in town, the door of the dungeon is locked. Say ready then pickup the keys.";
+            return "Say ready then pickup the keys.";
         }
 
         public string Description()
@@ -96,7 +97,7 @@ namespace StarterGame
                 {
                     ContainingRoom.Delegate = null;
                     player.NotificationMessage("\nYou are ready, the guard dropped the key.");
-                    Key.CreateKey(_room, "dungeonkey", 0, "Key that the entrance to the dungeon");
+                    Key.CreateKey(_room, "dungeonkey", 0, "Key that unlocks entrance to the dungeon");
                     Key.CreateKey(_room, "chestkey", 0, "Key that unlocks the chest in town");
                     NPC.CreateNPC(_room, "guard", true, "Goodluck in the dungeon");
                 }
@@ -107,7 +108,68 @@ namespace StarterGame
             }
         }
     }
+    //when entering a certain room, restock where ever the store is located
+    public class RestockRoom : IRoomDelegate
+    {
+        public Room ContainingRoom { set; get; }
+        public Dictionary<string, Door> ContainingRoomExits { set; get; }
 
+        private Room _npcLocation;
+        private Room _room;
+        private Room _itemRoom;
+        private Potion _potion;
+
+        public RestockRoom(Room npcLocation, Room room, Room itemroom)
+        {
+            _npcLocation = npcLocation;
+            _room = room;
+            _itemRoom = itemroom;
+            NotificationCenter.Instance.AddObserver("PlayerDidEnterRoom", PlayerDidEnterRoom);
+        }
+
+        public Door GetExit(string exitName)
+        {
+            return null;
+        }
+        public string GetExits()
+        {
+            string exitNames = "Exits: ";
+            Dictionary<string, Door>.KeyCollection keys = ContainingRoomExits.Keys;
+            foreach (string exitName in keys)
+            {
+                exitNames += " " + exitName;
+            }
+            return exitNames;
+        }
+
+        public string Description()
+        {
+            return "You are " + ContainingRoom.Tag + ".\n *** " + this.GetExits();
+        }
+
+        public void PlayerDidEnterRoom(Notification notification)
+        {
+            Player player = (Player)notification.Object;
+            if (player.CurrentRoom == ContainingRoom)
+            {
+                ContainingRoom.Delegate = null;
+                _potion = Potion.CreatePotion(_itemRoom, "shealpot", 10, 1, 10, "HP");
+                _npcLocation.Shop.Add(_potion);
+                _potion = Potion.CreatePotion(_itemRoom, "shealpot", 10, 1, 10, "HP");
+                _npcLocation.Shop.Add(_potion);
+                _potion = Potion.CreatePotion(_itemRoom, "mhealpot", 25, 1, 35, "HP");
+                _npcLocation.Shop.Add(_potion);
+                _potion = Potion.CreatePotion(_itemRoom, "mhealpot", 25, 1, 35, "HP");
+                _npcLocation.Shop.Add(_potion);
+                _potion = Potion.CreatePotion(_itemRoom, "lhealpot", 50, 1, 80, "HP");
+                _npcLocation.Shop.Add(_potion);
+                _potion = Potion.CreatePotion(_itemRoom, "lhealpot", 50, 1, 80, "HP");
+                _npcLocation.Shop.Add(_potion);
+            }
+        }
+    }
+
+    //echo room
     public class EchoRoom : IRoomDelegate
     {
         public Room ContainingRoom { set; get; }
@@ -162,6 +224,7 @@ namespace StarterGame
         private Dictionary<string, List<Item>> _items;
         private Dictionary<string, NPC> _npcs;
         private Dictionary<string, Enemy> _enemies;
+        private List<Room> _rooms;
         public Shop _shop = new Shop();
 
         private string _tag;
@@ -221,7 +284,21 @@ namespace StarterGame
             _items = new Dictionary<string, List<Item>>();
             _npcs = new Dictionary<string, NPC>();
             _enemies = new Dictionary<string, Enemy>();
+            _rooms = new List<Room>();
             this.Tag = tag;
+        }
+
+        //get rooms and put it into list
+        public void AddRooms(Room room)
+        {
+            _rooms.Add(room);
+        }
+        //get random rooms
+        public Room randomRoom()
+        {
+            Random rand = new Random();
+            int index = rand.Next(_rooms.Count);
+            return _rooms[index];
         }
 
         //Set Room Exits
@@ -272,6 +349,7 @@ namespace StarterGame
             }
         }
 
+        //set chest in rooms
         public void SetChest(string name, Chest chest)
         {
             if (chest != null)
@@ -284,6 +362,7 @@ namespace StarterGame
             }
         }
 
+        //get chest in rooms
         public Item GetChest(string name)
         {
             Item chest = null;
@@ -291,11 +370,12 @@ namespace StarterGame
             return chest;
         }
 
+        //remove chest in rooms
         public void RemoveChest(String name)
         {
             _chests.Remove(name);
         }
-
+        //print string of chest in a room
         public string GetChests()
         {
             string names = "";
@@ -318,12 +398,9 @@ namespace StarterGame
             }
             else
             {
-                //Item newItem = item.Clone();
                 List<Item> itemlist = new List<Item>();
                 itemlist.Add(item);
                 _items.Add(item.Name, itemlist);
-                //Item newItem = (Item)item.Clone();
-                //_items.Add(item.Name, newItem);
             }
             success = true;
             return success;

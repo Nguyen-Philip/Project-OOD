@@ -20,8 +20,8 @@ namespace StarterGame
             else
             {
                 player.ErrorMessage("\nInspect what?");
+                player.LocationMessage("\n" + player.CurrentRoom.Description());
             }
-            player.LocationMessage("\n" + player.CurrentRoom.Description());
             return false;
         }
 

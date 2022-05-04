@@ -21,12 +21,9 @@ namespace StarterGame
             }
             else
             {
-                //Item newItem = item.Clone();
                 List<Item> itemlist = new List<Item>();
                 itemlist.Add(item);
                 _items.Add(item.Name, itemlist);
-                //Item newItem = (Item)item.Clone();
-                //_items.Add(item.Name, newItem);
             }
             success = true;
 

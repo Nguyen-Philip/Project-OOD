@@ -18,13 +18,13 @@ namespace StarterGame
             if (this.HasSecondWord())
             {
                 player.ErrorMessage("\nStats does not contain " + this.SecondWord);
+                player.LocationMessage("\n" + player.CurrentRoom.Description());
             }
             else
             {
                 player.NotificationMessage("\nYou look at your stats\n");
                 player.Stats();
             }
-            player.LocationMessage("\n" + player.CurrentRoom.Description());
             return false;
         }
     }

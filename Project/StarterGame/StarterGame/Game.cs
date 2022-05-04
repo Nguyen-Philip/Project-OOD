@@ -67,7 +67,6 @@ namespace StarterGame
             Start();
             Play();
             End();
-            
         }
 
         //ends the program

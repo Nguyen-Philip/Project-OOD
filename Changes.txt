@@ -307,5 +307,24 @@ Buy items from shop
 Shop.cs
 Setup shops
 
-
 Time Spent: 2h 05m 32s
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes
+Gem, Armor, Weapon, Potion, Backpack
+Removed Clone, using List<Items> in Dictionarys to be able to stack items
+
+Room.cs
+Ability to get random rooms and setup random item spawns and random portals, Shop restocks new items whenever the player enter a certain room.
+
+Player.cs 
+Whenever the player moves while there is a certain npc in the room, the npc will move to a different part of the map.
+
+Player.cs
+Improvements to some functions
+
+Combat.cs
+Improvements to some functions
+
+Time Spent: 4h 35m 25s

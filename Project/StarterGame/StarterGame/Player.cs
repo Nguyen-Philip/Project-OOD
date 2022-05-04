@@ -11,7 +11,7 @@ namespace StarterGame
         private Stack<string> _movementlog = new Stack<string>();
         private BackPack _backPack = new BackPack();
         private int _maxhp = 100;
-        private int _hp = 100;
+        private int _hp = 50;
         private int _ar = 5;
         private int _av = 0;
         private int _priority = 1;
@@ -21,6 +21,8 @@ namespace StarterGame
         private Armor _armor;
         private Weapon _weapon;
         private CombatLoop _combatLoop;
+        private bool _battleState = false;
+        private bool _buffState = false;
 
         public Room CurrentRoom
         {
@@ -42,12 +44,15 @@ namespace StarterGame
         public int Xp { set { _xp = value; } get { return _xp; } }
         public int Level { set { _level = value; } get { return _level; } }
         public int Gold { set { _gold = value; } get { return _gold; } }
+        public bool BattleState { set { _battleState = value; } get { return _battleState; } }
+        public bool BuffState { set { _buffState = value; } get { return _buffState; } }
 
         public Player(Room room)
         {
             _currentRoom = room;
         }
 
+        //chest if item is weapon or armor before equipping it
         public bool EquipX(Item item)
         {
             bool success = false;
@@ -73,6 +78,7 @@ namespace StarterGame
             return success;
         }
 
+        //chest if item is weapon or armor before unequipping it
         public bool UnequipX(Item item)
         {
             bool success = false;
@@ -109,6 +115,7 @@ namespace StarterGame
         public void WaltTo(string direction)
         {
             Door door = this.CurrentRoom.GetExit(direction);
+            NPC npc = this.CurrentRoom.GetNPC("explorer");
             if (door != null)
             {
                 if (door.IsOpen)
@@ -119,6 +126,10 @@ namespace StarterGame
                     this.CurrentRoom = nextRoom;
                     notification = new Notification("PlayerDidEnterRoom", this);
                     NotificationCenter.Instance.PostNotification(notification);
+                    if (npc != null)
+                    {
+                        //npc.Location = randomRoom();
+                    }
                 }
                 else
                 {
@@ -261,6 +272,7 @@ namespace StarterGame
             return success;
         }
 
+        //used by BuyCommand, buys items if merchant is around
         public bool Buy(string word)
         {
             bool success = false;
@@ -301,11 +313,12 @@ namespace StarterGame
             return success;
         }
 
+        //used by BrowseCommand, browse shop if merchant is around
         public void Browse()
         {
             if (CurrentRoom.GetNPC("merchant") != null)
             {
-                this.NotificationMessage("Items:" + this.CurrentRoom.Shop.GetItems());
+                this.NotificationMessage("Items:" + this.CurrentRoom.Shop.GetItems() + "\nGold: " + Gold);
             }
             else
             {
@@ -314,6 +327,7 @@ namespace StarterGame
             }
         }
 
+        //used by SellCommand, sells items if merchant is around
         public bool Sell(string word)
         {
             bool success = false;
@@ -424,7 +438,7 @@ namespace StarterGame
                 this.LocationMessage("\n" + this.CurrentRoom.Description());
             }
         }
-
+        //used by UseCommand, use hp and ar potions
         public void Use(string word)
         {
             Item item = _backPack.GetItem(word)?[0];
@@ -434,12 +448,15 @@ namespace StarterGame
                 if(item.GetType() == typeof(Potion))
                 {
                     p = (Potion)item;
-                    if(p.GetHealing(p.Type))
+                    if (p.GetHealing(p.Type))
                     {
-                        this.NotificationMessage("\nYou can use the " + word + " to heal with");
                         if (MaxHp == Hp)
                         {
                             this.ErrorMessage("\nYou have full hp");
+                            if (BattleState == false)
+                            {
+                                this.LocationMessage("\n" + this.CurrentRoom.Description());
+                            }
                         }
                         else
                         {
@@ -452,38 +469,71 @@ namespace StarterGame
                                 this.NotificationMessage("\nThe potion healed for " + dif);
                                 this.NotificationMessage("\nHP: " + Hp);
                                 _backPack.Remove(item.Name);
+                                if (BattleState == false)
+                                {
+                                    this.LocationMessage("\n" + this.CurrentRoom.Description());
+                                }
                             }
                             else
                             {
                                 this.NotificationMessage("\nThe potion healed for " + p.Modifier);
                                 this.NotificationMessage("\nHP: " + Hp);
                                 _backPack.Remove(item.Name);
+                                if (BattleState == false)
+                                {
+                                    this.LocationMessage("\n" + this.CurrentRoom.Description());
+                                }
                             }
                         }
                     }
                     else
                     {
-                        Ar += p.Modifier;
-                        this.NotificationMessage("\nYou can use the " + word + " to pernamently gain AR with");
-                        this.NotificationMessage("\nAR: " + Ar);
-                        _backPack.Remove(item.Name);
+                        if (BattleState == false)
+                        {
+                            this.ErrorMessage("\nYou can only use the " + p.Name + " during battle");
+                            this.LocationMessage("\n" + this.CurrentRoom.Description());
+                        }
+                        else
+                        {
+                            if (BuffState == false)
+                            {
+                                Ar += p.Modifier;
+                                this.NotificationMessage("\nYou use the " + p.Name + " to temporarily gain " + p.Modifier + " Attack Rating");
+                                this.NotificationMessage("\nAttack Rating: " + Ar);
+                                _backPack.Remove(item.Name);
+                                BuffState = true;
+                            }
+                            else
+                            {
+                                this.ErrorMessage("\nYou can only consume one " + p.Name + " during a battle");
+                            }
+                        }
                     }
                 }
                 else
                 {
                     this.ErrorMessage("\nYou cannot use the " + word + " to heal with");
+                    if (BattleState == false)
+                    {
+                        this.LocationMessage("\n" + this.CurrentRoom.Description());
+                    }
                 }
             }
             else
             {
                 this.ErrorMessage("\nThere is potion named " + word + " to use");
+                if (BattleState == false)
+                {
+                    this.LocationMessage("\n" + this.CurrentRoom.Description());
+                }
             }
         }
-
+        //if attackCommand is successful, start Battle loop and change the player's battlestate from false to true
         public void Battle(Enemy enemy)
         {
             Parser _parser = new Parser(new CommandWords());
             _combatLoop = new CombatLoop(this, enemy);
+            BattleState = true;
             bool speed = _combatLoop.comparePriority();
             if (speed == true)
             {
@@ -539,6 +589,10 @@ namespace StarterGame
         public void Inventory()
         {
             this.NotificationMessage("\nItems:" + this._backPack.GetItems() + "\nKey Items:" + this._backPack.GetKeyItems() + "\nWeight: " + this._backPack.GetWeight() + "/50" + "\nGold: " + _gold);
+            if (BattleState == false)
+            {
+                this.LocationMessage("\n" + this.CurrentRoom.Description());
+            }
         }
 
         //used by SayCommand, allows you to say a word
@@ -806,6 +860,7 @@ namespace StarterGame
             this.NotificationMessage(this.CurrentRoom.SearchRoom());
         }
 
+        //used by InspectCommand, inspect items and keyitems
         public bool Inspect(string word)
         {
             bool success = false;
@@ -826,17 +881,33 @@ namespace StarterGame
                     {
                         a = (Armor)invItem;
                         this.NotificationMessage("\nArmor Value: " + a.AV);
+                        if (BattleState == false)
+                        {
+                            this.LocationMessage("\n" + this.CurrentRoom.Description());
+                        }
                     }
                     else if (invItem.GetType() == typeof(Weapon))
                     {
                         w = (Weapon)invItem;
                         this.NotificationMessage("\nAttack Rating: " + w.AR);
+                        if (BattleState == false)
+                        {
+                            this.LocationMessage("\n" + this.CurrentRoom.Description());
+                        }
                     }
                     else if (invItem.GetType() == typeof(Potion))
                     {
                         p = (Potion)invItem;
                         this.NotificationMessage("\nPotion Type: " + p.Type);
                         this.NotificationMessage("\nModifier: " + p.Modifier);
+                        if(BattleState == false)
+                        {
+                            this.LocationMessage("\n" + this.CurrentRoom.Description());
+                        }
+                    }
+                    else if (BattleState == false)
+                    {
+                        this.LocationMessage("\n" + this.CurrentRoom.Description());
                     }
                 }
                 else if (grndItem != null)
@@ -847,17 +918,33 @@ namespace StarterGame
                     {
                         a = (Armor)grndItem;
                         this.NotificationMessage("\nArmor Value: " + a.AV);
+                        if (BattleState == false)
+                        {
+                            this.LocationMessage("\n" + this.CurrentRoom.Description());
+                        }
                     }
                     else if (grndItem.GetType() == typeof(Weapon))
                     {
                         w = (Weapon)grndItem;
                         this.NotificationMessage("\nAttack Rating: " + w.AR);
+                        if (BattleState == false)
+                        {
+                            this.LocationMessage("\n" + this.CurrentRoom.Description());
+                        }
                     }
                     else if (grndItem.GetType() == typeof(Potion))
                     {
                         p = (Potion)grndItem;
                         this.NotificationMessage("\nPotion Type: " + p.Type);
                         this.NotificationMessage("\nModifier: " + p.Modifier);
+                        if (BattleState == false)
+                        {
+                            this.LocationMessage("\n" + this.CurrentRoom.Description());
+                        }
+                    }
+                    else if (BattleState == false)
+                    {
+                        this.LocationMessage("\n" + this.CurrentRoom.Description());
                     }
                 }
             }
@@ -866,21 +953,65 @@ namespace StarterGame
                 if (invKeyitem != null)
                 {
                     this.NotificationMessage("\nDescription: " + invKeyitem.Description);
+                    if (BattleState == false)
+                    {
+                        this.LocationMessage("\n" + this.CurrentRoom.Description());
+                    }
                 }
                 else if (grndKeyitem != null)
                 {
                     this.NotificationMessage("\nDescription: " + grndKeyitem.Description);
+                    if (BattleState == false)
+                    {
+                        this.LocationMessage("\n" + this.CurrentRoom.Description());
+                    }
                 }
             }
             else
             {
                 this.ErrorMessage("\nThere is no item named " + word + " to inspect");
+                if (BattleState == false)
+                {
+                    this.LocationMessage("\n" + this.CurrentRoom.Description());
+                }
             }
             return success;
         }
+        //used by StatsCommand, look at player's stats
         public void Stats()
         {
-            this.NotificationMessage(" *** HP: " + Hp + "/" + MaxHp + "\n *** Attack Rating: " + Ar + "\n *** Armor Value: " + Av);
+            if (_armor == null && _weapon == null)
+            {
+                this.NotificationMessage(" *** Level: " + Level + "\n *** HP: " + Hp + "/" + MaxHp + "\n *** Attack Rating: " + Ar + "\n *** Armor Value: " + Av);
+                if (BattleState == false)
+                {
+                    this.LocationMessage("\n" + this.CurrentRoom.Description());
+                }
+            }
+            else if(_armor != null && _weapon == null)
+            {
+                this.NotificationMessage(" *** Level: " + Level + "\n *** HP: " + Hp + "/" + MaxHp + "\n *** Attack Rating: " + Ar + "\n *** Armor Value: " + Av + " (" + _armor.Name + ")");
+                if (BattleState == false)
+                {
+                    this.LocationMessage("\n" + this.CurrentRoom.Description());
+                }
+            }
+            else if (_armor == null && _weapon != null)
+            {
+                this.NotificationMessage(" *** Level: " + Level + "\n *** HP: " + Hp + "/" + MaxHp + "\n *** Attack Rating: " + Ar + " (" + _weapon.Name + ")\n *** Armor Value: " + Av);
+                if (BattleState == false)
+                {
+                    this.LocationMessage("\n" + this.CurrentRoom.Description());
+                }
+            }
+            else
+            {
+                this.NotificationMessage(" *** Level: " + Level + "\n *** HP: " + Hp + "/" + MaxHp + "\n *** Attack Rating: " + Ar + " (" + _weapon.Name + ")\n *** Armor Value: " + Av + " (" + _armor.Name + ")");
+                if (BattleState == false)
+                {
+                    this.LocationMessage("\n" + this.CurrentRoom.Description());
+                }
+            }
         }
 
         //prints a message
@@ -888,25 +1019,28 @@ namespace StarterGame
         {
             Console.WriteLine(message);
         }
+        //prints notification message
         public void NotificationMessage(string message)
         {
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine(message);
             Console.ForegroundColor = ConsoleColor.White;
         }
+        //prints error message
         public void ErrorMessage(string message)
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(message);
             Console.ForegroundColor = ConsoleColor.White;
         }
+        //prints location message
         public void LocationMessage(string message)
         {
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine(message);
             Console.ForegroundColor = ConsoleColor.White;
         }
-
+        //prints what you say when you use SayCommand
         public void SayMessage(string message)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -928,7 +1062,7 @@ namespace StarterGame
                 Console.WriteLine(loggedCommand);
             }
         }
-
+        //check if you use go command and put it into the stack for BackCommand to use
         public void InputMovementLog(string movementCommand)
         {
             Parser _parser = new Parser(new CommandWords());
@@ -957,6 +1091,7 @@ namespace StarterGame
             game.Restart();
         }
 
+        //used by MapCommand, shows the map of the game
         public void Map()
         {
             this.OutputMessage("\n                1_8               " + 

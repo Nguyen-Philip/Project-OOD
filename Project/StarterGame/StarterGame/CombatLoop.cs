@@ -8,6 +8,7 @@ namespace StarterGame
         public bool victory;
         public int limit = 10;
 
+        //enemy attacks player damage calculation
         public int pDamage(int damage)
         {
             damage -= _Player.Av;
@@ -21,6 +22,7 @@ namespace StarterGame
             return _Player.Hp;
         }
 
+        //player attacks enemy damage calculation
         public int eDamage(int damage)
         {
             _Enemy.Hp -= damage;
@@ -29,6 +31,7 @@ namespace StarterGame
             return _Enemy.Hp;
         }
 
+        //if player wins, reward player
         public void Victory()
         {
             _Player.NotificationMessage("\n" + _Enemy.Name + " has died");
@@ -39,7 +42,13 @@ namespace StarterGame
             _Player.NotificationMessage("\nYou have won");
             _Player.Gold += _Enemy.Gold;
             _Player.Xp += _Enemy.XP;
-            while(_Player.Xp >= limit)
+            if (_Player.BuffState == true)
+            {
+                _Player.NotificationMessage("\nThe potion's effects have worn off");
+                _Player.Ar -= 1;
+                _Player.BuffState = false;
+            }
+            while (_Player.Xp >= limit)
             {
                 _Player.Level += 1;
                 _Player.Xp -= limit;
@@ -51,15 +60,18 @@ namespace StarterGame
                 _Player.Ar += 1;
                 _Player.NotificationMessage("\nYou have gain 1 attack rating. Ar: " + _Player.Ar);
             }
+            _Player.BattleState = false;
             _Player.CurrentRoom.RemoveEnemy(_Enemy.Name);
             _Player.LocationMessage("\n" + _Player.CurrentRoom.Description());
         }
 
+        //if player loses, end program
         public void Defeat()
         {
             System.Environment.Exit(0);
         }
 
+        //compare player and enemy's priority
         public bool comparePriority()
         {
             bool isPlayerFaster = false;
@@ -81,6 +93,7 @@ namespace StarterGame
             return isPlayerFaster;
         }
 
+        //loop that happens when you enter combat
         public void Loop(Enemy enemy)
         {
             Parser _parser = new Parser(new CommandWords());
@@ -117,13 +130,13 @@ namespace StarterGame
                     }
                     else
                     {
-                        _Player.ErrorMessage("\nYou are unable to do anything but attack, heal, inspect your items, look at your stats, and look in your inventory");
+                        _Player.ErrorMessage("\nYou are unable to do anything but attack, use items, inspect your items, look at your stats, and look in your inventory");
                         finished = false;
                     }
                 }
                 else
                 {
-                    _Player.ErrorMessage("\nYou are unable to do anything but attack, use items, or run");
+                    _Player.ErrorMessage("\nYou are unable to do anything but attack, use items, inspect your items, look at your stats, and look in your inventory");
                     finished = false;
                 }
             }
