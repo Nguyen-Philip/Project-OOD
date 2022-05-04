@@ -79,7 +79,7 @@ namespace StarterGame
         //prints a welcome message when Start() is called
         public string Welcome()
         {
-            return "Welcome to ###.\n\nThe World of ### is an exciting adventure game.\n\nType 'help' if you need help.\n";
+            return "Welcome to Dragon and Dungeons.\n\nThe World of Dragon and Dungeons is an exciting turn-based game.\n\nType 'help' if you need help.\n";
         }
 
         public string Goal()

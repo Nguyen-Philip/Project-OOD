@@ -8,6 +8,7 @@ namespace StarterGame
     {
 
         private static GameWorld _instance;
+        Room room = new Room();
         private Room _entrance;
         private Room _exit;
         private Room _trigger;
@@ -26,7 +27,7 @@ namespace StarterGame
 
         public static GameWorld Instance()
         {
-            if(_instance == null)
+            if (_instance == null)
             {
                 _instance = new GameWorld();
             }
@@ -38,6 +39,7 @@ namespace StarterGame
             _entrance = CreateWorld();
             NotificationCenter.Instance.AddObserver("PlayerWillEnterRoom", PlayerWillEnterRoom);
             NotificationCenter.Instance.AddObserver("PlayerDidEnterRoom", PlayerDidEnterRoom);
+            //NotificationCenter.Instance.AddObserver("DidPlayerLeaveTheRoom", DidPlayerLeaveTheRoom);
         }
 
         public Room Entrance
@@ -82,10 +84,10 @@ namespace StarterGame
         public void PlayerWillEnterRoom(Notification notification)
         {
             Player player = (Player)notification.Object;
-            if(player.CurrentRoom == _exit)
+            if (player.CurrentRoom == _exit)
             {
                 door = player.CurrentRoom.GetExit("portal");
-                if(door != null)
+                if (door != null)
                 {
                     player.CurrentRoom.SetExit("portal", null);
                     _trigger = null;
@@ -93,6 +95,20 @@ namespace StarterGame
                 }
             }
         }
+
+        /*public void DidPlayerLeaveTheRoom(Notification notification)
+        {
+            Player player = (Player)notification.Object;
+            if (player.CurrentRoom == npc.Location)
+            {
+                door = player.CurrentRoom.GetExit("");
+                if (door != null)
+                {
+                    npc.Location = room.randomRoom();
+                    player.NotificationMessage("\n*** Explorer has been has left ***");
+                }
+            }
+        }*/
 
         public void PlayerDidEnterRoom(Notification notification)
         {
@@ -108,13 +124,12 @@ namespace StarterGame
                 player.NotificationMessage("\nFinal Stats ");
                 player.Stats();
                 System.Environment.Exit(0);
-            }
+            }    
             player.NotificationMessage("\n*** The player is " + player.CurrentRoom.Tag + " ***");
         }
 
         private Room CreateWorld()
         {
-            Room room = new Room();
             Room itemRoom = new Room("Purpose of creating items");
             Room town = new Room("in the town");
             Room entrance = new Room("in the entrance of the dungeon");

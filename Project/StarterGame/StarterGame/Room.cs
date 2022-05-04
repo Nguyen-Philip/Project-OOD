@@ -56,6 +56,7 @@ namespace StarterGame
             }
         }
     }
+
     //whenever the player is ready, drop items
     public class TownRoom : IRoomDelegate
     {
@@ -224,7 +225,7 @@ namespace StarterGame
         private Dictionary<string, List<Item>> _items;
         private Dictionary<string, NPC> _npcs;
         private Dictionary<string, Enemy> _enemies;
-        private List<Room> _rooms;
+        public List<Room> _rooms = new List<Room>();
         public Shop _shop = new Shop();
 
         private string _tag;
@@ -250,6 +251,14 @@ namespace StarterGame
             set
             {
                 _shop = value;
+            }
+        }
+
+        public List<Room> ListofRooms
+        {
+            get
+            {
+                return _rooms;
             }
         }
 
@@ -284,7 +293,6 @@ namespace StarterGame
             _items = new Dictionary<string, List<Item>>();
             _npcs = new Dictionary<string, NPC>();
             _enemies = new Dictionary<string, Enemy>();
-            _rooms = new List<Room>();
             this.Tag = tag;
         }
 

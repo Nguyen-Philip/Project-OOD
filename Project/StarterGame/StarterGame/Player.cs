@@ -23,7 +23,7 @@ namespace StarterGame
         private CombatLoop _combatLoop;
         private bool _battleState = false;
         private bool _buffState = false;
-
+        
         public Room CurrentRoom
         {
             get
@@ -115,7 +115,6 @@ namespace StarterGame
         public void WaltTo(string direction)
         {
             Door door = this.CurrentRoom.GetExit(direction);
-            NPC npc = this.CurrentRoom.GetNPC("explorer");
             if (door != null)
             {
                 if (door.IsOpen)
@@ -124,12 +123,10 @@ namespace StarterGame
                     Notification notification = new Notification("PlayerWillEnterRoom", this);
                     NotificationCenter.Instance.PostNotification(notification);
                     this.CurrentRoom = nextRoom;
+                    /*notification = new Notification("DidPlayerLeaveTheRoom", this);
+                    NotificationCenter.Instance.PostNotification(notification);*/
                     notification = new Notification("PlayerDidEnterRoom", this);
                     NotificationCenter.Instance.PostNotification(notification);
-                    if (npc != null)
-                    {
-                        //npc.Location = randomRoom();
-                    }
                 }
                 else
                 {
